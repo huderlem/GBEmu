@@ -107,6 +107,22 @@ public:
 	int op_5D(CPURegisters *registers);
 	int op_5E(CPURegisters *registers);
 	int op_5F(CPURegisters *registers);
+	int op_60(CPURegisters *registers);
+	int op_61(CPURegisters *registers);
+	int op_62(CPURegisters *registers);
+	int op_63(CPURegisters *registers);
+	int op_64(CPURegisters *registers);
+	int op_65(CPURegisters *registers);
+	int op_66(CPURegisters *registers);
+	int op_67(CPURegisters *registers);
+	int op_68(CPURegisters *registers);
+	int op_69(CPURegisters *registers);
+	int op_6A(CPURegisters *registers);
+	int op_6B(CPURegisters *registers);
+	int op_6C(CPURegisters *registers);
+	int op_6D(CPURegisters *registers);
+	int op_6E(CPURegisters *registers);
+	int op_6F(CPURegisters *registers);
 };
 
 
