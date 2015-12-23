@@ -1231,7 +1231,7 @@ namespace GameBoyEmulatorTest
 			registers.f = 0b11110000;
 			int cycles = ops.op_20(&registers);
 			Assert::AreEqual(cycles, 8);
-			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.pc, 11);
 			Assert::AreEqual(registers.f, 0b11110000);
 		};
 
@@ -1668,6 +1668,308 @@ namespace GameBoyEmulatorTest
 			Assert::AreEqual(registers.pc, 10);
 			Assert::AreEqual(registers.a, 0x00);
 			Assert::AreEqual(registers.f, 0b11010000);
+		};
+
+		[TestMethod]
+		void Opcode_28_ZeroFlag_JumpForward()
+		{
+			MockMMU mmu(0x5, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.f = 0b11110000;
+			int cycles = ops.op_28(&registers);
+			Assert::AreEqual(cycles, 12);
+			Assert::AreEqual(registers.pc, 16);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_28_NoZeroFlag()
+		{
+			MockMMU mmu(0xfe, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.f = 0b01110000;
+			int cycles = ops.op_28(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.f, 0b01110000);
+		};
+
+		[TestMethod]
+		void Opcode_29_NoCarry_NoHalfCarry()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.h = 0x23;
+			registers.l = 0x56;
+			registers.f = 0b11110000;
+			int cycles = ops.op_29(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.h, 0x46);
+			Assert::AreEqual(registers.l, 0xac);
+			Assert::AreEqual(registers.f, 0b10000000);
+		};
+
+		[TestMethod]
+		void Opcode_29_Carry_HalfCarry()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.h = 0x88;
+			registers.l = 0x00;
+			registers.f = 0b11110000;
+			int cycles = ops.op_29(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.h, 0x10);
+			Assert::AreEqual(registers.l, 0x00);
+			Assert::AreEqual(registers.f, 0b10110000);
+		};
+
+		[TestMethod]
+		void Opcode_29_NoCarry_HalfCarry()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.h = 0x08;
+			registers.l = 0x00;
+			registers.f = 0b11110000;
+			int cycles = ops.op_29(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.h, 0x10);
+			Assert::AreEqual(registers.l, 0x00);
+			Assert::AreEqual(registers.f, 0b10100000);
+		};
+
+		[TestMethod]
+		void Opcode_2A()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0x4;
+			registers.h = 0x40;
+			registers.l = 0x00;
+			registers.f = 0b11110000;
+			int cycles = ops.op_2A(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.a, 0x4c);
+			Assert::AreEqual(registers.h, 0x40);
+			Assert::AreEqual(registers.l, 0x01);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_2A_Overflow()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0x4;
+			registers.h = 0xff;
+			registers.l = 0xff;
+			registers.f = 0b11110000;
+			int cycles = ops.op_2A(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.a, 0x4c);
+			Assert::AreEqual(registers.h, 0x00);
+			Assert::AreEqual(registers.l, 0x00);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_2B_Underflow()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.h = 0;
+			registers.l = 0;
+			registers.f = 0b11110000;
+			int cycles = ops.op_2B(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.h, 0xff);
+			Assert::AreEqual(registers.l, 0xff);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_2B_NoUnderflow()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.h = 0xff;
+			registers.l = 0xff;
+			registers.f = 0b11110000;
+			int cycles = ops.op_2B(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.h, 0xff);
+			Assert::AreEqual(registers.l, 0xfe);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_2C_HalfOverflow()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.l = 0x0f;
+			registers.f = 0b11010000;
+			int cycles = ops.op_2C(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.l, 0x10);
+			Assert::AreEqual(registers.f, 0b00110000);
+		};
+
+		[TestMethod]
+		void Opcode_2C_NoZero_NoHalfOverflow()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.l = 0x10;
+			registers.f = 0b11110000;
+			int cycles = ops.op_2C(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.l, 0x11);
+			Assert::AreEqual(registers.f, 0b00010000);
+		};
+
+		[TestMethod]
+		void Opcode_2C_Overflow()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.l = 0xff;
+			registers.f = 0b01010000;
+			int cycles = ops.op_2C(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.l, 0x00);
+			Assert::AreEqual(registers.f, 0b10110000);
+		};
+
+		[TestMethod]
+		void Opcode_2D_NoZeroFlag_NoHalfCarry()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.l = 0x45;
+			registers.f = 0b10110000;
+			int cycles = ops.op_2D(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.l, 0x44);
+			Assert::AreEqual(registers.f, 0b01010000);
+		};
+
+		[TestMethod]
+		void Opcode_2D_Underflow()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.l = 0x00;
+			registers.f = 0b10010000;
+			int cycles = ops.op_2D(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.l, 0xff);
+			Assert::AreEqual(registers.f, 0b01110000);
+		};
+
+		[TestMethod]
+		void Opcode_2D_ZeroFlag()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.l = 0x01;
+			registers.f = 0b00110000;
+			int cycles = ops.op_2D(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.l, 0x00);
+			Assert::AreEqual(registers.f, 0b11010000);
+		};
+
+		[TestMethod]
+		void Opcode_2D_NoZeroFlag_HalfCarry()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.l = 0x10;
+			registers.f = 0b10010000;
+			int cycles = ops.op_2D(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.l, 0x0f);
+			Assert::AreEqual(registers.f, 0b01110000);
+		};
+
+		[TestMethod]
+		void Opcode_2E()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.l = 0x10;
+			registers.f = 0b11110000;
+			int cycles = ops.op_2E(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.l, 0x4c);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_2F()
+		{
+			MockMMU mmu(0x4c, 0xa734);
+			CPUOpcodes ops(&mmu);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0b10100101;
+			registers.f = 0b10010000;
+			int cycles = ops.op_2F(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.a, 0b01011010);
+			Assert::AreEqual(registers.f, 0b11110000);
 		};
 	};
 }
