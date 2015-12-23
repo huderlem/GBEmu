@@ -891,4 +891,181 @@ int CPUOpcodes::op_2F(CPURegisters * registers)
 	return 4;
 }
 
+// jr nc, r8
+int CPUOpcodes::op_30(CPURegisters * registers)
+{
+	int offset = mmu->ReadByte(registers->pc);
+	registers->pc++;
+	if ((registers->f & 0b00010000) == 0)
+	{
+		if (offset > 0x7f)
+		{
+			registers->pc -= (0x100 - offset);
+		}
+		else
+		{
+			registers->pc += offset;
+		}
+
+		return 12;
+	}
+	else
+	{
+		return 8;
+	}
+}
+
+// ld sp, d16
+int CPUOpcodes::op_31(CPURegisters * registers)
+{
+	int word = mmu->ReadWord(registers->pc);
+	registers->pc += 2;
+	registers->sp = word;
+	return 12;
+}
+
+// ld (hl-), a
+int CPUOpcodes::op_32(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(registers->a, hl);
+	hl--;
+	registers->h = (hl >> 8) & 0xff;
+	registers->l = (hl & 0xff);
+	return 8;
+}
+
+// inc sp
+int CPUOpcodes::op_33(CPURegisters * registers)
+{
+	registers->sp = (registers->sp + 1) & 0xffff;
+	return 8;
+}
+
+// inc (hl)
+int CPUOpcodes::op_34(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	value = (value + 1) & 0xff;
+	if (value == 0)
+	{
+		registers->f |= 0b10000000;  // set zero flag
+	}
+	else
+	{
+		registers->f &= 0b01111111;  // reset zero flag
+	}
+
+	if ((value & 0xf) == 0)
+	{
+		registers->f |= 0b00100000;  // set half carry flag
+	}
+	else
+	{
+		registers->f &= 0b11011111;  // reset half carry flag
+	}
+
+	registers->f &= 0b10111111;  // clear subtract flag
+
+	mmu->WriteByte(value, hl);
+	return 12;
+}
+
+// dec (hl)
+int CPUOpcodes::op_35(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	if (value == 0)
+	{
+		value = 0xff;
+	}
+	else
+	{
+		value--;
+	}
+
+	if (value == 0)
+	{
+		registers->f |= 0b10000000;  // set zero flag
+	}
+	else
+	{
+		registers->f &= 0b01111111;  // reset zero flag
+	}
+
+	if ((value & 0x0f) == 0x0f)
+	{
+		registers->f |= 0b00100000;  // set half carry flag
+	}
+	else
+	{
+		registers->f &= 0b11011111;  // reset half carry flag
+	}
+
+	registers->f |= 0b01000000;  // set subtract flag
+	
+	mmu->WriteByte(value, hl);
+	return 12;
+}
+
+// ld (hl), d8
+int CPUOpcodes::op_36(CPURegisters * registers)
+{
+	int byte = mmu->ReadByte(registers->pc);
+	registers->pc++;
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(byte, hl);
+	return 12;
+}
+
+// scf
+int CPUOpcodes::op_37(CPURegisters * registers)
+{
+	registers->f &= 0b10011111;
+	registers->f |= 0b00010000;
+	return 4;
+}
+
+int CPUOpcodes::op_38(CPURegisters * registers)
+{
+	return 0;
+}
+
+int CPUOpcodes::op_39(CPURegisters * registers)
+{
+	return 0;
+}
+
+int CPUOpcodes::op_3A(CPURegisters * registers)
+{
+	return 0;
+}
+
+int CPUOpcodes::op_3B(CPURegisters * registers)
+{
+	return 0;
+}
+
+int CPUOpcodes::op_3C(CPURegisters * registers)
+{
+	return 0;
+}
+
+int CPUOpcodes::op_3D(CPURegisters * registers)
+{
+	return 0;
+}
+
+int CPUOpcodes::op_3E(CPURegisters * registers)
+{
+	return 0;
+}
+
+int CPUOpcodes::op_3F(CPURegisters * registers)
+{
+	return 0;
+}
+
 
