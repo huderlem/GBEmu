@@ -1186,4 +1186,117 @@ int CPUOpcodes::op_3F(CPURegisters * registers)
 	return 4;
 }
 
+// ld b, b
+int CPUOpcodes::op_40(CPURegisters * registers)
+{
+	return 4;
+}
+
+// ld b, c
+int CPUOpcodes::op_41(CPURegisters * registers)
+{
+	registers->b = registers->c;
+	return 4;
+}
+
+// ld b, d
+int CPUOpcodes::op_42(CPURegisters * registers)
+{
+	registers->b = registers->d;
+	return 4;
+}
+
+// ld b, e
+int CPUOpcodes::op_43(CPURegisters * registers)
+{
+	registers->b = registers->e;
+	return 4;
+}
+
+// ld b, h
+int CPUOpcodes::op_44(CPURegisters * registers)
+{
+	registers->b = registers->h;
+	return 4;
+}
+
+// ld b, l
+int CPUOpcodes::op_45(CPURegisters * registers)
+{
+	registers->b = registers->l;
+	return 4;
+}
+
+// ld b, (hl)
+int CPUOpcodes::op_46(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	registers->b = mmu->ReadByte(hl);
+	return 8;
+}
+
+// ld b, a
+int CPUOpcodes::op_47(CPURegisters * registers)
+{
+	registers->b = registers->a;
+	return 4;
+}
+
+// ld c, b
+int CPUOpcodes::op_48(CPURegisters * registers)
+{
+	registers->c = registers->b;
+	return 4;
+}
+
+// ld c, c
+int CPUOpcodes::op_49(CPURegisters * registers)
+{
+	return 4;
+}
+
+// ld c, d
+int CPUOpcodes::op_4A(CPURegisters * registers)
+{
+	registers->c = registers->d;
+	return 4;
+}
+
+// ld c, e
+int CPUOpcodes::op_4B(CPURegisters * registers)
+{
+	registers->c = registers->e;
+	return 4;
+}
+
+// ld c, h
+int CPUOpcodes::op_4C(CPURegisters * registers)
+{
+	registers->c = registers->h;
+	return 4;
+}
+
+// ld c, l
+int CPUOpcodes::op_4D(CPURegisters * registers)
+{
+	registers->c = registers->l;
+	return 4;
+}
+
+// ld c, (hl)
+int CPUOpcodes::op_4E(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	registers->c = mmu->ReadByte(hl);
+	return 8;
+}
+
+// ld c, a
+int CPUOpcodes::op_4F(CPURegisters * registers)
+{
+	registers->c = registers->a;
+	return 4;
+}
+
+
 
