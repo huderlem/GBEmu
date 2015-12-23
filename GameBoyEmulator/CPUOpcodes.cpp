@@ -1522,3 +1522,121 @@ int CPUOpcodes::op_6F(CPURegisters * registers)
 	return 4;
 }
 
+// ld (hl), b
+int CPUOpcodes::op_70(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(registers->b, hl);
+	return 8;
+}
+
+// ld (hl), c
+int CPUOpcodes::op_71(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(registers->c, hl);
+	return 8;
+}
+
+// ld (hl), d
+int CPUOpcodes::op_72(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(registers->d, hl);
+	return 8;
+}
+
+// ld (hl), e
+int CPUOpcodes::op_73(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(registers->e, hl);
+	return 8;
+}
+
+// ld (hl), h
+int CPUOpcodes::op_74(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(registers->h, hl);
+	return 8;
+}
+
+// ld (hl), l
+int CPUOpcodes::op_75(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(registers->l, hl);
+	return 8;
+}
+
+// halt
+int CPUOpcodes::op_76(CPURegisters * registers)
+{
+	// TODO: implement halt
+	return 4;
+}
+
+// ld (hl), a
+int CPUOpcodes::op_77(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	mmu->WriteByte(registers->a, hl);
+	return 8;
+}
+
+// ld a, b
+int CPUOpcodes::op_78(CPURegisters * registers)
+{
+	registers->a = registers->b;
+	return 4;
+}
+
+// ld a, c
+int CPUOpcodes::op_79(CPURegisters * registers)
+{
+	registers->a = registers->c;
+	return 4;
+}
+
+// ld a, d
+int CPUOpcodes::op_7A(CPURegisters * registers)
+{
+	registers->a = registers->d;
+	return 4;
+}
+
+// ld a, e
+int CPUOpcodes::op_7B(CPURegisters * registers)
+{
+	registers->a = registers->e;
+	return 4;
+}
+
+// ld a, h
+int CPUOpcodes::op_7C(CPURegisters * registers)
+{
+	registers->a = registers->h;
+	return 4;
+}
+
+// ld a, l
+int CPUOpcodes::op_7D(CPURegisters * registers)
+{
+	registers->a = registers->l;
+	return 4;
+}
+
+// ld a, (hl)
+int CPUOpcodes::op_7E(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	registers->a = mmu->ReadByte(hl);
+	return 8;
+}
+
+// ld a, a
+int CPUOpcodes::op_7F(CPURegisters * registers)
+{
+	return 4;
+}
