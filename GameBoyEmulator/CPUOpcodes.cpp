@@ -1640,3 +1640,703 @@ int CPUOpcodes::op_7F(CPURegisters * registers)
 {
 	return 4;
 }
+
+// add a, b	
+int CPUOpcodes::op_80(CPURegisters * registers)
+{
+	int result = registers->a + registers->b;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->b & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// add a, c
+int CPUOpcodes::op_81(CPURegisters * registers)
+{
+	int result = registers->a + registers->c;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->c & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// add a, d
+int CPUOpcodes::op_82(CPURegisters * registers)
+{
+	int result = registers->a + registers->d;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->d & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// add a, e
+int CPUOpcodes::op_83(CPURegisters * registers)
+{
+	int result = registers->a + registers->e;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->e & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// add a, h
+int CPUOpcodes::op_84(CPURegisters * registers)
+{
+	int result = registers->a + registers->h;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->h & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// add a, l
+int CPUOpcodes::op_85(CPURegisters * registers)
+{
+	int result = registers->a + registers->l;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->l & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// add a, (hl)
+int CPUOpcodes::op_86(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	int result = registers->a + value;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (value & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 8;
+}
+
+// add a, a
+int CPUOpcodes::op_87(CPURegisters * registers)
+{
+	int result = registers->a + registers->a;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->a & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// adc a, b
+int CPUOpcodes::op_88(CPURegisters * registers)
+{
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int result = registers->a + registers->b + carry;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->b & 0xf) + carry > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// adc a, c
+int CPUOpcodes::op_89(CPURegisters * registers)
+{
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int result = registers->a + registers->c + carry;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->c & 0xf) + carry > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// adc a, d
+int CPUOpcodes::op_8A(CPURegisters * registers)
+{
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int result = registers->a + registers->d + carry;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->d & 0xf) + carry > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// adc a, e
+int CPUOpcodes::op_8B(CPURegisters * registers)
+{
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int result = registers->a + registers->e + carry;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->e & 0xf) + carry > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// adc a, h
+int CPUOpcodes::op_8C(CPURegisters * registers)
+{
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int result = registers->a + registers->h + carry;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->h & 0xf) + carry > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// adc a, l
+int CPUOpcodes::op_8D(CPURegisters * registers)
+{
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int result = registers->a + registers->l + carry;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->l & 0xf) + carry > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
+
+// adc a, (hl)
+int CPUOpcodes::op_8E(CPURegisters * registers)
+{
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	int result = registers->a + value + carry;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (value & 0xf) + carry > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 8;
+}
+
+// adc a, a
+int CPUOpcodes::op_8F(CPURegisters * registers)
+{
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int result = registers->a + registers->a + carry;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (registers->a & 0xf) + carry > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 4;
+}
