@@ -179,6 +179,14 @@ public:
 	int op_A5(CPURegisters *registers);
 	int op_A6(CPURegisters *registers);
 	int op_A7(CPURegisters *registers);
+	int op_A8(CPURegisters *registers);
+	int op_A9(CPURegisters *registers);
+	int op_AA(CPURegisters *registers);
+	int op_AB(CPURegisters *registers);
+	int op_AC(CPURegisters *registers);
+	int op_AD(CPURegisters *registers);
+	int op_AE(CPURegisters *registers);
+	int op_AF(CPURegisters *registers);
 };
 
 
