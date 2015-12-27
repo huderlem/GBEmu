@@ -187,6 +187,14 @@ public:
 	int op_AD(CPURegisters *registers);
 	int op_AE(CPURegisters *registers);
 	int op_AF(CPURegisters *registers);
+	int op_B0(CPURegisters *registers);
+	int op_B1(CPURegisters *registers);
+	int op_B2(CPURegisters *registers);
+	int op_B3(CPURegisters *registers);
+	int op_B4(CPURegisters *registers);
+	int op_B5(CPURegisters *registers);
+	int op_B6(CPURegisters *registers);
+	int op_B7(CPURegisters *registers);
 };
 
 
