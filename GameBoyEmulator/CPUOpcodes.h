@@ -163,6 +163,14 @@ public:
 	int op_95(CPURegisters *registers);
 	int op_96(CPURegisters *registers);
 	int op_97(CPURegisters *registers);
+	int op_98(CPURegisters *registers);
+	int op_99(CPURegisters *registers);
+	int op_9A(CPURegisters *registers);
+	int op_9B(CPURegisters *registers);
+	int op_9C(CPURegisters *registers);
+	int op_9D(CPURegisters *registers);
+	int op_9E(CPURegisters *registers);
+	int op_9F(CPURegisters *registers);
 };
 
 
