@@ -171,6 +171,14 @@ public:
 	int op_9D(CPURegisters *registers);
 	int op_9E(CPURegisters *registers);
 	int op_9F(CPURegisters *registers);
+	int op_A0(CPURegisters *registers);
+	int op_A1(CPURegisters *registers);
+	int op_A2(CPURegisters *registers);
+	int op_A3(CPURegisters *registers);
+	int op_A4(CPURegisters *registers);
+	int op_A5(CPURegisters *registers);
+	int op_A6(CPURegisters *registers);
+	int op_A7(CPURegisters *registers);
 };
 
 

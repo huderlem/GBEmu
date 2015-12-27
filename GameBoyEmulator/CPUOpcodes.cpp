@@ -3040,3 +3040,165 @@ int CPUOpcodes::op_9F(CPURegisters * registers)
 	registers->a = result;
 	return 4;
 }
+
+// and b
+int CPUOpcodes::op_A0(CPURegisters * registers)
+{
+	registers->a = registers->a & registers->b;
+	// reset subtract and carry flags
+	registers->f &= 0b10101111;
+	// set half carry flag
+	registers->f |= 0b00100000;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 4;
+}
+
+// and c
+int CPUOpcodes::op_A1(CPURegisters * registers)
+{
+	registers->a = registers->a & registers->c;
+	// reset subtract and carry flags
+	registers->f &= 0b10101111;
+	// set half carry flag
+	registers->f |= 0b00100000;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 4;
+}
+
+// and d
+int CPUOpcodes::op_A2(CPURegisters * registers)
+{
+	registers->a = registers->a & registers->d;
+	// reset subtract and carry flags
+	registers->f &= 0b10101111;
+	// set half carry flag
+	registers->f |= 0b00100000;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 4;
+}
+
+// and e
+int CPUOpcodes::op_A3(CPURegisters * registers)
+{
+	registers->a = registers->a & registers->e;
+	// reset subtract and carry flags
+	registers->f &= 0b10101111;
+	// set half carry flag
+	registers->f |= 0b00100000;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 4;
+}
+
+// and h
+int CPUOpcodes::op_A4(CPURegisters * registers)
+{
+	registers->a = registers->a & registers->h;
+	// reset subtract and carry flags
+	registers->f &= 0b10101111;
+	// set half carry flag
+	registers->f |= 0b00100000;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 4;
+}
+
+// and l
+int CPUOpcodes::op_A5(CPURegisters * registers)
+{
+	registers->a = registers->a & registers->l;
+	// reset subtract and carry flags
+	registers->f &= 0b10101111;
+	// set half carry flag
+	registers->f |= 0b00100000;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 4;
+}
+
+// and (hl)
+int CPUOpcodes::op_A6(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	registers->a = registers->a & value;
+	// reset subtract and carry flags
+	registers->f &= 0b10101111;
+	// set half carry flag
+	registers->f |= 0b00100000;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 8;
+}
+
+// and a
+int CPUOpcodes::op_A7(CPURegisters * registers)
+{
+	registers->a = registers->a & registers->a;
+	// reset subtract and carry flags
+	registers->f &= 0b10101111;
+	// set half carry flag
+	registers->f |= 0b00100000;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 4;
+}
