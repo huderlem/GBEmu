@@ -3816,3 +3816,133 @@ int CPUOpcodes::op_BF(CPURegisters * registers)
 
 	return 4;
 }
+
+// ret nz
+int CPUOpcodes::op_C0(CPURegisters * registers)
+{
+	if ((registers->f & 0b10000000) == 0)
+	{
+		registers->pc = mmu->ReadWord(registers->sp);
+		registers->sp += 2;
+		return 20;
+	}
+	else
+	{
+		return 8;
+	}
+}
+
+// pop bc
+int CPUOpcodes::op_C1(CPURegisters * registers)
+{
+	registers->c = mmu->ReadByte(registers->sp);
+	registers->b = mmu->ReadByte(registers->sp + 1);
+	registers->sp += 2;
+	return 12;
+}
+
+// jp nz, a16
+int CPUOpcodes::op_C2(CPURegisters * registers)
+{
+	if ((registers->f & 0b10000000) == 0)
+	{
+		registers->pc = mmu->ReadWord(registers->pc);
+		return 16;
+	}
+	else
+	{
+		registers->pc += 2;
+		return 12;
+	}
+}
+
+// jp a16
+int CPUOpcodes::op_C3(CPURegisters * registers)
+{
+	registers->pc = mmu->ReadWord(registers->pc);
+	return 16;
+}
+
+// call nz, a16
+int CPUOpcodes::op_C4(CPURegisters * registers)
+{
+	if ((registers->f & 0b10000000) == 0)
+	{
+		int address = mmu->ReadWord(registers->pc);
+		registers->pc += 2;
+		registers->sp -= 2;
+		mmu->WriteWord(registers->pc, registers->sp);
+		registers->pc = address;
+		return 24;
+	}
+	else
+	{
+		registers->pc += 2;
+		return 12;
+	}
+}
+
+// push bc
+int CPUOpcodes::op_C5(CPURegisters * registers)
+{
+	int bc = (registers->b << 8) | registers->c;
+	registers->sp -= 2;
+	mmu->WriteWord(bc, registers->sp);
+	return 16;
+}
+
+// add a, d8
+int CPUOpcodes::op_C6(CPURegisters * registers)
+{
+	int value = mmu->ReadByte(registers->pc);
+	registers->pc++;
+
+	int result = registers->a + value;
+	// carry flag
+	if (result > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) + (value & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// reset subtract flag
+	registers->f &= 0b10111111;
+
+	registers->a = result;
+	return 8;
+}
+
+// rst 00H
+int CPUOpcodes::op_C7(CPURegisters * registers)
+{
+	registers->sp -= 2;
+	mmu->WriteWord(registers->pc, registers->sp);
+	registers->pc = 0x00;
+	return 16;
+}
+

@@ -203,6 +203,14 @@ public:
 	int op_BD(CPURegisters *registers);
 	int op_BE(CPURegisters *registers);
 	int op_BF(CPURegisters *registers);
+	int op_C0(CPURegisters *registers);
+	int op_C1(CPURegisters *registers);
+	int op_C2(CPURegisters *registers);
+	int op_C3(CPURegisters *registers);
+	int op_C4(CPURegisters *registers);
+	int op_C5(CPURegisters *registers);
+	int op_C6(CPURegisters *registers);
+	int op_C7(CPURegisters *registers);
 };
 
 
