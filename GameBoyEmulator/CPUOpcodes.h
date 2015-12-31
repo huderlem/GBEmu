@@ -211,6 +211,14 @@ public:
 	int op_C5(CPURegisters *registers);
 	int op_C6(CPURegisters *registers);
 	int op_C7(CPURegisters *registers);
+	int op_C8(CPURegisters *registers);
+	int op_C9(CPURegisters *registers);
+	int op_CA(CPURegisters *registers);
+	int op_CB(CPURegisters *registers);
+	int op_CC(CPURegisters *registers);
+	int op_CD(CPURegisters *registers);
+	int op_CE(CPURegisters *registers);
+	int op_CF(CPURegisters *registers);
 };
 
 
