@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdexcept>
+
 #include "CPURegisters.h"
 #include "IMMU.h"
 
@@ -219,6 +221,14 @@ public:
 	int op_CD(CPURegisters *registers);
 	int op_CE(CPURegisters *registers);
 	int op_CF(CPURegisters *registers);
+	int op_D0(CPURegisters *registers);
+	int op_D1(CPURegisters *registers);
+	int op_D2(CPURegisters *registers);
+	int op_D3(CPURegisters *registers);
+	int op_D4(CPURegisters *registers);
+	int op_D5(CPURegisters *registers);
+	int op_D6(CPURegisters *registers);
+	int op_D7(CPURegisters *registers);
 };
 
 
