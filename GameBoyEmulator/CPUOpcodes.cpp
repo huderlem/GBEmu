@@ -4379,3 +4379,117 @@ int CPUOpcodes::op_E7(CPURegisters * registers)
 	registers->pc = 0x0020;
 	return 16;
 }
+
+// add sp, r8
+int CPUOpcodes::op_E8(CPURegisters * registers)
+{
+	int value = mmu->ReadByte(registers->pc);
+	registers->pc++;
+
+	int result;
+	if (value > 0x7f)
+	{
+		// immediate value is treated as negative integer
+		result = registers->sp - (0x100 - value);
+
+		// carry flag
+		if (((registers->sp & 0xff) - (0x100 - value)) < 0)
+		{
+			registers->f |= 0b00010000;
+		}
+		else
+		{
+			registers->f &= 0b11101111;
+		}
+
+		// half carry flag
+		if ((registers->sp & 0xf) - ((0x100 - value) & 0xf) < 0)
+		{
+			registers->f |= 0b00100000;
+		}
+		else
+		{
+			registers->f &= 0b11011111;
+		}
+	}
+	else
+	{
+		result = registers->sp + value;
+
+		// carry flag
+		if (((registers->sp & 0xff) + value) > 0xff)
+		{
+			registers->f |= 0b00010000;
+		}
+		else
+		{
+			registers->f &= 0b11101111;
+		}
+
+		// half carry flag
+		if ((registers->sp & 0xf) + (value & 0xf) > 0xf)
+		{
+			registers->f |= 0b00100000;
+		}
+		else
+		{
+			registers->f &= 0b11011111;
+		}
+	}
+
+	result = result & 0xffff;
+
+	// reset subtract and zero flags
+	registers->f &= 0b00111111;
+
+	registers->sp = result;
+	return 16;
+}
+
+// jp (hl)
+int CPUOpcodes::op_E9(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int destination = mmu->ReadWord(hl);
+	registers->pc = destination;
+	return 4;
+}
+
+// ld (a16), a
+int CPUOpcodes::op_EA(CPURegisters * registers)
+{
+	int address = mmu->ReadWord(registers->pc);
+	registers->pc += 2;
+	mmu->WriteByte(registers->a, address);
+	return 16;
+}
+
+// xor d8
+int CPUOpcodes::op_EE(CPURegisters * registers)
+{
+	int value = mmu->ReadByte(registers->pc);
+	registers->pc++;
+
+	registers->a = registers->a ^ value;
+	// reset subtract, half carry, and carry flags
+	registers->f &= 0b10001111;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 8;
+}
+
+// rst 28H
+int CPUOpcodes::op_EF(CPURegisters * registers)
+{
+	registers->sp -= 2;
+	mmu->WriteWord(registers->pc, registers->sp);
+	registers->pc = 0x0028;
+	return 16;
+}
