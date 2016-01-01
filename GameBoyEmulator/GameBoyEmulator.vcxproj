@@ -149,6 +149,7 @@
     <ClInclude Include="CPUOpcodes.h" />
     <ClInclude Include="CPURegisters.h" />
     <ClInclude Include="IMMU.h" />
+    <ClInclude Include="Interrupts.h" />
     <ClInclude Include="MMU.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="CPUOpcodes.cpp" />
     <ClCompile Include="CPURegisters.cpp" />
     <ClCompile Include="GameBoyEmulator.cpp" />
+    <ClCompile Include="Interrupts.cpp" />
     <ClCompile Include="MMU.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
