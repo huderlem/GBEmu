@@ -4,15 +4,17 @@
 
 #include "CPURegisters.h"
 #include "IMMU.h"
+#include "Interrupts.h"
 
 #define TEST_API __declspec(dllexport)
 
 class TEST_API CPUOpcodes
 {
 public:
-	CPUOpcodes(IMMU *mmu);
+	CPUOpcodes(IMMU *mmu, Interrupts *interrupts);
 	~CPUOpcodes();
 	IMMU *mmu;
+	Interrupts *interrupts;
 	int op_00(CPURegisters *registers);
 	int op_01(CPURegisters *registers);
 	int op_02(CPURegisters *registers);
@@ -224,11 +226,16 @@ public:
 	int op_D0(CPURegisters *registers);
 	int op_D1(CPURegisters *registers);
 	int op_D2(CPURegisters *registers);
-	int op_D3(CPURegisters *registers);
 	int op_D4(CPURegisters *registers);
 	int op_D5(CPURegisters *registers);
 	int op_D6(CPURegisters *registers);
 	int op_D7(CPURegisters *registers);
+	int op_D8(CPURegisters *registers);
+	int op_D9(CPURegisters *registers);
+	int op_DA(CPURegisters *registers);
+	int op_DC(CPURegisters *registers);
+	int op_DE(CPURegisters *registers);
+	int op_DF(CPURegisters *registers);
 };
 
 

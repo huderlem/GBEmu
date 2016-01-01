@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "CPUOpcodes.h"
 
-CPUOpcodes::CPUOpcodes(IMMU *mmu)
+CPUOpcodes::CPUOpcodes(IMMU *mmu, Interrupts *interrupts)
 {
 	CPUOpcodes::mmu = mmu;
+	CPUOpcodes::interrupts = interrupts;
 }
 
 
@@ -4196,5 +4197,119 @@ int CPUOpcodes::op_D7(CPURegisters * registers)
 	registers->sp -= 2;
 	mmu->WriteWord(registers->pc, registers->sp);
 	registers->pc = 0x0010;
+	return 16;
+}
+
+// ret c
+int CPUOpcodes::op_D8(CPURegisters * registers)
+{
+	if ((registers->f & 0b00010000) > 0)
+	{
+		registers->pc = mmu->ReadWord(registers->sp);
+		registers->sp += 2;
+		return 20;
+	}
+	else
+	{
+		return 8;
+	}
+}
+
+// reti
+int CPUOpcodes::op_D9(CPURegisters * registers)
+{
+	registers->pc = mmu->ReadWord(registers->sp);
+	registers->sp += 2;
+	interrupts->EnableInterrupts();
+	return 16;
+}
+
+// jp c, a16
+int CPUOpcodes::op_DA(CPURegisters * registers)
+{
+	if ((registers->f & 0b00010000) > 0)
+	{
+		registers->pc = mmu->ReadWord(registers->pc);
+		return 16;
+	}
+	else
+	{
+		registers->pc += 2;
+		return 12;
+	}
+}
+
+// call c, a16
+int CPUOpcodes::op_DC(CPURegisters * registers)
+{
+	if ((registers->f & 0b00010000) > 0)
+	{
+		int address = mmu->ReadWord(registers->pc);
+		registers->pc += 2;
+		registers->sp -= 2;
+		mmu->WriteWord(registers->pc, registers->sp);
+		registers->pc = address;
+		return 24;
+	}
+	else
+	{
+		registers->pc += 2;
+		return 12;
+	}
+}
+
+// sbc a, d8
+int CPUOpcodes::op_DE(CPURegisters * registers)
+{
+	int value = mmu->ReadByte(registers->pc);
+	registers->pc++;
+
+	int carry = ((registers->f & 0b00010000) >> 4);
+	int result = registers->a - value - carry;
+	// carry flag
+	if (result < 0)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) - (value & 0xf) - carry < 0)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	result = result & 0xff;
+
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// set subtract flag
+	registers->f |= 0b01000000;
+
+	registers->a = result;
+	return 8;
+}
+
+// rst 18H
+int CPUOpcodes::op_DF(CPURegisters * registers)
+{
+	registers->sp -= 2;
+	mmu->WriteWord(registers->pc, registers->sp);
+	registers->pc = 0x0018;
 	return 16;
 }

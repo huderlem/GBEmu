@@ -18,7 +18,7 @@ namespace GameBoyEmulatorTest
 	private:
 		TestContext^ testContextInstance;
 
-	public: 
+	public:
 		/// <summary>
 		///Gets or sets the test context which provides
 		///information about and functionality for the current test run.
@@ -35,7 +35,7 @@ namespace GameBoyEmulatorTest
 			}
 		};
 
-		#pragma region Additional test attributes
+#pragma region Additional test attributes
 		//
 		//You can use the following additional attributes as you write your tests:
 		//
@@ -55,13 +55,14 @@ namespace GameBoyEmulatorTest
 		//[TestCleanup()]
 		//void MyTestCleanup() {};
 		//
-		#pragma endregion 
+#pragma endregion 
 
 		[TestMethod]
 		void Opcode_00()
 		{
 			MockMMU mmu;
-			CPUOpcodes ops (&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b00000000;
@@ -74,8 +75,9 @@ namespace GameBoyEmulatorTest
 		[TestMethod]
 		void Opcode_01()
 		{
-			MockMMU mmu (0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			MockMMU mmu(0x4c, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b00000000;
@@ -91,7 +93,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_02()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b00000000;
@@ -106,7 +109,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_03_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x10;
@@ -124,7 +128,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_03_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0xff;
@@ -142,7 +147,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_04_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x45;
@@ -158,7 +164,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_04_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0xff;
@@ -174,7 +181,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_04_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x0f;
@@ -190,7 +198,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_05_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x45;
@@ -206,7 +215,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_05_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x00;
@@ -222,7 +232,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_05_ZeroFlag()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x01;
@@ -238,7 +249,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_05_NoZeroFlag_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x10;
@@ -254,7 +266,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_06()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x10;
@@ -270,7 +283,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_07_Carry_NoChange()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xff;
@@ -286,7 +300,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_07_Carry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xc3;
@@ -302,7 +317,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_07_NoCarry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x7f;
@@ -318,7 +334,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_08()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 0xffa0;
@@ -334,7 +351,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_09_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x23;
@@ -356,7 +374,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_09_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0xff;
@@ -378,7 +397,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_09_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x0e;
@@ -400,7 +420,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0A()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0;
@@ -416,7 +437,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0B_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0;
@@ -434,7 +456,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0B_NoUnderflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0xff;
@@ -452,7 +475,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0C_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x0f;
@@ -468,7 +492,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0C_NoZero_NoHalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x10;
@@ -484,7 +509,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0C_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0xff;
@@ -500,7 +526,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0D_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x45;
@@ -516,7 +543,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0D_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x00;
@@ -532,7 +560,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0D_ZeroFlag()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x01;
@@ -548,7 +577,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0D_NoZeroFlag_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x10;
@@ -564,7 +594,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0E()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x10;
@@ -580,7 +611,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0F_Carry_NoChange()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xff;
@@ -596,7 +628,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0F_Carry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xc3;
@@ -612,7 +645,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_0F_NoCarry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xFE;
@@ -628,7 +662,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_11()
 		{
 			MockMMU mmu(0x4c, 0xb130);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -644,7 +679,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_12()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -659,7 +695,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_13_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x10;
@@ -677,7 +714,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_13_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0xff;
@@ -695,7 +733,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_14_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x45;
@@ -711,7 +750,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_14_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0xff;
@@ -727,7 +767,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_14_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x0f;
@@ -743,7 +784,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_15_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x45;
@@ -759,7 +801,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_15_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x00;
@@ -775,7 +818,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_15_ZeroFlag()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x01;
@@ -791,7 +835,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_15_NoZeroFlag_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x10;
@@ -807,7 +852,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_16()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x10;
@@ -823,7 +869,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_17_Carry_NoChange()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xff;
@@ -839,7 +886,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_17_Carry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xc3;
@@ -855,7 +903,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_17_NoCarry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x7f;
@@ -871,7 +920,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_17_Carry_ExistingCarry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x7f;
@@ -887,7 +937,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_18_JumpForward()
 		{
 			MockMMU mmu(0x5, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -901,7 +952,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_18_JumpBackward()
 		{
 			MockMMU mmu(0xfe, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -915,7 +967,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_19_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x23;
@@ -937,7 +990,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_19_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0xff;
@@ -959,7 +1013,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_19_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x0e;
@@ -981,7 +1036,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1A()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0;
@@ -997,7 +1053,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1B_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0;
@@ -1015,7 +1072,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1B_NoUnderflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0xff;
@@ -1033,7 +1091,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1C_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x0f;
@@ -1049,7 +1108,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1C_NoZero_NoHalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x10;
@@ -1065,7 +1125,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1C_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0xff;
@@ -1081,7 +1142,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1D_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x45;
@@ -1097,7 +1159,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1D_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x00;
@@ -1113,7 +1176,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1D_ZeroFlag()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x01;
@@ -1129,7 +1193,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1D_NoZeroFlag_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x10;
@@ -1145,7 +1210,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1E()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x10;
@@ -1161,7 +1227,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1F_Carry_NoChange()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xff;
@@ -1177,7 +1244,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1F_Carry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xc3;
@@ -1193,7 +1261,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1F_NoCarry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -1209,7 +1278,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_1F_Carry_ExistingCarry_Change()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -1225,7 +1295,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_20_ZeroFlag()
 		{
 			MockMMU mmu(0x5, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -1239,7 +1310,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_20_NoZeroFlag_JumpBackward()
 		{
 			MockMMU mmu(0xfe, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b01110000;
@@ -1253,7 +1325,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_20_NoZeroFlag_JumpForward()
 		{
 			MockMMU mmu(0x5, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b01110000;
@@ -1267,7 +1340,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_21()
 		{
 			MockMMU mmu(0x4c, 0xb130);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -1283,7 +1357,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_22()
 		{
 			MockMMU mmu(0x4c, 0xb130);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x4e;
@@ -1302,7 +1377,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_23_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x10;
@@ -1320,7 +1396,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_23_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0xff;
@@ -1338,7 +1415,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_24_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x45;
@@ -1354,7 +1432,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_24_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0xff;
@@ -1370,7 +1449,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_24_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x0f;
@@ -1386,7 +1466,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_25_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x45;
@@ -1402,7 +1483,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_25_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x00;
@@ -1418,7 +1500,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_25_ZeroFlag()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x01;
@@ -1434,7 +1517,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_25_NoZeroFlag_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x10;
@@ -1450,7 +1534,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_26()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x10;
@@ -1466,7 +1551,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_NoCorrection()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -1482,7 +1568,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_6Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x1A;
@@ -1498,7 +1585,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_HalfCarry_6Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -1514,7 +1602,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_60Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xA8;
@@ -1530,7 +1619,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_66Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x9A;
@@ -1546,7 +1636,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_HalfCarry_66Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xA0;
@@ -1562,7 +1653,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_Carry_60Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x29;
@@ -1578,7 +1670,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_Carry_66Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x2A;
@@ -1594,7 +1687,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Add_Carry_HalfCarry_66Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x30;
@@ -1610,7 +1704,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Subtract_NoCorrection()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x99;
@@ -1626,7 +1721,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Subtract_HalfCarry_Sub6Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x86;
@@ -1642,7 +1738,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Subtract_Carry_Sub60Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x70;
@@ -1658,7 +1755,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_27_Subtract_Carry_HalfCarry_Sub66Correction()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x66;
@@ -1674,7 +1772,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_28_ZeroFlag_JumpForward()
 		{
 			MockMMU mmu(0x5, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -1688,7 +1787,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_28_NoZeroFlag()
 		{
 			MockMMU mmu(0xfe, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b01110000;
@@ -1702,7 +1802,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_29_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x23;
@@ -1720,7 +1821,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_29_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x88;
@@ -1738,7 +1840,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_29_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x08;
@@ -1756,7 +1859,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2A()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x4;
@@ -1776,7 +1880,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2A_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x4;
@@ -1796,7 +1901,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2B_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0;
@@ -1814,7 +1920,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2B_NoUnderflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0xff;
@@ -1832,7 +1939,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2C_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x0f;
@@ -1848,7 +1956,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2C_NoZero_NoHalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x10;
@@ -1864,7 +1973,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2C_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0xff;
@@ -1880,7 +1990,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2D_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x45;
@@ -1896,7 +2007,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2D_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x00;
@@ -1912,7 +2024,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2D_ZeroFlag()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x01;
@@ -1928,7 +2041,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2D_NoZeroFlag_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x10;
@@ -1944,7 +2058,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2E()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x10;
@@ -1960,7 +2075,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_2F()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b10100101;
@@ -1976,7 +2092,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_30_CarryFlag()
 		{
 			MockMMU mmu(0x5, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -1990,7 +2107,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_30_NoCarryFlag_JumpBackward()
 		{
 			MockMMU mmu(0xfe, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11100000;
@@ -2004,7 +2122,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_31()
 		{
 			MockMMU mmu(0x4c, 0xb130);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -2019,7 +2138,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_32()
 		{
 			MockMMU mmu(0x4c, 0xb130);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x4e;
@@ -2038,7 +2158,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_32_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xb130);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x00;
@@ -2057,7 +2178,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_33_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 0x10ff;
@@ -2073,7 +2195,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_33_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 0xffff;
@@ -2101,7 +2224,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_36()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -2116,7 +2240,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_37()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11100000;
@@ -2130,7 +2255,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_38_CarryFlag_JumpForward()
 		{
 			MockMMU mmu(0x5, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -2144,7 +2270,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_38_NoCarryFlag()
 		{
 			MockMMU mmu(0xfe, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11100000;
@@ -2158,7 +2285,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_39_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x23;
@@ -2178,7 +2306,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_39_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0xff;
@@ -2198,7 +2327,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_39_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x0e;
@@ -2218,7 +2348,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3A()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x4;
@@ -2238,7 +2369,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3A_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x4;
@@ -2258,7 +2390,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3B_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 0x0000;
@@ -2274,7 +2407,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3B_NoUnderflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 0xffff;
@@ -2290,7 +2424,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3C_HalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x0f;
@@ -2306,7 +2441,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3C_NoZero_NoHalfOverflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -2322,7 +2458,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3C_Overflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xff;
@@ -2338,7 +2475,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3D_NoZeroFlag_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x45;
@@ -2354,7 +2492,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3D_Underflow()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -2370,7 +2509,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3D_ZeroFlag()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x01;
@@ -2386,7 +2526,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3D_NoZeroFlag_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -2402,7 +2543,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3E()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -2418,7 +2560,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3F()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -2432,7 +2575,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_3F_NoCarryFlag()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11100000;
@@ -2446,7 +2590,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_40()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -2462,7 +2607,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_41()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -2480,7 +2626,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_42()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -2498,7 +2645,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_43()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -2516,7 +2664,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_44()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -2534,7 +2683,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_45()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -2552,7 +2702,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_46()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -2569,7 +2720,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_47()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -2587,7 +2739,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_48()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -2605,7 +2758,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_49()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -2621,7 +2775,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_4A()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -2639,7 +2794,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_4B()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -2657,7 +2813,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_4C()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -2675,7 +2832,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_4D()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -2693,7 +2851,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_4E()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -2710,7 +2869,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_4F()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -2728,7 +2888,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_50()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -2746,7 +2907,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_51()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -2764,7 +2926,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_52()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -2780,7 +2943,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_53()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -2798,7 +2962,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_54()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -2816,7 +2981,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_55()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -2834,7 +3000,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_56()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -2851,7 +3018,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_57()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -2869,7 +3037,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_58()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -2887,7 +3056,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_59()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -2905,7 +3075,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_5A()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -2923,7 +3094,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_5B()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -2939,7 +3111,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_5C()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -2957,7 +3130,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_5D()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -2975,7 +3149,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_5E()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -2992,7 +3167,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_5F()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -3010,7 +3186,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_60()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3028,7 +3205,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_61()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3046,7 +3224,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_62()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3064,7 +3243,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_63()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3082,7 +3262,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_64()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3098,7 +3279,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_65()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3116,7 +3298,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_66()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3133,7 +3316,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_67()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3151,7 +3335,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_68()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3169,7 +3354,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_69()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3187,7 +3373,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_6A()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3205,7 +3392,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_6B()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3223,7 +3411,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_6C()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3241,7 +3430,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_6D()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3257,7 +3447,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_6E()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3274,7 +3465,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_6F()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3292,7 +3484,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_70()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.b = 0x40;
@@ -3309,7 +3502,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_71()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.c = 0x40;
@@ -3326,7 +3520,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_72()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.d = 0x40;
@@ -3343,7 +3538,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_73()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.e = 0x40;
@@ -3360,7 +3556,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_74()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.h = 0x40;
@@ -3377,7 +3574,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_75()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.l = 0x40;
@@ -3394,7 +3592,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_76()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.f = 0b11110000;
@@ -3409,7 +3608,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_77()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3426,7 +3626,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_78()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3444,7 +3645,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_79()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3462,7 +3664,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_7A()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3480,7 +3683,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_7B()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3498,7 +3702,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_7C()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3516,7 +3721,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_7D()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3534,7 +3740,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_7E()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3551,7 +3758,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_7F()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x40;
@@ -3567,7 +3775,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_80_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3584,7 +3793,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_80_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -3601,7 +3811,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_80_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3618,7 +3829,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_80_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3635,7 +3847,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_80_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3652,7 +3865,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_81_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3669,7 +3883,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_81_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -3686,7 +3901,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_81_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3703,7 +3919,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_81_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3720,7 +3937,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_81_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3737,7 +3955,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_82_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3754,7 +3973,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_82_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -3771,7 +3991,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_82_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3788,7 +4009,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_82_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3805,7 +4027,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_82_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3822,7 +4045,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_83_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3839,7 +4063,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_83_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -3856,7 +4081,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_83_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3873,7 +4099,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_83_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3890,7 +4117,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_83_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3907,7 +4135,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_84_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3924,7 +4153,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_84_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -3941,7 +4171,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_84_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3958,7 +4189,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_84_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -3975,7 +4207,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_84_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -3992,7 +4225,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_85_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4009,7 +4243,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_85_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4026,7 +4261,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_85_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4043,7 +4279,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_85_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4060,7 +4297,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_85_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4077,7 +4315,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_86_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x13, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4093,7 +4332,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_86_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x1c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4109,7 +4349,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_86_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x10, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4125,7 +4366,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_86_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x12, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4141,7 +4383,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_86_Zero()
 		{
 			MockMMU mmu(0xef, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4157,7 +4400,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_87_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4173,7 +4417,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_87_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x18;
@@ -4189,7 +4434,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_87_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xf1;
@@ -4205,7 +4451,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_87_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x88;
@@ -4221,7 +4468,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_87_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x80;
@@ -4237,7 +4485,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_88_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4254,7 +4503,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_88_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4271,7 +4521,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_88_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4288,7 +4539,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_88_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4305,7 +4557,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_88_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4322,7 +4575,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_89_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4339,7 +4593,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_89_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4356,7 +4611,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_89_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4373,7 +4629,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_89_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4390,7 +4647,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_89_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4407,7 +4665,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8A_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4424,7 +4683,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8A_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4441,7 +4701,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8A_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4458,7 +4719,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8A_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4475,7 +4737,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8A_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4492,7 +4755,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8B_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4509,7 +4773,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8B_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4526,7 +4791,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8B_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4543,7 +4809,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8B_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4560,7 +4827,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8B_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4577,7 +4845,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8C_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4594,7 +4863,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8C_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4611,7 +4881,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8C_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4628,7 +4899,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8C_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4645,7 +4917,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8C_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4662,7 +4935,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8D_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4679,7 +4953,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8D_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4696,7 +4971,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8D_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4713,7 +4989,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8D_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -4730,7 +5007,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8D_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4747,7 +5025,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8E_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x13, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4763,7 +5042,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8E_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x1c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4779,7 +5059,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8E_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x10, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfd;
@@ -4795,7 +5076,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8E_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x12, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfd;
@@ -4811,7 +5093,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8E_Zero()
 		{
 			MockMMU mmu(0xef, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4827,7 +5110,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8F_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4843,7 +5127,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8F_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x18;
@@ -4859,7 +5144,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8F_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xf1;
@@ -4875,7 +5161,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8F_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x88;
@@ -4891,7 +5178,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_8F_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x80;
@@ -4907,7 +5195,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_90_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4924,7 +5213,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_90_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -4941,7 +5231,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_90_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -4958,7 +5249,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_90_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -4975,7 +5267,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_90_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -4992,7 +5285,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_91_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5009,7 +5303,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_91_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -5026,7 +5321,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_91_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5043,7 +5339,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_91_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5060,7 +5357,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_91_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5077,7 +5375,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_92_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5094,7 +5393,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_92_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -5111,7 +5411,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_92_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5128,7 +5429,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_92_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5145,7 +5447,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_92_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5162,7 +5465,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_93_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5179,7 +5483,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_93_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -5196,7 +5501,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_93_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5213,7 +5519,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_93_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5230,7 +5537,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_93_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5247,7 +5555,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_94_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5264,7 +5573,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_94_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -5281,7 +5591,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_94_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5298,7 +5609,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_94_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5315,7 +5627,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_94_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5332,7 +5645,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_95_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5349,7 +5663,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_95_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -5366,7 +5681,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_95_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5383,7 +5699,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_95_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5400,7 +5717,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_95_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5417,7 +5735,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_96_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x01, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5433,7 +5752,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_96_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x05, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -5449,7 +5769,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_96_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x80, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5465,7 +5786,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_96_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x41, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5481,7 +5803,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_96_Zero()
 		{
 			MockMMU mmu(0x11, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5497,7 +5820,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_97_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x88;
@@ -5513,7 +5837,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_98_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5530,7 +5855,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_98_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x15;
@@ -5547,7 +5873,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_98_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5564,7 +5891,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_98_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5581,7 +5909,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_98_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -5598,7 +5927,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_99_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5615,7 +5945,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_99_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x15;
@@ -5632,7 +5963,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_99_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5649,7 +5981,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_99_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5666,7 +5999,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_99_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5683,7 +6017,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9A_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5700,7 +6035,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9A_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x15;
@@ -5717,7 +6053,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9A_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5734,7 +6071,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9A_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5751,7 +6089,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9A_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5768,7 +6107,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9B_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5785,7 +6125,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9B_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x15;
@@ -5802,7 +6143,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9B_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5819,7 +6161,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9B_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5836,7 +6179,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9B_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5853,7 +6197,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9C_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5870,7 +6215,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9C_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x15;
@@ -5887,7 +6233,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9C_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5904,7 +6251,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9C_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -5921,7 +6269,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9C_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5938,7 +6287,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9D_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -5955,7 +6305,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9D_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x15;
@@ -5972,7 +6323,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9D_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -5989,7 +6341,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9D_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -6006,7 +6359,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9D_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -6023,7 +6377,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9E_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x01, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -6039,7 +6394,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9E_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x05, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x15;
@@ -6055,7 +6411,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9E_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x80, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -6071,7 +6428,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9E_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x41, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -6087,7 +6445,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9E_Zero()
 		{
 			MockMMU mmu(0x11, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x12;
@@ -6103,7 +6462,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9F_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x88;
@@ -6119,7 +6479,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_9F_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x88;
@@ -6135,7 +6496,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A0_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6152,7 +6514,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A0_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6169,7 +6532,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A1_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6186,7 +6550,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A1_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6203,7 +6568,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A2_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6220,7 +6586,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A2_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6237,7 +6604,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A3_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6254,7 +6622,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A3_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b10011100;
@@ -6271,7 +6640,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A4_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6288,7 +6658,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A4_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6305,7 +6676,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A5_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6322,7 +6694,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A5_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6339,7 +6712,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A6_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6355,7 +6729,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A6_NonZero()
 		{
 			MockMMU mmu(0b11110000, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6371,7 +6746,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A7_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6388,7 +6764,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A7_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6404,7 +6781,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A8_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b11110000;
@@ -6421,7 +6799,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A8_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6438,7 +6817,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A9_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b11110000;
@@ -6455,7 +6835,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_A9_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6472,7 +6853,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AA_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b11110000;
@@ -6489,7 +6871,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AA_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6506,7 +6889,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AB_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b11110000;
@@ -6523,7 +6907,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AB_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6540,7 +6925,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AC_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b11110000;
@@ -6557,7 +6943,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AC_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6574,7 +6961,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AD_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b11110000;
@@ -6591,7 +6979,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AD_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6608,7 +6997,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AE_Zero()
 		{
 			MockMMU mmu(0b11110000, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b11110000;
@@ -6624,7 +7014,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AE_NonZero()
 		{
 			MockMMU mmu(0b11110000, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6640,7 +7031,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_AF_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b11110000;
@@ -6656,7 +7048,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B0_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6673,7 +7066,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B0_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6690,7 +7084,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B1_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6707,7 +7102,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B1_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6724,7 +7120,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B2_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6741,7 +7138,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B2_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6758,7 +7156,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B3_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6775,7 +7174,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B3_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6792,7 +7192,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B4_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6809,7 +7210,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B4_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6826,7 +7228,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B5_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6843,7 +7246,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B5_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6860,7 +7264,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B6_Zero()
 		{
 			MockMMU mmu(0b00000000, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6876,7 +7281,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B6_NonZero()
 		{
 			MockMMU mmu(0b10110000, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6892,7 +7298,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B7_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00000000;
@@ -6908,7 +7315,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B7_NonZero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0b00011100;
@@ -6924,7 +7332,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B8_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -6942,7 +7351,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B8_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -6960,7 +7370,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B8_Carry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -6978,7 +7389,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B9_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -6996,7 +7408,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B9_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7014,7 +7427,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_B9_Carry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7032,7 +7446,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BA_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7050,7 +7465,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BA_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7068,7 +7484,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BA_Carry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7086,7 +7503,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BB_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7104,7 +7522,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BB_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7122,7 +7541,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BB_Carry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7140,7 +7560,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BC_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7158,7 +7579,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BC_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7176,7 +7598,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BC_Carry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7194,7 +7617,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BD_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7212,7 +7636,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BD_HalfCarry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7230,7 +7655,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BD_Carry()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7248,7 +7674,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BE_Zero()
 		{
 			MockMMU mmu(0x10, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7264,7 +7691,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BE_HalfCarry()
 		{
 			MockMMU mmu(0x05, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7280,7 +7708,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BE_Carry()
 		{
 			MockMMU mmu(0x20, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7296,7 +7725,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_BF_Zero()
 		{
 			MockMMU mmu(0x4c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x10;
@@ -7312,7 +7742,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C0_Zero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7328,7 +7759,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C0_NotZero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7344,7 +7776,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C1()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7364,7 +7797,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C2_Zero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7380,7 +7814,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C2_NotZero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7396,7 +7831,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C3()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7412,7 +7848,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C4_Zero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7428,7 +7865,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C4_NotZero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7444,7 +7882,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C5()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7464,7 +7903,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C6_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x13, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -7480,7 +7920,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C6_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x1c, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -7496,7 +7937,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C6_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x10, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -7512,7 +7954,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C6_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x12, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -7528,7 +7971,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C6_Zero()
 		{
 			MockMMU mmu(0xef, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -7544,7 +7988,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C7()
 		{
 			MockMMU mmu(0xef, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7560,7 +8005,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C8_Zero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7576,7 +8022,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C8_NotZero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7592,7 +8039,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_C9()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7608,7 +8056,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CA_Zero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7624,7 +8073,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CA_NotZero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7640,7 +8090,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CC_Zero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7656,7 +8107,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CC_NotZero()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7672,7 +8124,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CD()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7688,7 +8141,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CE_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x13, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -7704,7 +8158,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CE_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x1b, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -7720,7 +8175,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CE_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x10, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -7736,7 +8192,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CE_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x11, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0xfe;
@@ -7752,7 +8209,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CE_Zero()
 		{
 			MockMMU mmu(0xef, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -7768,7 +8226,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_CF()
 		{
 			MockMMU mmu(0xef, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7784,7 +8243,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D0_Carry()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7800,7 +8260,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D0_NotCarry()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7816,7 +8277,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D1()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7836,7 +8298,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D2_Carry()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7852,7 +8315,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D2_NotCarry()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7868,7 +8332,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D4_Carry()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7884,7 +8349,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D4_NotCarry()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7900,7 +8366,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D5()
 		{
 			MockMMU mmu(0x4c, 0xde37);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -7920,7 +8387,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D6_NoZero_NoCarry_NoHalfCarry()
 		{
 			MockMMU mmu(0x01, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -7936,7 +8404,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D6_NoZero_NoCarry_HalfCarry()
 		{
 			MockMMU mmu(0x05, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x14;
@@ -7952,7 +8421,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D6_NoZero_Carry_NoHalfCarry()
 		{
 			MockMMU mmu(0x80, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x00;
@@ -7968,7 +8438,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D6_NoZero_Carry_HalfCarry()
 		{
 			MockMMU mmu(0x41, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x20;
@@ -7984,7 +8455,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D6_Zero()
 		{
 			MockMMU mmu(0x11, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.a = 0x11;
@@ -8000,7 +8472,8 @@ namespace GameBoyEmulatorTest
 		void Opcode_D7()
 		{
 			MockMMU mmu(0xef, 0xa734);
-			CPUOpcodes ops(&mmu);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
 			CPURegisters registers;
 			registers.pc = 10;
 			registers.sp = 30;
@@ -8008,6 +8481,229 @@ namespace GameBoyEmulatorTest
 			int cycles = ops.op_D7(&registers);
 			Assert::AreEqual(cycles, 16);
 			Assert::AreEqual(registers.pc, 0x10);
+			Assert::AreEqual(registers.sp, 28);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_D8_Carry()
+		{
+			MockMMU mmu(0x4c, 0xde37);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11110000;
+			int cycles = ops.op_D8(&registers);
+			Assert::AreEqual(cycles, 20);
+			Assert::AreEqual(registers.pc, 0xde37);
+			Assert::AreEqual(registers.sp, 32);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_D8_NotCarry()
+		{
+			MockMMU mmu(0x4c, 0xde37);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11100000;
+			int cycles = ops.op_D8(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.sp, 30);
+			Assert::AreEqual(registers.f, 0b11100000);
+		};
+
+		[TestMethod]
+		void Opcode_D9()
+		{
+			MockMMU mmu(0x4c, 0xde37);
+			Interrupts interrupts;
+			interrupts.DisableInterrupts();
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11110000;
+			int cycles = ops.op_D9(&registers);
+			Assert::AreEqual(cycles, 16);
+			Assert::AreEqual(registers.pc, 0xde37);
+			Assert::AreEqual(registers.sp, 32);
+			Assert::AreEqual(interrupts.InterruptsEnabled(), true);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_DA_Carry()
+		{
+			MockMMU mmu(0x4c, 0xde37);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11110000;
+			int cycles = ops.op_DA(&registers);
+			Assert::AreEqual(cycles, 16);
+			Assert::AreEqual(registers.pc, 0xde37);
+			Assert::AreEqual(registers.sp, 30);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_DA_NotCarry()
+		{
+			MockMMU mmu(0x4c, 0xde37);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11100000;
+			int cycles = ops.op_DA(&registers);
+			Assert::AreEqual(cycles, 12);
+			Assert::AreEqual(registers.pc, 12);
+			Assert::AreEqual(registers.sp, 30);
+			Assert::AreEqual(registers.f, 0b11100000);
+		};
+
+		[TestMethod]
+		void Opcode_DC_Carry()
+		{
+			MockMMU mmu(0x4c, 0xde37);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11110000;
+			int cycles = ops.op_DC(&registers);
+			Assert::AreEqual(cycles, 24);
+			Assert::AreEqual(registers.pc, 0xde37);
+			Assert::AreEqual(registers.sp, 28);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_DC_NotCarry()
+		{
+			MockMMU mmu(0x4c, 0xde37);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11100000;
+			int cycles = ops.op_DC(&registers);
+			Assert::AreEqual(cycles, 12);
+			Assert::AreEqual(registers.pc, 12);
+			Assert::AreEqual(registers.sp, 30);
+			Assert::AreEqual(registers.f, 0b11100000);
+		};
+
+		[TestMethod]
+		void Opcode_DE_NoZero_NoCarry_NoHalfCarry()
+		{
+			MockMMU mmu(0x01, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0x12;
+			registers.f = 0b10110000;
+			int cycles = ops.op_DE(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.a, 0x10);
+			Assert::AreEqual(registers.f, 0b01000000);
+		};
+
+		[TestMethod]
+		void Opcode_DE_NoZero_NoCarry_HalfCarry()
+		{
+			MockMMU mmu(0x05, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0x15;
+			registers.f = 0b10010000;
+			int cycles = ops.op_DE(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.a, 0x0f);
+			Assert::AreEqual(registers.f, 0b01100000);
+		};
+
+		[TestMethod]
+		void Opcode_DE_NoZero_Carry_NoHalfCarry()
+		{
+			MockMMU mmu(0x80, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0x00;
+			registers.f = 0b10100000;
+			int cycles = ops.op_DE(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.a, 0x80);
+			Assert::AreEqual(registers.f, 0b01010000);
+		};
+
+		[TestMethod]
+		void Opcode_DE_NoZero_Carry_HalfCarry()
+		{
+			MockMMU mmu(0x41, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0x20;
+			registers.f = 0b11000000;
+			int cycles = ops.op_DE(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.a, 0xdf);
+			Assert::AreEqual(registers.f, 0b01110000);
+		};
+
+		[TestMethod]
+		void Opcode_DE_Zero()
+		{
+			MockMMU mmu(0x10, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0x11;
+			registers.f = 0b00110000;
+			int cycles = ops.op_DE(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.a, 0x00);
+			Assert::AreEqual(registers.f, 0b11000000);
+		};
+
+		[TestMethod]
+		void Opcode_DF()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11110000;
+			int cycles = ops.op_DF(&registers);
+			Assert::AreEqual(cycles, 16);
+			Assert::AreEqual(registers.pc, 0x18);
 			Assert::AreEqual(registers.sp, 28);
 			Assert::AreEqual(registers.f, 0b11110000);
 		};
