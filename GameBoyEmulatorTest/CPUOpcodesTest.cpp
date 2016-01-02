@@ -9892,5 +9892,37 @@ namespace GameBoyEmulatorTest
 			Assert::AreEqual(registers.d, 0b00000000);
 			Assert::AreEqual(registers.f, 0b10010000);
 		};
+
+		[TestMethod]
+		void Opcode_CB_BIT_Zero()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.d = 0b00001000;
+			registers.f = 0b01010000;
+			ops.op_CB_BIT(&registers, 2, &registers.d);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.d, 0b00001000);
+			Assert::AreEqual(registers.f, 0b10110000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_BIT_NotZero()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.e = 0b00101000;
+			registers.f = 0b11010000;
+			ops.op_CB_BIT(&registers, 5, &registers.e);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.e, 0b00101000);
+			Assert::AreEqual(registers.f, 0b00110000);
+		};
 	};
 }
