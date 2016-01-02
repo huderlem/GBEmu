@@ -4706,3 +4706,147 @@ int CPUOpcodes::op_FF(CPURegisters * registers)
 	registers->pc = 0x0038;
 	return 16;
 }
+
+// Helper for opcodes CB 00 through CB 07.
+// Performs RLC on the given value.
+void CPUOpcodes::op_CB_RLC(CPURegisters *registers, int *value)
+{
+	int carry = (*value >> 7);
+	*value = ((*value << 1) & 0xff) | carry;
+	registers->f = carry << 4;
+	if (*value == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+}
+
+// rlc b
+int CPUOpcodes::op_CB00(CPURegisters * registers)
+{
+	op_CB_RLC(registers, &registers->b);
+	return 8;
+}
+
+// rlc c
+int CPUOpcodes::op_CB01(CPURegisters * registers)
+{
+	op_CB_RLC(registers, &registers->c);
+	return 8;
+}
+
+// rlc d
+int CPUOpcodes::op_CB02(CPURegisters * registers)
+{
+	op_CB_RLC(registers, &registers->d);
+	return 8;
+}
+
+// rlc e
+int CPUOpcodes::op_CB03(CPURegisters * registers)
+{
+	op_CB_RLC(registers, &registers->e);
+	return 8;
+}
+
+// rlc h
+int CPUOpcodes::op_CB04(CPURegisters * registers)
+{
+	op_CB_RLC(registers, &registers->h);
+	return 8;
+}
+
+// rlc l
+int CPUOpcodes::op_CB05(CPURegisters * registers)
+{
+	op_CB_RLC(registers, &registers->l);
+	return 8;
+}
+
+// rlc (hl)
+int CPUOpcodes::op_CB06(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_RLC(registers, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// rlc a
+int CPUOpcodes::op_CB07(CPURegisters * registers)
+{
+	op_CB_RLC(registers, &registers->a);
+	return 8;
+}
+
+// Helper for opcodes CB 08 through CB 0F.
+// Performs RRC on the given value.
+void CPUOpcodes::op_CB_RRC(CPURegisters *registers, int *value)
+{
+	int carry = (*value & 1);
+	*value = (*value >> 1) | (carry << 7);
+	registers->f = carry << 4;
+	if (*value == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+}
+
+// rrc b
+int CPUOpcodes::op_CB08(CPURegisters * registers)
+{
+	op_CB_RRC(registers, &registers->b);
+	return 8;
+}
+
+// rrc c
+int CPUOpcodes::op_CB09(CPURegisters * registers)
+{
+	op_CB_RRC(registers, &registers->c);
+	return 8;
+}
+
+// rrc d
+int CPUOpcodes::op_CB0A(CPURegisters * registers)
+{
+	op_CB_RRC(registers, &registers->d);
+	return 8;
+}
+
+// rrc e
+int CPUOpcodes::op_CB0B(CPURegisters * registers)
+{
+	op_CB_RRC(registers, &registers->e);
+	return 8;
+}
+
+// rrc h
+int CPUOpcodes::op_CB0C(CPURegisters * registers)
+{
+	op_CB_RRC(registers, &registers->h);
+	return 8;
+}
+
+// rrc l
+int CPUOpcodes::op_CB0D(CPURegisters * registers)
+{
+	op_CB_RRC(registers, &registers->l);
+	return 8;
+}
+
+// rrc (hl)
+int CPUOpcodes::op_CB0E(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_RRC(registers, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// rrc a
+int CPUOpcodes::op_CB0F(CPURegisters * registers)
+{
+	op_CB_RRC(registers, &registers->a);
+	return 8;
+}
