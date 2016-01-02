@@ -247,6 +247,13 @@ public:
 	int op_EA(CPURegisters *registers);
 	int op_EE(CPURegisters *registers);
 	int op_EF(CPURegisters *registers);
+	int op_F0(CPURegisters *registers);
+	int op_F1(CPURegisters *registers);
+	int op_F2(CPURegisters *registers);
+	int op_F3(CPURegisters *registers);
+	int op_F5(CPURegisters *registers);
+	int op_F6(CPURegisters *registers);
+	int op_F7(CPURegisters *registers);
 };
 
 

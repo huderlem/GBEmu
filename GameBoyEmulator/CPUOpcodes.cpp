@@ -4493,3 +4493,74 @@ int CPUOpcodes::op_EF(CPURegisters * registers)
 	registers->pc = 0x0028;
 	return 16;
 }
+
+// ldh a, (a8)
+int CPUOpcodes::op_F0(CPURegisters * registers)
+{
+	int address = mmu->ReadByte(registers->pc);
+	registers->pc++;
+	registers->a = mmu->ReadByte(address);
+	return 12;
+}
+
+// pop af
+int CPUOpcodes::op_F1(CPURegisters * registers)
+{
+	registers->f = mmu->ReadByte(registers->sp);
+	registers->a = mmu->ReadByte(registers->sp + 1);
+	registers->sp += 2;
+	return 12;
+}
+
+// ld a, (c)
+int CPUOpcodes::op_F2(CPURegisters * registers)
+{
+	registers->a = mmu->ReadByte(0xff00 + registers->c);
+	return 8;
+}
+
+// di
+int CPUOpcodes::op_F3(CPURegisters * registers)
+{
+	interrupts->DisableInterrupts();
+	return 4;
+}
+
+// push af
+int CPUOpcodes::op_F5(CPURegisters * registers)
+{
+	int af = (registers->a << 8) | registers->f;
+	registers->sp -= 2;
+	mmu->WriteWord(af, registers->sp);
+	return 16;
+}
+
+// or d8
+int CPUOpcodes::op_F6(CPURegisters * registers)
+{
+	int value = mmu->ReadByte(registers->pc);
+	registers->pc++;
+
+	registers->a = registers->a | value;
+	// reset subtract, half carry, and carry flags
+	registers->f &= 0b10001111;
+	if (registers->a == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	return 8;
+}
+
+// rst 30H
+int CPUOpcodes::op_F7(CPURegisters * registers)
+{
+	registers->sp -= 2;
+	mmu->WriteWord(registers->pc, registers->sp);
+	registers->pc = 0x0030;
+	return 16;
+}

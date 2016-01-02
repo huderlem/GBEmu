@@ -9074,5 +9074,151 @@ namespace GameBoyEmulatorTest
 			Assert::AreEqual(registers.sp, 28);
 			Assert::AreEqual(registers.f, 0b11110000);
 		};
+
+		[TestMethod]
+		void Opcode_F0()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11110000;
+			int cycles = ops.op_F0(&registers);
+			Assert::AreEqual(cycles, 12);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.sp, 30);
+			Assert::AreEqual(registers.a, 0xef);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_F1()
+		{
+			MockMMU mmu(0xc0, 0x7fc0);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.a = 1;
+			registers.f = 0b00000001;
+			int cycles = ops.op_F1(&registers);
+			Assert::AreEqual(cycles, 12);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.sp, 32);
+			Assert::AreEqual(registers.a, 0xc0);
+			Assert::AreEqual(registers.f, 0xc0);
+		};
+
+		[TestMethod]
+		void Opcode_F2()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.a = 10;
+			registers.c = 4;
+			registers.f = 0b11110000;
+			int cycles = ops.op_F2(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.sp, 30);
+			Assert::AreEqual(registers.a, 0xef);
+			Assert::AreEqual(registers.f, 0b11110000);
+			// TODO: make sure WriteByte() was called correctly
+		};
+
+		[TestMethod]
+		void Opcode_F3()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11110000;
+			int cycles = ops.op_F3(&registers);
+			Assert::AreEqual(cycles, 4);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.sp, 30);
+			Assert::AreEqual(interrupts.InterruptsEnabled(), false);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_F5()
+		{
+			MockMMU mmu(0x4c, 0xde37);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.a = 0x05;
+			registers.f = 0xf0;
+			int cycles = ops.op_F5(&registers);
+			Assert::AreEqual(cycles, 16);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.sp, 28);
+			Assert::AreEqual(registers.a, 0x05);
+			Assert::AreEqual(registers.f, 0xf0);
+		};
+
+		[TestMethod]
+		void Opcode_F6_Zero()
+		{
+			MockMMU mmu(0b00000000, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0b00000000;
+			registers.f = 0b01110000;
+			int cycles = ops.op_F6(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.a, 0x00);
+			Assert::AreEqual(registers.f, 0b10000000);
+		};
+
+		[TestMethod]
+		void Opcode_F6_NonZero()
+		{
+			MockMMU mmu(0b10110000, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0b00011100;
+			registers.f = 0b11110000;
+			int cycles = ops.op_F6(&registers);
+			Assert::AreEqual(cycles, 8);
+			Assert::AreEqual(registers.pc, 11);
+			Assert::AreEqual(registers.a, 0b10111100);
+			Assert::AreEqual(registers.f, 0b00000000);
+		};
+
+		[TestMethod]
+		void Opcode_F7()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.sp = 30;
+			registers.f = 0b11110000;
+			int cycles = ops.op_F7(&registers);
+			Assert::AreEqual(cycles, 16);
+			Assert::AreEqual(registers.pc, 0x30);
+			Assert::AreEqual(registers.sp, 28);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
 	};
 }
