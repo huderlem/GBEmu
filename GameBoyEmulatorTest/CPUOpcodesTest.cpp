@@ -9620,5 +9620,101 @@ namespace GameBoyEmulatorTest
 			Assert::AreEqual(registers.d, 0b00000000);
 			Assert::AreEqual(registers.f, 0b10000000);
 		};
+
+		[TestMethod]
+		void Opcode_CB_RL_NoCarry()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.b = 0b10011010;
+			registers.f = 0b11100000;
+			ops.op_CB_RL(&registers, &registers.b);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.b, 0b00110100);
+			Assert::AreEqual(registers.f, 0b00010000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_RL_Carry()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.c = 0b00011001;
+			registers.f = 0b11110000;
+			ops.op_CB_RL(&registers, &registers.c);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.c, 0b00110011);
+			Assert::AreEqual(registers.f, 0b00000000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_RL_Zero()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.d = 0b10000000;
+			registers.f = 0b01100000;
+			ops.op_CB_RL(&registers, &registers.d);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.d, 0b00000000);
+			Assert::AreEqual(registers.f, 0b10010000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_RR_NoCarry()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.b = 0b10011010;
+			registers.f = 0b11110000;
+			ops.op_CB_RR(&registers, &registers.b);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.b, 0b11001101);
+			Assert::AreEqual(registers.f, 0b00000000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_RR_Carry()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.c = 0b10011001;
+			registers.f = 0b11100000;
+			ops.op_CB_RR(&registers, &registers.c);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.c, 0b01001100);
+			Assert::AreEqual(registers.f, 0b00010000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_RR_Zero()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.d = 0b00000001;
+			registers.f = 0b01100000;
+			ops.op_CB_RR(&registers, &registers.d);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.d, 0b00000000);
+			Assert::AreEqual(registers.f, 0b10010000);
+		};
 	};
 }

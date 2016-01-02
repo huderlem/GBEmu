@@ -4850,3 +4850,156 @@ int CPUOpcodes::op_CB0F(CPURegisters * registers)
 	op_CB_RRC(registers, &registers->a);
 	return 8;
 }
+
+// Helper for opcodes CB 10 through CB 17.
+// Performs RL on the given value.
+void CPUOpcodes::op_CB_RL(CPURegisters *registers, int *value)
+{
+	int carry = (registers->f >> 4) & 1;
+	if ((*value >> 7) == 1)
+	{
+		registers->f = 0b00010000;
+	}
+	else
+	{
+		registers->f = 0b00000000;
+	}
+
+	*value = ((*value << 1) | carry) & 0xff;
+	if (*value == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+}
+
+// rl b
+int CPUOpcodes::op_CB10(CPURegisters * registers)
+{
+	op_CB_RL(registers, &registers->b);
+	return 8;
+}
+
+// rl c
+int CPUOpcodes::op_CB11(CPURegisters * registers)
+{
+	op_CB_RL(registers, &registers->c);
+	return 8;
+}
+
+// rl d
+int CPUOpcodes::op_CB12(CPURegisters * registers)
+{
+	op_CB_RL(registers, &registers->d);
+	return 8;
+}
+
+// rl e
+int CPUOpcodes::op_CB13(CPURegisters * registers)
+{
+	op_CB_RL(registers, &registers->e);
+	return 8;
+}
+
+// rl h
+int CPUOpcodes::op_CB14(CPURegisters * registers)
+{
+	op_CB_RL(registers, &registers->h);
+	return 8;
+}
+
+// rl l
+int CPUOpcodes::op_CB15(CPURegisters * registers)
+{
+	op_CB_RL(registers, &registers->l);
+	return 8;
+}
+
+// rl (hl)
+int CPUOpcodes::op_CB16(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_RL(registers, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// rl a
+int CPUOpcodes::op_CB17(CPURegisters * registers)
+{
+	op_CB_RL(registers, &registers->a);
+	return 8;
+}
+
+// Helper for opcodes CB 18 through CB 1F.
+// Performs RR on the given value.
+void CPUOpcodes::op_CB_RR(CPURegisters *registers, int *value)
+{
+	int carry = (registers->f >> 4) & 1;
+	int newCarry = (*value & 1);
+	*value = (*value >> 1) | (carry << 7);
+	registers->f = (newCarry << 4);
+	if (*value == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+}
+
+// rr b
+int CPUOpcodes::op_CB18(CPURegisters * registers)
+{
+	op_CB_RR(registers, &registers->b);
+	return 8;
+}
+
+// rr c
+int CPUOpcodes::op_CB19(CPURegisters * registers)
+{
+	op_CB_RR(registers, &registers->c);
+	return 8;
+}
+
+// rr d
+int CPUOpcodes::op_CB1A(CPURegisters * registers)
+{
+	op_CB_RR(registers, &registers->d);
+	return 8;
+}
+
+// rrc e
+int CPUOpcodes::op_CB1B(CPURegisters * registers)
+{
+	op_CB_RR(registers, &registers->e);
+	return 8;
+}
+
+// rr h
+int CPUOpcodes::op_CB1C(CPURegisters * registers)
+{
+	op_CB_RR(registers, &registers->h);
+	return 8;
+}
+
+// rr l
+int CPUOpcodes::op_CB1D(CPURegisters * registers)
+{
+	op_CB_RR(registers, &registers->l);
+	return 8;
+}
+
+// rr (hl)
+int CPUOpcodes::op_CB1E(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_RR(registers, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// rr a
+int CPUOpcodes::op_CB1F(CPURegisters * registers)
+{
+	op_CB_RR(registers, &registers->a);
+	return 8;
+}
