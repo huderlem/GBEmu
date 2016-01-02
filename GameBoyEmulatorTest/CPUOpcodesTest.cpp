@@ -9983,9 +9983,73 @@ namespace GameBoyEmulatorTest
 			registers.pc = 10;
 			registers.a = 0b00101010;
 			registers.f = 0b11110000;
-			ops.op_CB_RES(&registers, 7, &registers.d);
+			ops.op_CB_RES(&registers, 7, &registers.a);
 			Assert::AreEqual(registers.pc, 10);
 			Assert::AreEqual(registers.a, 0b00101010);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_SET_BitZero()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.h = 0b00101000;
+			registers.f = 0b11110000;
+			ops.op_CB_SET(&registers, 0, &registers.h);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.h, 0b00101001);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_SET_BitZero_Same()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.d = 0b00101011;
+			registers.f = 0b11110000;
+			ops.op_CB_SET(&registers, 0, &registers.d);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.d, 0b00101011);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_SET_BitSeven()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.b = 0b00101001;
+			registers.f = 0b11110000;
+			ops.op_CB_SET(&registers, 7, &registers.b);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.b, 0b10101001);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_SET_BitSeven_Same()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0b10101010;
+			registers.f = 0b11110000;
+			ops.op_CB_SET(&registers, 7, &registers.a);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.a, 0b10101010);
 			Assert::AreEqual(registers.f, 0b11110000);
 		};
 	};

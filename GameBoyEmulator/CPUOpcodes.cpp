@@ -6275,3 +6275,482 @@ int CPUOpcodes::op_CBBF(CPURegisters * registers)
 	op_CB_RES(registers, 7, &registers->a);
 	return 8;
 }
+
+// Helper for opcodes CB C0 through CB FF.
+// Performs SET on the given value.
+void CPUOpcodes::op_CB_SET(CPURegisters *registers, int bitIndex, int *value)
+{
+	*value |= (1 << bitIndex);
+}
+
+// set 0, b
+int CPUOpcodes::op_CBC0(CPURegisters * registers)
+{
+	op_CB_SET(registers, 0, &registers->b);
+	return 8;
+}
+
+// set 0, c
+int CPUOpcodes::op_CBC1(CPURegisters * registers)
+{
+	op_CB_SET(registers, 0, &registers->c);
+	return 8;
+}
+
+// set 0, d
+int CPUOpcodes::op_CBC2(CPURegisters * registers)
+{
+	op_CB_SET(registers, 0, &registers->d);
+	return 8;
+}
+
+// set 0, e
+int CPUOpcodes::op_CBC3(CPURegisters * registers)
+{
+	op_CB_SET(registers, 0, &registers->e);
+	return 8;
+}
+
+// set 0, h
+int CPUOpcodes::op_CBC4(CPURegisters * registers)
+{
+	op_CB_SET(registers, 0, &registers->h);
+	return 8;
+}
+
+// set 0, l
+int CPUOpcodes::op_CBC5(CPURegisters * registers)
+{
+	op_CB_SET(registers, 0, &registers->l);
+	return 8;
+}
+
+// set 0, (hl)
+int CPUOpcodes::op_CBC6(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SET(registers, 0, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// set 0, a
+int CPUOpcodes::op_CBC7(CPURegisters * registers)
+{
+	op_CB_SET(registers, 0, &registers->a);
+	return 8;
+}
+
+// set 1, b
+int CPUOpcodes::op_CBC8(CPURegisters * registers)
+{
+	op_CB_SET(registers, 1, &registers->b);
+	return 8;
+}
+
+// set 1, c
+int CPUOpcodes::op_CBC9(CPURegisters * registers)
+{
+	op_CB_SET(registers, 1, &registers->c);
+	return 8;
+}
+
+// set 1, d
+int CPUOpcodes::op_CBCA(CPURegisters * registers)
+{
+	op_CB_SET(registers, 1, &registers->d);
+	return 8;
+}
+
+// set 1, e
+int CPUOpcodes::op_CBCB(CPURegisters * registers)
+{
+	op_CB_SET(registers, 1, &registers->e);
+	return 8;
+}
+
+// set 1, h
+int CPUOpcodes::op_CBCC(CPURegisters * registers)
+{
+	op_CB_SET(registers, 1, &registers->h);
+	return 8;
+}
+
+// set 1, l
+int CPUOpcodes::op_CBCD(CPURegisters * registers)
+{
+	op_CB_SET(registers, 1, &registers->l);
+	return 8;
+}
+
+// set 1, (hl)
+int CPUOpcodes::op_CBCE(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SET(registers, 1, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// set 1, a
+int CPUOpcodes::op_CBCF(CPURegisters * registers)
+{
+	op_CB_SET(registers, 1, &registers->a);
+	return 8;
+}
+
+// set 2, b
+int CPUOpcodes::op_CBD0(CPURegisters * registers)
+{
+	op_CB_SET(registers, 2, &registers->b);
+	return 8;
+}
+
+// set 2, c
+int CPUOpcodes::op_CBD1(CPURegisters * registers)
+{
+	op_CB_SET(registers, 2, &registers->c);
+	return 8;
+}
+
+// set 2, d
+int CPUOpcodes::op_CBD2(CPURegisters * registers)
+{
+	op_CB_SET(registers, 2, &registers->d);
+	return 8;
+}
+
+// set 2, e
+int CPUOpcodes::op_CBD3(CPURegisters * registers)
+{
+	op_CB_SET(registers, 2, &registers->e);
+	return 8;
+}
+
+// set 2, h
+int CPUOpcodes::op_CBD4(CPURegisters * registers)
+{
+	op_CB_SET(registers, 2, &registers->h);
+	return 8;
+}
+
+// set 2, l
+int CPUOpcodes::op_CBD5(CPURegisters * registers)
+{
+	op_CB_SET(registers, 2, &registers->l);
+	return 8;
+}
+
+// set 2, (hl)
+int CPUOpcodes::op_CBD6(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SET(registers, 2, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// set 2, a
+int CPUOpcodes::op_CBD7(CPURegisters * registers)
+{
+	op_CB_SET(registers, 2, &registers->a);
+	return 8;
+}
+
+// set 3, b
+int CPUOpcodes::op_CBD8(CPURegisters * registers)
+{
+	op_CB_SET(registers, 3, &registers->b);
+	return 8;
+}
+
+// set 3, c
+int CPUOpcodes::op_CBD9(CPURegisters * registers)
+{
+	op_CB_SET(registers, 3, &registers->c);
+	return 8;
+}
+
+// set 3, d
+int CPUOpcodes::op_CBDA(CPURegisters * registers)
+{
+	op_CB_SET(registers, 3, &registers->d);
+	return 8;
+}
+
+// set 3, e
+int CPUOpcodes::op_CBDB(CPURegisters * registers)
+{
+	op_CB_SET(registers, 3, &registers->e);
+	return 8;
+}
+
+// set 3, h
+int CPUOpcodes::op_CBDC(CPURegisters * registers)
+{
+	op_CB_SET(registers, 3, &registers->h);
+	return 8;
+}
+
+// set 3, l
+int CPUOpcodes::op_CBDD(CPURegisters * registers)
+{
+	op_CB_SET(registers, 3, &registers->l);
+	return 8;
+}
+
+// set 3, (hl)
+int CPUOpcodes::op_CBDE(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SET(registers, 3, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// set 3, a
+int CPUOpcodes::op_CBDF(CPURegisters * registers)
+{
+	op_CB_SET(registers, 3, &registers->a);
+	return 8;
+}
+
+// set 4, b
+int CPUOpcodes::op_CBE0(CPURegisters * registers)
+{
+	op_CB_SET(registers, 4, &registers->b);
+	return 8;
+}
+
+// set 4, c
+int CPUOpcodes::op_CBE1(CPURegisters * registers)
+{
+	op_CB_SET(registers, 4, &registers->c);
+	return 8;
+}
+
+// set 4, d
+int CPUOpcodes::op_CBE2(CPURegisters * registers)
+{
+	op_CB_SET(registers, 4, &registers->d);
+	return 8;
+}
+
+// set 4, e
+int CPUOpcodes::op_CBE3(CPURegisters * registers)
+{
+	op_CB_SET(registers, 4, &registers->e);
+	return 8;
+}
+
+// set 4, h
+int CPUOpcodes::op_CBE4(CPURegisters * registers)
+{
+	op_CB_SET(registers, 4, &registers->h);
+	return 8;
+}
+
+// set 4, l
+int CPUOpcodes::op_CBE5(CPURegisters * registers)
+{
+	op_CB_SET(registers, 4, &registers->l);
+	return 8;
+}
+
+// set 4, (hl)
+int CPUOpcodes::op_CBE6(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SET(registers, 4, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// set 4, a
+int CPUOpcodes::op_CBE7(CPURegisters * registers)
+{
+	op_CB_SET(registers, 4, &registers->a);
+	return 8;
+}
+
+// set 5, b
+int CPUOpcodes::op_CBE8(CPURegisters * registers)
+{
+	op_CB_SET(registers, 5, &registers->b);
+	return 8;
+}
+
+// set 5, c
+int CPUOpcodes::op_CBE9(CPURegisters * registers)
+{
+	op_CB_SET(registers, 5, &registers->c);
+	return 8;
+}
+
+// set 5, d
+int CPUOpcodes::op_CBEA(CPURegisters * registers)
+{
+	op_CB_SET(registers, 5, &registers->d);
+	return 8;
+}
+
+// set 5, e
+int CPUOpcodes::op_CBEB(CPURegisters * registers)
+{
+	op_CB_SET(registers, 5, &registers->e);
+	return 8;
+}
+
+// set 5, h
+int CPUOpcodes::op_CBEC(CPURegisters * registers)
+{
+	op_CB_SET(registers, 5, &registers->h);
+	return 8;
+}
+
+// set 5, l
+int CPUOpcodes::op_CBED(CPURegisters * registers)
+{
+	op_CB_SET(registers, 5, &registers->l);
+	return 8;
+}
+
+// set 5, (hl)
+int CPUOpcodes::op_CBEE(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SET(registers, 5, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// set 5, a
+int CPUOpcodes::op_CBEF(CPURegisters * registers)
+{
+	op_CB_SET(registers, 5, &registers->a);
+	return 8;
+}
+
+// set 6, b
+int CPUOpcodes::op_CBF0(CPURegisters * registers)
+{
+	op_CB_SET(registers, 6, &registers->b);
+	return 8;
+}
+
+// set 6, c
+int CPUOpcodes::op_CBF1(CPURegisters * registers)
+{
+	op_CB_SET(registers, 6, &registers->c);
+	return 8;
+}
+
+// set 6, d
+int CPUOpcodes::op_CBF2(CPURegisters * registers)
+{
+	op_CB_SET(registers, 6, &registers->d);
+	return 8;
+}
+
+// set 6, e
+int CPUOpcodes::op_CBF3(CPURegisters * registers)
+{
+	op_CB_SET(registers, 6, &registers->e);
+	return 8;
+}
+
+// set 6, h
+int CPUOpcodes::op_CBF4(CPURegisters * registers)
+{
+	op_CB_SET(registers, 6, &registers->h);
+	return 8;
+}
+
+// set 6, l
+int CPUOpcodes::op_CBF5(CPURegisters * registers)
+{
+	op_CB_SET(registers, 6, &registers->l);
+	return 8;
+}
+
+// set 6, (hl)
+int CPUOpcodes::op_CBF6(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SET(registers, 6, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// set 6, a
+int CPUOpcodes::op_CBF7(CPURegisters * registers)
+{
+	op_CB_SET(registers, 6, &registers->a);
+	return 8;
+}
+
+// set 7, b
+int CPUOpcodes::op_CBF8(CPURegisters * registers)
+{
+	op_CB_SET(registers, 7, &registers->b);
+	return 8;
+}
+
+// set 7, c
+int CPUOpcodes::op_CBF9(CPURegisters * registers)
+{
+	op_CB_SET(registers, 7, &registers->c);
+	return 8;
+}
+
+// set 7, d
+int CPUOpcodes::op_CBFA(CPURegisters * registers)
+{
+	op_CB_SET(registers, 7, &registers->d);
+	return 8;
+}
+
+// set 7, e
+int CPUOpcodes::op_CBFB(CPURegisters * registers)
+{
+	op_CB_SET(registers, 7, &registers->e);
+	return 8;
+}
+
+// set 7, h
+int CPUOpcodes::op_CBFC(CPURegisters * registers)
+{
+	op_CB_SET(registers, 7, &registers->h);
+	return 8;
+}
+
+// set 7, l
+int CPUOpcodes::op_CBFD(CPURegisters * registers)
+{
+	op_CB_SET(registers, 7, &registers->l);
+	return 8;
+}
+
+// set 7, (hl)
+int CPUOpcodes::op_CBFE(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SET(registers, 7, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// set 7, a
+int CPUOpcodes::op_CBFF(CPURegisters * registers)
+{
+	op_CB_SET(registers, 7, &registers->a);
+	return 8;
+}
