@@ -9924,5 +9924,69 @@ namespace GameBoyEmulatorTest
 			Assert::AreEqual(registers.e, 0b00101000);
 			Assert::AreEqual(registers.f, 0b00110000);
 		};
+
+		[TestMethod]
+		void Opcode_CB_RES_BitZero()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.e = 0b00101001;
+			registers.f = 0b11110000;
+			ops.op_CB_RES(&registers, 0, &registers.e);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.e, 0b00101000);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_RES_BitZero_Same()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.d = 0b00101010;
+			registers.f = 0b11110000;
+			ops.op_CB_RES(&registers, 0, &registers.d);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.d, 0b00101010);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_RES_BitSeven()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.e = 0b10101001;
+			registers.f = 0b11110000;
+			ops.op_CB_RES(&registers, 7, &registers.e);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.e, 0b00101001);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
+
+		[TestMethod]
+		void Opcode_CB_RES_BitSeven_Same()
+		{
+			MockMMU mmu(0xef, 0xa734);
+			Interrupts interrupts;
+			CPUOpcodes ops(&mmu, &interrupts);
+			CPURegisters registers;
+			registers.pc = 10;
+			registers.a = 0b00101010;
+			registers.f = 0b11110000;
+			ops.op_CB_RES(&registers, 7, &registers.d);
+			Assert::AreEqual(registers.pc, 10);
+			Assert::AreEqual(registers.a, 0b00101010);
+			Assert::AreEqual(registers.f, 0b11110000);
+		};
 	};
 }
