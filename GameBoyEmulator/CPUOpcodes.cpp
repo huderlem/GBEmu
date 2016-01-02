@@ -4564,3 +4564,145 @@ int CPUOpcodes::op_F7(CPURegisters * registers)
 	registers->pc = 0x0030;
 	return 16;
 }
+
+// ld hl, sp + r8
+int CPUOpcodes::op_F8(CPURegisters * registers)
+{
+	int value = mmu->ReadByte(registers->pc);
+	registers->pc++;
+
+	int result;
+	if (value > 0x7f)
+	{
+		// immediate value is treated as negative integer
+		result = registers->sp - (0x100 - value);
+
+		// carry flag
+		if (((registers->sp & 0xff) - (0x100 - value)) < 0)
+		{
+			registers->f |= 0b00010000;
+		}
+		else
+		{
+			registers->f &= 0b11101111;
+		}
+
+		// half carry flag
+		if ((registers->sp & 0xf) - ((0x100 - value) & 0xf) < 0)
+		{
+			registers->f |= 0b00100000;
+		}
+		else
+		{
+			registers->f &= 0b11011111;
+		}
+	}
+	else
+	{
+		result = registers->sp + value;
+
+		// carry flag
+		if (((registers->sp & 0xff) + value) > 0xff)
+		{
+			registers->f |= 0b00010000;
+		}
+		else
+		{
+			registers->f &= 0b11101111;
+		}
+
+		// half carry flag
+		if ((registers->sp & 0xf) + (value & 0xf) > 0xf)
+		{
+			registers->f |= 0b00100000;
+		}
+		else
+		{
+			registers->f &= 0b11011111;
+		}
+	}
+
+	result = result & 0xffff;
+	registers->h = (result >> 8);
+	registers->l = (result & 0xff);
+
+	// reset zero and subtrat flags
+	registers->f &= 0b00111111;
+
+	return 12;
+}
+
+// ld sp, hl
+int CPUOpcodes::op_F9(CPURegisters * registers)
+{
+	registers->sp = ((registers->h << 8) | registers->l);
+	return 8;
+}
+
+// ld a, (a16)
+int CPUOpcodes::op_FA(CPURegisters * registers)
+{
+	int address = mmu->ReadWord(registers->pc);
+	registers->pc += 2;
+	registers->a = mmu->ReadByte(address);
+	return 16;
+}
+
+// ei
+int CPUOpcodes::op_FB(CPURegisters * registers)
+{
+	interrupts->EnableInterrupts();
+	return 4;
+}
+
+// cp d8
+int CPUOpcodes::op_FE(CPURegisters * registers)
+{
+	int value = mmu->ReadByte(registers->pc);
+	registers->pc++;
+
+	int result = registers->a - value;
+	// zero flag
+	if (result == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+	else
+	{
+		registers->f &= 0b01111111;
+	}
+
+	// carry flag
+	if (result < 0)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
+
+	// half carry flag
+	if ((registers->a & 0xf) - (value & 0xf) < 0)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
+	}
+
+	// set subtract flag
+	registers->f |= 0b01000000;
+
+	return 8;
+}
+
+// rst 38H
+int CPUOpcodes::op_FF(CPURegisters * registers)
+{
+	registers->sp -= 2;
+	mmu->WriteWord(registers->pc, registers->sp);
+	registers->pc = 0x0038;
+	return 16;
+}
