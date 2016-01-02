@@ -300,6 +300,26 @@ public:
 	int op_CB1D(CPURegisters *registers);
 	int op_CB1E(CPURegisters *registers);
 	int op_CB1F(CPURegisters *registers);
+
+	void op_CB_SLA(CPURegisters *registers, int *value);
+	int op_CB20(CPURegisters *registers);
+	int op_CB21(CPURegisters *registers);
+	int op_CB22(CPURegisters *registers);
+	int op_CB23(CPURegisters *registers);
+	int op_CB24(CPURegisters *registers);
+	int op_CB25(CPURegisters *registers);
+	int op_CB26(CPURegisters *registers);
+	int op_CB27(CPURegisters *registers);
+
+	void op_CB_SRA(CPURegisters *registers, int *value);
+	int op_CB28(CPURegisters *registers);
+	int op_CB29(CPURegisters *registers);
+	int op_CB2A(CPURegisters *registers);
+	int op_CB2B(CPURegisters *registers);
+	int op_CB2C(CPURegisters *registers);
+	int op_CB2D(CPURegisters *registers);
+	int op_CB2E(CPURegisters *registers);
+	int op_CB2F(CPURegisters *registers);
 };
 
 

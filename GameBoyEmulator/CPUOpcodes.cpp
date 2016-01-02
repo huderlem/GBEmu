@@ -5003,3 +5003,162 @@ int CPUOpcodes::op_CB1F(CPURegisters * registers)
 	op_CB_RR(registers, &registers->a);
 	return 8;
 }
+
+// Helper for opcodes CB 20 through CB 27.
+// Performs SLA on the given value.
+void CPUOpcodes::op_CB_SLA(CPURegisters *registers, int *value)
+{
+	if ((*value >> 7) == 1)
+	{
+		registers->f = 0b00010000;
+	}
+	else
+	{
+		registers->f = 0b00000000;
+	}
+
+	*value = ((*value << 1) & 0xff);
+	if (*value == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+}
+
+// sla b
+int CPUOpcodes::op_CB20(CPURegisters * registers)
+{
+	op_CB_SLA(registers, &registers->b);
+	return 8;
+}
+
+// sla c
+int CPUOpcodes::op_CB21(CPURegisters * registers)
+{
+	op_CB_SLA(registers, &registers->c);
+	return 8;
+}
+
+// sla d
+int CPUOpcodes::op_CB22(CPURegisters * registers)
+{
+	op_CB_SLA(registers, &registers->d);
+	return 8;
+}
+
+// sla e
+int CPUOpcodes::op_CB23(CPURegisters * registers)
+{
+	op_CB_SLA(registers, &registers->e);
+	return 8;
+}
+
+// sla h
+int CPUOpcodes::op_CB24(CPURegisters * registers)
+{
+	op_CB_SLA(registers, &registers->h);
+	return 8;
+}
+
+// sla l
+int CPUOpcodes::op_CB25(CPURegisters * registers)
+{
+	op_CB_SLA(registers, &registers->l);
+	return 8;
+}
+
+// sla (hl)
+int CPUOpcodes::op_CB26(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SLA(registers, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// sla a
+int CPUOpcodes::op_CB27(CPURegisters * registers)
+{
+	op_CB_SLA(registers, &registers->a);
+	return 8;
+}
+
+// Helper for opcodes CB 28 through CB 2F.
+// Performs SRA on the given value.
+void CPUOpcodes::op_CB_SRA(CPURegisters *registers, int *value)
+{
+	int msb = (*value & 0b10000000);
+	if ((*value & 1) == 1)
+	{
+		registers->f = 0b00010000;
+	}
+	else
+	{
+		registers->f = 0b00000000;
+	}
+
+	*value = (((*value >> 1) & 0xff) | msb);
+	if (*value == 0)
+	{
+		registers->f |= 0b10000000;
+	}
+}
+
+// sra b
+int CPUOpcodes::op_CB28(CPURegisters * registers)
+{
+	op_CB_SRA(registers, &registers->b);
+	return 8;
+}
+
+// sra c
+int CPUOpcodes::op_CB29(CPURegisters * registers)
+{
+	op_CB_SRA(registers, &registers->c);
+	return 8;
+}
+
+// sra d
+int CPUOpcodes::op_CB2A(CPURegisters * registers)
+{
+	op_CB_SRA(registers, &registers->d);
+	return 8;
+}
+
+// sra e
+int CPUOpcodes::op_CB2B(CPURegisters * registers)
+{
+	op_CB_SRA(registers, &registers->e);
+	return 8;
+}
+
+// sra h
+int CPUOpcodes::op_CB2C(CPURegisters * registers)
+{
+	op_CB_SRA(registers, &registers->h);
+	return 8;
+}
+
+// sra l
+int CPUOpcodes::op_CB2D(CPURegisters * registers)
+{
+	op_CB_SRA(registers, &registers->l);
+	return 8;
+}
+
+// sra (hl)
+int CPUOpcodes::op_CB2E(CPURegisters * registers)
+{
+	int hl = (registers->h << 8) | registers->l;
+	int value = mmu->ReadByte(hl);
+	op_CB_SRA(registers, &value);
+	mmu->WriteByte(value, hl);
+	return 16;
+}
+
+// sra a
+int CPUOpcodes::op_CB2F(CPURegisters * registers)
+{
+	op_CB_SLA(registers, &registers->a);
+	return 8;
+}
