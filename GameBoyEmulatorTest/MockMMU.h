@@ -1,6 +1,5 @@
 #pragma once
 
-#include "stdafx.h"
 #include "../GameBoyEmulator/IMMU.h"
 
 class MockMMU : public IMMU

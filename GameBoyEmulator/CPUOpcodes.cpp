@@ -7,9 +7,17 @@ CPUOpcodes::CPUOpcodes(IMMU *mmu, Interrupts *interrupts)
 	CPUOpcodes::interrupts = interrupts;
 }
 
-
 CPUOpcodes::~CPUOpcodes()
 {
+}
+
+// Executes the CPU instruction corresponding to the given opcode.
+// Returns the number of CPU cycles used by the instruction.
+int CPUOpcodes::ExecuteInstruction(int opcode, CPURegisters *registers)
+{
+	Instruction_Func func = Instructions[opcode];
+	int cycles = (this->*func)(registers);
+	return cycles;
 }
 
 // NOP
@@ -3988,8 +3996,12 @@ int CPUOpcodes::op_CA(CPURegisters * registers)
 // CB XX
 int CPUOpcodes::op_CB(CPURegisters * registers)
 {
-	// TODO: implement CB opcodes
-	return 0;
+	int opcode = mmu->ReadByte(registers->pc);
+	registers->pc++;
+
+	Instruction_Func CB_func = CB_Instructions[opcode];
+	int cycles = (this->*CB_func)(registers);
+	return cycles;
 }
 
 // call z, a16

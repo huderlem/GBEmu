@@ -30,6 +30,9 @@
     <ClCompile Include="MockMMU.cpp">
       <Filter>Source Files\Mocks</Filter>
     </ClCompile>
+    <ClCompile Include="CPUTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

@@ -90,6 +90,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CPUOpcodesTest.cpp" />
+    <ClCompile Include="CPUTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MockMMU.h" />
