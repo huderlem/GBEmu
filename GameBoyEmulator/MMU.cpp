@@ -4,9 +4,10 @@
 #include "MMU.h"
 
 
-MMU::MMU(Interrupts *interrupts)
+MMU::MMU(Interrupts *interrupts, WRAM *wram)
 {
 	MMU::interrupts = interrupts;
+	MMU::wram = wram;
 }
 
 MMU::~MMU()
@@ -41,8 +42,7 @@ int MMU::ReadByte(long address)
 	{
 		// Working RAM
 		// Bank 1 is switchable in Color GameBoy
-		// TODO:
-		return 0;
+		return wram->ReadByte(address);
 	}
 	else if (address < 0xFE00)
 	{

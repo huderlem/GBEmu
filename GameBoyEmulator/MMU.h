@@ -3,11 +3,12 @@
 #include "BaseMBC.h"
 #include "IMMU.h"
 #include "Interrupts.h"
+#include "WRAM.h"
 
 class MMU: public IMMU
 {
 public:
-	MMU(Interrupts *interrupts);
+	MMU(Interrupts *interrupts, WRAM *wram);
 	~MMU();
 	virtual int ReadByte(long address);
 	virtual int ReadWord(long address);
@@ -18,6 +19,9 @@ private:
 	// Byte array of entire ROM.
 	unsigned char *ROM;
 	long ROMSize;
+
+	// Working RAM
+	WRAM *wram;
 
 	// Memory Bank Controller
 	BaseMBC *mbc;
