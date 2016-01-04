@@ -35,3 +35,7 @@ void MockMMU::WriteWord(int value, long address)
 	return;
 }
 
+bool MockMMU::LoadROM(std::string filepath)
+{
+	return true;
+}

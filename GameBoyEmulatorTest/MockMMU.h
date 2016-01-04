@@ -2,6 +2,7 @@
 
 #include "../GameBoyEmulator/IMMU.h"
 
+
 class MockMMU : public IMMU
 {
 public:
@@ -14,5 +15,6 @@ public:
 	virtual int ReadWord(long address);
 	virtual void WriteByte(int value, long address);
 	virtual void WriteWord(int value, long address);
+	virtual bool LoadROM(std::string filepath);
 };
 
