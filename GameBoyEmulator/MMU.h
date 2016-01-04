@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BaseMBC.h"
 #include "IMMU.h"
 
 class MMU: public IMMU
@@ -16,5 +17,7 @@ private:
 	// Byte array of entire ROM.
 	unsigned char *ROM;
 	long ROMSize;
-};
 
+	// Memory Bank Controller
+	BaseMBC *mbc;
+};

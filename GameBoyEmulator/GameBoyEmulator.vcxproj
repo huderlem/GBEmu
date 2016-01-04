@@ -149,6 +149,7 @@
     <ClInclude Include="CPU.h" />
     <ClInclude Include="CPUOpcodes.h" />
     <ClInclude Include="CPURegisters.h" />
+    <ClInclude Include="BaseMBC.h" />
     <ClInclude Include="IMMU.h" />
     <ClInclude Include="Interrupts.h" />
     <ClInclude Include="MMU.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseMBC.cpp" />
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="CPUOpcodes.cpp" />
     <ClCompile Include="CPURegisters.cpp" />
