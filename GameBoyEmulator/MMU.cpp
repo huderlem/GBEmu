@@ -8,6 +8,7 @@ MMU::MMU(Interrupts *interrupts, WRAM *wram)
 {
 	MMU::interrupts = interrupts;
 	MMU::wram = wram;
+	InitializeHRAM();
 }
 
 MMU::~MMU()
@@ -47,9 +48,8 @@ int MMU::ReadByte(long address)
 	else if (address < 0xFE00)
 	{
 		// Echo of Working RAM (typically unused)
-		int offset = address - 0x2000;
-		// TODO:
-		return 0;
+		long offset = address - 0x2000;
+		return wram->ReadByte(address);
 	}
 	else if (address < 0xFEA0)
 	{
@@ -71,8 +71,8 @@ int MMU::ReadByte(long address)
 	else if (address < 0xFFFF)
 	{
 		// High RAM
-		// TODO:
-		return 0;
+		long offset = address - 0xFF80;
+		return HRAM[offset];
 	}
 	else if (address == 0xFFFF)
 	{
@@ -140,4 +140,10 @@ bool MMU::LoadROM(std::string filepath)
 	}
 
 	return success;
+}
+
+void MMU::InitializeHRAM()
+{
+	HRAMSize = 0x7F;
+	HRAM = new unsigned char[HRAMSize]();
 }

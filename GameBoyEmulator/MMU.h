@@ -23,6 +23,11 @@ private:
 	// Working RAM
 	WRAM *wram;
 
+	// High RAM
+	unsigned char *HRAM;
+	long HRAMSize;
+	void InitializeHRAM();
+
 	// Memory Bank Controller
 	BaseMBC *mbc;
 
