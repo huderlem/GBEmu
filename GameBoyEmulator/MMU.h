@@ -2,11 +2,12 @@
 
 #include "BaseMBC.h"
 #include "IMMU.h"
+#include "Interrupts.h"
 
 class MMU: public IMMU
 {
 public:
-	MMU();
+	MMU(Interrupts *interrupts);
 	~MMU();
 	virtual int ReadByte(long address);
 	virtual int ReadWord(long address);
@@ -20,4 +21,6 @@ private:
 
 	// Memory Bank Controller
 	BaseMBC *mbc;
+
+	Interrupts *interrupts;
 };

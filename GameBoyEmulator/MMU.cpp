@@ -4,8 +4,9 @@
 #include "MMU.h"
 
 
-MMU::MMU()
+MMU::MMU(Interrupts *interrupts)
 {
+	MMU::interrupts = interrupts;
 }
 
 MMU::~MMU()
@@ -76,9 +77,10 @@ int MMU::ReadByte(long address)
 	else if (address == 0xFFFF)
 	{
 		// Interrupt Enable Register
-		// TODO:
-		return 0;
+		return interrupts->GetInterruptEnableRegister();
 	}
+
+	// TODO: handle address out of bounds
 	return 0;
 }
 

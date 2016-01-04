@@ -26,3 +26,13 @@ bool Interrupts::InterruptsEnabled()
 {
 	return IME;
 }
+
+void Interrupts::SetInterruptEnableRegister(int value)
+{
+	IE = value;
+}
+
+int Interrupts::GetInterruptEnableRegister()
+{
+	return IE;
+}
