@@ -4,10 +4,11 @@
 #include "MMU.h"
 
 
-MMU::MMU(Interrupts *interrupts, WRAM *wram)
+MMU::MMU(Interrupts *interrupts, WRAM *wram, Joypad *joypad)
 {
 	MMU::interrupts = interrupts;
 	MMU::wram = wram;
+	MMU::joypad = joypad;
 	InitializeHRAM();
 }
 
@@ -61,6 +62,11 @@ int MMU::ReadByte(long address)
 		// Unusable section
 		// TODO: throw exception?
 		return 0;
+	}
+	else if (address == 0xFF00)
+	{
+		// Joypad
+		return joypad->ReadJoypad();
 	}
 	else if (address < 0xff80)
 	{

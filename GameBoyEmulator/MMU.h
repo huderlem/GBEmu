@@ -3,12 +3,13 @@
 #include "BaseMBC.h"
 #include "IMMU.h"
 #include "Interrupts.h"
+#include "Joypad.h"
 #include "WRAM.h"
 
 class MMU: public IMMU
 {
 public:
-	MMU(Interrupts *interrupts, WRAM *wram);
+	MMU(Interrupts *interrupts, WRAM *wram, Joypad *joypad);
 	~MMU();
 	virtual int ReadByte(long address);
 	virtual int ReadWord(long address);
@@ -30,6 +31,8 @@ private:
 
 	// Memory Bank Controller
 	BaseMBC *mbc;
+
+	Joypad *joypad;
 
 	Interrupts *interrupts;
 };
