@@ -36,3 +36,13 @@ int Interrupts::GetInterruptEnableRegister()
 {
 	return IE;
 }
+
+void Interrupts::SetInterruptRequestRegister(int value)
+{
+	IF = value;
+}
+
+int Interrupts::GetInterruptRequestRegister()
+{
+	return IF;
+}

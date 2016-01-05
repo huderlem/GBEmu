@@ -85,6 +85,17 @@ int MMU::ReadByte(long address)
 	{
 		return timer->ReadByte(address);
 	}
+	else if (address < 0xFF0F)
+	{
+		// Unused I/O register
+		// TODO:
+		return 0;
+	}
+	else if (address == 0xFF0F)
+	{
+		// Interrupt Flag
+		return interrupts->GetInterruptRequestRegister();
+	}
 	else if (address < 0xff80)
 	{
 		// I/O registers
