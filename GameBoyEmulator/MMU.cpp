@@ -4,10 +4,11 @@
 #include "MMU.h"
 
 
-MMU::MMU(Interrupts *interrupts, WRAM *wram, Joypad *joypad, Timer *timer)
+MMU::MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer)
 {
 	MMU::interrupts = interrupts;
 	MMU::wram = wram;
+	MMU::vram = vram;
 	MMU::joypad = joypad;
 	MMU::timer = timer;
 	InitializeHRAM();
@@ -33,8 +34,7 @@ int MMU::ReadByte(long address)
 	else if (address < 0xA000)
 	{
 		// VRAM
-		// TODO:
-		return 0;
+		return vram->ReadByte(address);
 	}
 	else if (address < 0xC000)
 	{
@@ -154,7 +154,7 @@ void MMU::WriteByte(int value, long address)
 	else if (address < 0xA000)
 	{
 		// VRAM
-		// TODO:
+		vram->WriteByte(value, address);
 	}
 	else if (address < 0xC000)
 	{

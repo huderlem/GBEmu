@@ -5,12 +5,13 @@
 #include "Interrupts.h"
 #include "Joypad.h"
 #include "Timer.h"
+#include "VRAM.h"
 #include "WRAM.h"
 
 class MMU: public IMMU
 {
 public:
-	MMU(Interrupts *interrupts, WRAM *wram, Joypad *joypad, Timer *timer);
+	MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer);
 	~MMU();
 	virtual int ReadByte(long address);
 	virtual int ReadWord(long address);
@@ -24,6 +25,9 @@ private:
 
 	// Working RAM
 	WRAM *wram;
+
+	// Video RAM
+	VRAM *vram;
 
 	// High RAM
 	unsigned char *HRAM;
