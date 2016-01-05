@@ -17,6 +17,12 @@ int WRAM::ReadByte(long address)
 	return RAM[offset];
 }
 
+void WRAM::WriteByte(int value, long address)
+{
+	int offset = address - 0xC000;
+	RAM[offset] = (unsigned char)value;
+}
+
 void WRAM::InitializeRAM()
 {
 	RAMSize = 0x2000;

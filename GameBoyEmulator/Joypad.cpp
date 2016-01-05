@@ -24,3 +24,9 @@ char Joypad::ReadJoypad()
 
 	return state;
 }
+
+void Joypad::WriteJoyPad(int value)
+{
+	ButtonsSelected = ((value & 0b00100000) == 0);
+	DirectionsSelected = ((value & 0b00010000) == 0);
+}

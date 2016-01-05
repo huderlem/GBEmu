@@ -96,6 +96,12 @@ int MMU::ReadByte(long address)
 		// Interrupt Flag
 		return interrupts->GetInterruptRequestRegister();
 	}
+	else if (address < 0xFF40)
+	{
+		// Sound registers
+		// TODO:
+		return 0;
+	}
 	else if (address < 0xff80)
 	{
 		// I/O registers
@@ -128,7 +134,107 @@ int MMU::ReadWord(long address)
 
 void MMU::WriteByte(int value, long address)
 {
-	return;
+	// Determine which part of the memory map is being read.
+	if (address < 0x2000)
+	{
+		mbc->WriteByteSection0(value, address);
+	}
+	else if (address < 0x4000)
+	{
+		mbc->WriteByteSection1(value, address);
+	}
+	else if (address < 0x6000)
+	{
+		mbc->WriteByteSection2(value, address);
+	}
+	else if (address < 0x8000)
+	{
+		mbc->WriteByteSection3(value, address);
+	}
+	else if (address < 0xA000)
+	{
+		// VRAM
+		// TODO:
+	}
+	else if (address < 0xC000)
+	{
+		// External RAM
+		mbc->WriteByteRAMSwitchableBank(value, address);
+	}
+	else if (address < 0xE000)
+	{
+		// Working RAM
+		// Bank 1 is switchable in Color GameBoy
+		return wram->WriteByte(value, address);
+	}
+	else if (address < 0xFE00)
+	{
+		// Echo of Working RAM (typically unused)
+		long offset = address - 0x2000;
+		return wram->WriteByte(value, address);
+	}
+	else if (address < 0xFEA0)
+	{
+		// Sprite OAM table
+		// TODO:
+	}
+	else if (address < 0xFF00)
+	{
+		// Unusable section
+		// TODO: throw exception?
+	}
+	else if (address == 0xFF00)
+	{
+		// Joypad
+		return joypad->WriteJoyPad(value);
+	}
+	else if (address < 0xFF03)
+	{
+		// Serial Data Transfer
+		// TODO:
+	}
+	else if (address == 0xFF03)
+	{
+		// Unused I/O register
+		// TODO:
+	}
+	else if (address < 0xFF08)
+	{
+		timer->WriteByte(value, address);
+	}
+	else if (address < 0xFF0F)
+	{
+		// Unused I/O register
+		// TODO:
+	}
+	else if (address == 0xFF0F)
+	{
+		// Interrupt Flag
+		interrupts->SetInterruptRequestRegister(value);
+	}
+	else if (address < 0xFF40)
+	{
+		// Sound registers
+		// TODO:
+	}
+	else if (address < 0xff80)
+	{
+		// I/O registers
+		// TODO:
+	}
+	else if (address < 0xFFFF)
+	{
+		// High RAM
+		long offset = address - 0xFF80;
+		HRAM[offset] = (unsigned char)value;
+	}
+	else if (address == 0xFFFF)
+	{
+		// Interrupt Enable Register
+		interrupts->SetInterruptEnableRegister(value);
+	}
+
+	// TODO: handle address out of bounds
 }
 
 // Writes a 2-byte little-endian value to the given memory address.

@@ -5,6 +5,7 @@ public:
 	Joypad();
 	~Joypad();
 	char ReadJoypad();
+	void WriteJoyPad(int value);
 private:
 	// I/O port 0xFF00
 	char JOYP;
