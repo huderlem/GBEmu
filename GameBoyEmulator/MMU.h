@@ -4,12 +4,13 @@
 #include "IMMU.h"
 #include "Interrupts.h"
 #include "Joypad.h"
+#include "Timer.h"
 #include "WRAM.h"
 
 class MMU: public IMMU
 {
 public:
-	MMU(Interrupts *interrupts, WRAM *wram, Joypad *joypad);
+	MMU(Interrupts *interrupts, WRAM *wram, Joypad *joypad, Timer *timer);
 	~MMU();
 	virtual int ReadByte(long address);
 	virtual int ReadWord(long address);
@@ -35,4 +36,6 @@ private:
 	Joypad *joypad;
 
 	Interrupts *interrupts;
+
+	Timer *timer;
 };

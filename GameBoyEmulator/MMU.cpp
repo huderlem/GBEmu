@@ -4,11 +4,12 @@
 #include "MMU.h"
 
 
-MMU::MMU(Interrupts *interrupts, WRAM *wram, Joypad *joypad)
+MMU::MMU(Interrupts *interrupts, WRAM *wram, Joypad *joypad, Timer *timer)
 {
 	MMU::interrupts = interrupts;
 	MMU::wram = wram;
 	MMU::joypad = joypad;
+	MMU::timer = timer;
 	InitializeHRAM();
 }
 
@@ -67,6 +68,22 @@ int MMU::ReadByte(long address)
 	{
 		// Joypad
 		return joypad->ReadJoypad();
+	}
+	else if (address < 0xFF03)
+	{
+		// Serial Data Transfer
+		// TODO:
+		return 0;
+	}
+	else if (address == 0xFF03)
+	{
+		// Unused I/O register
+		// TODO:
+		return 0;
+	}
+	else if (address < 0xFF08)
+	{
+		return timer->ReadByte(address);
 	}
 	else if (address < 0xff80)
 	{
