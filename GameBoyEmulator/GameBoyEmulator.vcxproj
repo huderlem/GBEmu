@@ -153,6 +153,7 @@
     <ClInclude Include="CPUOpcodes.h" />
     <ClInclude Include="CPURegisters.h" />
     <ClInclude Include="BaseMBC.h" />
+    <ClInclude Include="GameBoy.h" />
     <ClInclude Include="IMMU.h" />
     <ClInclude Include="Interrupts.h" />
     <ClInclude Include="Joypad.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="CPUOpcodes.cpp" />
     <ClCompile Include="CPURegisters.cpp" />
+    <ClCompile Include="GameBoy.cpp" />
     <ClCompile Include="GameBoyEmulator.cpp" />
     <ClCompile Include="Interrupts.cpp" />
     <ClCompile Include="Joypad.cpp" />
