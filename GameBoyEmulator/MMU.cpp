@@ -56,7 +56,7 @@ int MMU::ReadByte(long address)
 	else if (address < 0xFEA0)
 	{
 		// Sprite OAM table
-		return 0;
+		return vram->ReadByteOAM(address);
 	}
 	else if (address < 0xFF00)
 	{
@@ -165,18 +165,18 @@ void MMU::WriteByte(int value, long address)
 	{
 		// Working RAM
 		// Bank 1 is switchable in Color GameBoy
-		return wram->WriteByte(value, address);
+		wram->WriteByte(value, address);
 	}
 	else if (address < 0xFE00)
 	{
 		// Echo of Working RAM (typically unused)
 		long offset = address - 0x2000;
-		return wram->WriteByte(value, address);
+		wram->WriteByte(value, address);
 	}
 	else if (address < 0xFEA0)
 	{
 		// Sprite OAM table
-		// TODO:
+		vram->WriteByteOAM(value, address);
 	}
 	else if (address < 0xFF00)
 	{
@@ -186,7 +186,7 @@ void MMU::WriteByte(int value, long address)
 	else if (address == 0xFF00)
 	{
 		// Joypad
-		return joypad->WriteJoyPad(value);
+		joypad->WriteJoyPad(value);
 	}
 	else if (address < 0xFF03)
 	{
