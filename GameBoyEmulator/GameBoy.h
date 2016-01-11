@@ -5,6 +5,7 @@
 #include "CPU.h"
 #include "Interrupts.h"
 #include "Joypad.h"
+#include "LCDDisplay.h"
 #include "MMU.h"
 #include "Timer.h"
 #include "VRAM.h"
@@ -27,6 +28,7 @@ private:
 	CPURegisters *registers;
 	CPUOpcodes *opcodes;
 	CPU *cpu;
+	LCDDisplay *display;
 
 	bool running = false;
 };

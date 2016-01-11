@@ -12,6 +12,7 @@ GameBoy::GameBoy()
 	registers = new CPURegisters();
 	opcodes = new CPUOpcodes(mmu, interrupts);
 	cpu = new CPU(mmu, registers, opcodes);
+	display = new LCDDisplay(vram);
 }
 
 GameBoy::~GameBoy()
@@ -26,8 +27,25 @@ void GameBoy::LoadGame(std::string filepath)
 
 void GameBoy::Run()
 {
+	running = true;
+	SDL_Event event;
+	int ticks = SDL_GetTicks();
+	int num = 0;
 	while (running)
 	{
-		int cpuCycles = cpu->ExecuteNextInstruction();
+		while (SDL_PollEvent(&event))
+		{
+			// Later, you'll be adding your code that handles keyboard / mouse input here
+		}
+
+		//int cpuCycles = cpu->ExecuteNextInstruction();
+		display->Render();
+		int now = SDL_GetTicks();
+		if (num % 100 == 0)
+		{
+			printf("Time: %f\n", 1000.0 / (now - ticks));
+		}
+		num++;
+		ticks = now;
 	}
 }

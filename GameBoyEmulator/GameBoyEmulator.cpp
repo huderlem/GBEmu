@@ -4,10 +4,12 @@
 
 #define EXPORT_TEST_APIS 1
 
-#include "CPU.h"
+#include "GameBoy.h"
 
 int main()
 {
+	GameBoy *gameboy = new GameBoy();
+	gameboy->Run();
     return 0;
 }
 

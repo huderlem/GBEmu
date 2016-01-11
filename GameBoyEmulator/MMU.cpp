@@ -106,6 +106,20 @@ int MMU::ReadByte(long address)
 	{
 		// I/O registers
 		// TODO:
+
+		if (address == 0xFF47)
+		{
+			return vram->BGP;
+		}
+		else if (address == 0xFF48)
+		{
+			return vram->OBP0;
+		}
+		else if (address == 0xFF49)
+		{
+			return vram->OBP1;
+		}
+
 		return 0;
 	}
 	else if (address < 0xFFFF)
@@ -221,6 +235,19 @@ void MMU::WriteByte(int value, long address)
 	{
 		// I/O registers
 		// TODO:
+
+		if (address == 0xFF47)
+		{
+			vram->WriteBGP(value);
+		}
+		else if (address == 0xFF48)
+		{
+			vram->WriteOBP0(value);
+		}
+		else if (address == 0xFF49)
+		{
+			vram->WriteOBP1(value);
+		}
 	}
 	else if (address < 0xFFFF)
 	{

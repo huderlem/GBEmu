@@ -157,6 +157,7 @@
     <ClInclude Include="IMMU.h" />
     <ClInclude Include="Interrupts.h" />
     <ClInclude Include="Joypad.h" />
+    <ClInclude Include="LCDDisplay.h" />
     <ClInclude Include="MMU.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="GameBoyEmulator.cpp" />
     <ClCompile Include="Interrupts.cpp" />
     <ClCompile Include="Joypad.cpp" />
+    <ClCompile Include="LCDDisplay.cpp" />
     <ClCompile Include="MMU.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
