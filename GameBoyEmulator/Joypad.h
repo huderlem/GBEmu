@@ -12,14 +12,14 @@ private:
 	bool ButtonsSelected = false;
 	bool DirectionsSelected = false;
 
-	// Joypad states. 1=On, 0=Off
-	char A		= 0;
-	char B		= 0;
-	char Start	= 0;
-	char Select	= 0;
-	char Right	= 0;
-	char Left	= 0;
-	char Up		= 0;
-	char Down	= 0;
+	// Joypad states. 0=Pressed, 1=Not Pressed
+	char A;
+	char B;
+	char Start;
+	char Select;
+	char Right;
+	char Left;
+	char Up;
+	char Down;
 };
 

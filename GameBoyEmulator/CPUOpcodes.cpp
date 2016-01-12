@@ -4458,12 +4458,11 @@ int CPUOpcodes::op_E8(CPURegisters * registers)
 	return 16;
 }
 
-// jp (hl)
+// jp hl
 int CPUOpcodes::op_E9(CPURegisters * registers)
 {
 	int hl = (registers->h << 8) | registers->l;
-	int destination = mmu->ReadWord(hl);
-	registers->pc = destination;
+	registers->pc = hl;
 	return 4;
 }
 
@@ -4509,9 +4508,9 @@ int CPUOpcodes::op_EF(CPURegisters * registers)
 // ldh a, (a8)
 int CPUOpcodes::op_F0(CPURegisters * registers)
 {
-	int address = mmu->ReadByte(registers->pc);
+	int offset = mmu->ReadByte(registers->pc);
 	registers->pc++;
-	registers->a = mmu->ReadByte(address);
+	registers->a = mmu->ReadByte(0xFF00 + offset);
 	return 12;
 }
 

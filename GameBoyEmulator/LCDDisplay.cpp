@@ -8,11 +8,14 @@ LCDDisplay::LCDDisplay(VRAM *vram)
 
 	SDL_Init(SDL_INIT_VIDEO);
 	window = SDL_CreateWindow("GBEmu", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 160*2, 144*2, SDL_WINDOW_SHOWN);
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	texture = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window), SDL_TextureAccess::SDL_TEXTUREACCESS_STREAMING, DISPLAY_PIXELS_WIDTH, DISPLAY_PIXELS_HEIGHT);
 	SDL_RenderClear(renderer);
 
 	InitPalette();
+
+	time = SDL_GetTicks();
+	last = time;
 }
 
 LCDDisplay::~LCDDisplay()
@@ -20,6 +23,20 @@ LCDDisplay::~LCDDisplay()
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+}
+
+int LCDDisplay::ReadSTAT()
+{
+	int coincidenceFlag = LY == LYC ? 1 : 0;
+	return (CoincidenceInterrupt << 6) | (OAMInterrupt << 5) | (VBlankInterrupt << 4) | (HBlankInterrupt << 3) | (coincidenceFlag << 2) | mode;
+}
+
+void LCDDisplay::WriteSTAT(int value)
+{
+	CoincidenceInterrupt = (value & 0b01000000) > 0 ? 1 : 0;
+	OAMInterrupt = (value & 0b00100000) > 0 ? 1 : 0;
+	VBlankInterrupt = (value & 0b00010000) > 0 ? 1 : 0;
+	HBlankInterrupt = (value & 0b00001000) > 0 ? 1 : 0;
 }
 
 void LCDDisplay::SetAllPixels()
@@ -214,9 +231,8 @@ void LCDDisplay::SetDisplayPixels()
 	int pitch;
 	SDL_LockTexture(texture, NULL, &pixels, &pitch);
 
-	int numPixels = DISPLAY_PIXELS_HEIGHT * DISPLAY_PIXELS_WIDTH;
-	// Set new pixels for background and window.
-	for (int i = 0; i < numPixels; i++)
+	// Set new pixels on the current scan line for background and window.
+	for (int i = 0; i < DISPLAY_PIXELS_HEIGHT * DISPLAY_PIXELS_WIDTH; i++)
 	{
 		int newPixel;
 		if ((LCDC & 0b00100000) > 0 && windowPixels[i] != -1)
@@ -277,4 +293,63 @@ void LCDDisplay::Render()
 	}
 
 	SDL_RenderPresent(renderer);
+}
+
+void LCDDisplay::Tick(int cpuCycles)
+{
+	ticks += cpuCycles;
+	if (mode == 0) // H-Blank
+	{
+		if (ticks >= 204)
+		{
+			// End H-Blank period
+			ticks = ticks % 204;
+			LY++;
+			if (LY < 144)
+			{
+				mode = 2;
+			}
+			else
+			{
+				// Enter V-Blank period
+				mode = 1;
+
+				// Render the current line
+				Render();
+
+				time = SDL_GetTicks();
+				printf("Time: %f\n", 1000.0 / (time - last));
+				last = time;
+			}
+		}
+	}
+	else if (mode == 1) // V-Blank
+	{
+		LY = 144 + (ticks / 456);
+		if (ticks >= 4560)
+		{
+			// End V-Blank period
+			ticks = ticks % 4560;
+			LY = 0;
+			mode = 2;
+		}
+	}
+	else if (mode == 2) // LCD controller is Reading OAM RAM
+	{
+		if (ticks >= 80)
+		{
+			// End Reading OAM RAM period
+			ticks = ticks % 80;
+			mode = 3;
+		}
+	}
+	else if (mode == 3) // Transferring Data to LCD Driver
+	{
+		if (ticks >= 172)
+		{
+			// End Transfer Data period
+			ticks = ticks % 172;
+			mode = 0;
+		}
+	}
 }

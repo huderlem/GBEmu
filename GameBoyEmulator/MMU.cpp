@@ -4,13 +4,14 @@
 #include "MMU.h"
 
 
-MMU::MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer)
+MMU::MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer, LCDDisplay *display)
 {
 	MMU::interrupts = interrupts;
 	MMU::wram = wram;
 	MMU::vram = vram;
 	MMU::joypad = joypad;
 	MMU::timer = timer;
+	MMU::display = display;
 	InitializeHRAM();
 }
 
@@ -106,18 +107,30 @@ int MMU::ReadByte(long address)
 	{
 		// I/O registers
 		// TODO:
-
-		if (address == 0xFF47)
+		switch (address)
 		{
+		case 0xFF40:
+			return display->LCDC;
+		case 0xFF41:
+			return display->ReadSTAT();
+		case 0xFF42:
+			return display->SCY;
+		case 0xFF43:
+			return display->SCX;
+		case 0xFF44:
+			return display->LY;
+		case 0xFF45:
+			return display->LYC;
+		case 0xFF47:
 			return vram->BGP;
-		}
-		else if (address == 0xFF48)
-		{
+		case 0xFF48:
 			return vram->OBP0;
-		}
-		else if (address == 0xFF49)
-		{
+		case 0xFF49:
 			return vram->OBP1;
+		case 0xFF4A:
+			return display->WY;
+		case 0xFF4B:
+			return display->WX;
 		}
 
 		return 0;
@@ -235,18 +248,42 @@ void MMU::WriteByte(int value, long address)
 	{
 		// I/O registers
 		// TODO:
-
-		if (address == 0xFF47)
+		
+		switch (address)
 		{
+		case 0xFF40:
+			display->LCDC = value;
+			break;
+		case 0xFF41:
+			display->WriteSTAT(value);
+			break;
+		case 0xFF42:
+			display->SCY = value;
+			break;
+		case 0xFF43:
+			display->SCX = value;
+			break;
+		case 0xFF44:
+			// LY register is readonly
+			break;
+		case 0xFF45:
+			display->LYC = value;
+			break;
+		case 0xFF47:
 			vram->WriteBGP(value);
-		}
-		else if (address == 0xFF48)
-		{
+			break;
+		case 0xFF48:
 			vram->WriteOBP0(value);
-		}
-		else if (address == 0xFF49)
-		{
+			break;
+		case 0xFF49:
 			vram->WriteOBP1(value);
+			break;
+		case 0xFF4A:
+			display->WY = value;
+			break;
+		case 0xFF4B:
+			display->WX = value;
+			break;
 		}
 	}
 	else if (address < 0xFFFF)
@@ -294,6 +331,8 @@ bool MMU::LoadROM(std::string filepath)
 			romFile.seekg(0, std::ios::beg);
 			romFile.read((char *)ROM, ROMSize);
 			romFile.close();
+
+			mbc = new BaseMBC(ROM, ROMSize);
 		}
 		else
 		{

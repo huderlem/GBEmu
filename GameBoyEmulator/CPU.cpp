@@ -22,5 +22,7 @@ int CPU::ExecuteNextInstruction()
 	registers->pc++;
 
 	int cycles = opcodes->ExecuteInstruction(opcode, registers);
+	//printf("Opcode %#x \tCycles %#x \n", opcode, cycles);
+	//printf("pc: %#x \n", registers->pc);
 	return cycles;
 }

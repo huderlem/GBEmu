@@ -11,26 +11,32 @@ class LCDDisplay
 public:
 	LCDDisplay(VRAM *vram);
 	~LCDDisplay();
+	int ReadSTAT();
+	void WriteSTAT(int value);
 	void SetAllPixels();
 	void SetDisplayPixels(int *newPixels, int numPixels, int offset);
 	void Render();
-private:
-	SDL_Window *window;
-	SDL_Renderer *renderer;
-	SDL_Surface *screen;
-	SDL_Texture *texture;
+	void Tick(int cpuCycles);
 
 	int LCDC = 0;
-	int STAT = 0;
+
+	// STAT register
+	int CoincidenceInterrupt = 0;
+	int OAMInterrupt = 0;
+	int VBlankInterrupt = 0;
+	int HBlankInterrupt = 0;
+
 	int SCY = 0;
 	int SCX = 0;
 	int LY = 0;
 	int LYC = 0;
 	int WY = 0;
 	int WX = 0;
-	int BGP = 0;
-	int OBP0 = 0;
-	int OBP1 = 0;
+private:
+	SDL_Window *window;
+	SDL_Renderer *renderer;
+	SDL_Surface *screen;
+	SDL_Texture *texture;
 
 	// Constants
 	const int DISPLAY_PIXELS_WIDTH = 160;
@@ -50,4 +56,10 @@ private:
 	void SetWindowPixels();
 	void SetBackgroundPixels();
 	void SetOAMPixels(void *pixels);
+
+	int ticks = 0;
+	int mode = 0;  // See STAT register
+
+	int time = 0;
+	int last = 0;
 };

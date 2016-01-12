@@ -19,6 +19,16 @@ public:
 	void LoadGame(std::string filepath);
 	void Run();
 private:
+	void ReadCartHeader();
+	void PowerUpSequence();
+
+	// Cartridge Header Values
+	std::string title = "";
+	int cartType;
+	int ROMSize;
+	int RAMSize;
+	int destinationCode;
+
 	Interrupts *interrupts;
 	WRAM *wram;
 	VRAM *vram;

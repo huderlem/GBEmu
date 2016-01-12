@@ -9,6 +9,7 @@
 int main()
 {
 	GameBoy *gameboy = new GameBoy();
+	gameboy->LoadGame("D:\\Games\\Emulation\\Nintendo Gameboy\\Tetris\\Tetris.gb");
 	gameboy->Run();
     return 0;
 }

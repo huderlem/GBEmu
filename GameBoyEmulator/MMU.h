@@ -4,6 +4,7 @@
 #include "IMMU.h"
 #include "Interrupts.h"
 #include "Joypad.h"
+#include "LCDDisplay.h"
 #include "Timer.h"
 #include "VRAM.h"
 #include "WRAM.h"
@@ -11,7 +12,7 @@
 class MMU: public IMMU
 {
 public:
-	MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer);
+	MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer, LCDDisplay *display);
 	~MMU();
 	virtual int ReadByte(long address);
 	virtual int ReadWord(long address);
@@ -28,6 +29,9 @@ private:
 
 	// Video RAM
 	VRAM *vram;
+
+	// LCD Display
+	LCDDisplay *display;
 
 	// High RAM
 	unsigned char *HRAM;

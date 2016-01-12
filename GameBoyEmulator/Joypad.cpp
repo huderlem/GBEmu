@@ -4,6 +4,14 @@
 
 Joypad::Joypad()
 {
+	A = 1;
+	B = 1;
+	Start = 1;
+	Select = 1;
+	Right = 1;
+	Left = 1;
+	Up = 1;
+	Down = 1;
 }
 
 Joypad::~Joypad()
