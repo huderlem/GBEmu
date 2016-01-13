@@ -6,6 +6,11 @@ LCDDisplay::LCDDisplay(VRAM *vram)
 {
 	LCDDisplay::vram = vram;
 
+	CoincidenceInterrupt = 0;
+	OAMInterrupt = 0;
+	VBlankInterrupt = 0;
+	HBlankInterrupt = 0;
+
 	SDL_Init(SDL_INIT_VIDEO);
 	window = SDL_CreateWindow("GBEmu", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 160*2, 144*2, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -295,7 +300,7 @@ void LCDDisplay::Render()
 	SDL_RenderPresent(renderer);
 }
 
-void LCDDisplay::Tick(int cpuCycles)
+void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts)
 {
 	ticks += cpuCycles;
 	if (mode == 0) // H-Blank
@@ -308,6 +313,11 @@ void LCDDisplay::Tick(int cpuCycles)
 			if (LY < 144)
 			{
 				mode = 2;
+
+				if (OAMInterrupt > 0)
+				{
+					interrupts->RequestLCDStatInterrupt();
+				}
 			}
 			else
 			{
@@ -316,15 +326,27 @@ void LCDDisplay::Tick(int cpuCycles)
 
 				// Render the current line
 				Render();
+				
+				interrupts->RequestVBlankInterrupt();
+				if (VBlankInterrupt > 0)
+				{
+					interrupts->RequestLCDStatInterrupt();
+				}
 
 				time = SDL_GetTicks();
 				printf("Time: %f\n", 1000.0 / (time - last));
 				last = time;
 			}
+
+			if (CoincidenceInterrupt > 0 && LY == LYC)
+			{
+				interrupts->RequestLCDStatInterrupt();
+			}
 		}
 	}
 	else if (mode == 1) // V-Blank
 	{
+		int prevLY = LY;
 		LY = 144 + (ticks / 456);
 		if (ticks >= 4560)
 		{
@@ -332,6 +354,22 @@ void LCDDisplay::Tick(int cpuCycles)
 			ticks = ticks % 4560;
 			LY = 0;
 			mode = 2;
+
+			if (OAMInterrupt > 0)
+			{
+				interrupts->RequestLCDStatInterrupt();
+			}
+			if (CoincidenceInterrupt > 0 && LY == LYC)
+			{
+				interrupts->RequestLCDStatInterrupt();
+			}
+		}
+		else if (LY != prevLY)
+		{
+			if (CoincidenceInterrupt > 0 && LY == LYC)
+			{
+				interrupts->RequestLCDStatInterrupt();
+			}
 		}
 	}
 	else if (mode == 2) // LCD controller is Reading OAM RAM
@@ -350,6 +388,11 @@ void LCDDisplay::Tick(int cpuCycles)
 			// End Transfer Data period
 			ticks = ticks % 172;
 			mode = 0;
+
+			if (HBlankInterrupt > 0)
+			{
+				interrupts->RequestLCDStatInterrupt();
+			}
 		}
 	}
 }

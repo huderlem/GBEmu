@@ -121,6 +121,9 @@ int MMU::ReadByte(long address)
 			return display->LY;
 		case 0xFF45:
 			return display->LYC;
+		case 0xFF46:
+			// DMA transfer register is write-only.
+			return 0;
 		case 0xFF47:
 			return vram->BGP;
 		case 0xFF48:
@@ -269,6 +272,9 @@ void MMU::WriteByte(int value, long address)
 		case 0xFF45:
 			display->LYC = value;
 			break;
+		case 0xFF46:
+			DMATransfer(value);
+			break;
 		case 0xFF47:
 			vram->WriteBGP(value);
 			break;
@@ -352,4 +358,13 @@ void MMU::InitializeHRAM()
 {
 	HRAMSize = 0x7F;
 	HRAM = new unsigned char[HRAMSize]();
+}
+
+void MMU::DMATransfer(int value)
+{
+	int sourceAddress = (value << 8);
+	for (int i = 0; i < 0xA0; i++)
+	{
+		vram->oamData[i] = ReadByte(sourceAddress + i);
+	}
 }

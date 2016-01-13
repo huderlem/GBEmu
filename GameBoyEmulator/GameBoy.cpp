@@ -87,7 +87,8 @@ void GameBoy::Run()
 		}
 
 		int cpuCycles = cpu->ExecuteNextInstruction();
-		display->Tick(cpuCycles);
+		display->Tick(cpuCycles, interrupts);
+		interrupts->ExecutePendingInterrupt(registers, mmu);
 	}
 }
 

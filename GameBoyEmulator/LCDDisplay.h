@@ -3,6 +3,7 @@
 #include "SDL.h"
 #undef main
 
+#include "Interrupts.h"
 #include "VRAM.h"
 
 
@@ -16,15 +17,15 @@ public:
 	void SetAllPixels();
 	void SetDisplayPixels(int *newPixels, int numPixels, int offset);
 	void Render();
-	void Tick(int cpuCycles);
+	void Tick(int cpuCycles, Interrupts *interrupts);
 
 	int LCDC = 0;
 
 	// STAT register
-	int CoincidenceInterrupt = 0;
-	int OAMInterrupt = 0;
-	int VBlankInterrupt = 0;
-	int HBlankInterrupt = 0;
+	int CoincidenceInterrupt;
+	int OAMInterrupt;
+	int VBlankInterrupt;
+	int HBlankInterrupt;
 
 	int SCY = 0;
 	int SCX = 0;

@@ -2,6 +2,9 @@
 
 #define TEST_API __declspec(dllexport)
 
+#include "CPURegisters.h"
+#include "IMMU.h"
+
 class TEST_API Interrupts
 {
 public:
@@ -14,6 +17,12 @@ public:
 	int GetInterruptEnableRegister();
 	void SetInterruptRequestRegister(int value);
 	int GetInterruptRequestRegister();
+	void RequestVBlankInterrupt();
+	void RequestLCDStatInterrupt();
+	void RequestTimerInterrupt();
+	void RequestSerialInterrupt();
+	void RequestJoypadInterrupt();
+	void ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu);
 private:
 	// Interrupt Master Enable flag
 	bool IME;
@@ -25,6 +34,11 @@ private:
 	// Bit 3 : Serial   Interrupt Request(INT 58h)    (1 = Request)
 	// Bit 4 : Joypad   Interrupt Request(INT 60h)    (1 = Request)
 	int IF = 0;
+	bool VBlankRequest;
+	bool LCDStatRequest;
+	bool TimerRequest;
+	bool SerialRequest;
+	bool JoypadRequest;
 
 	// FFFF: IE - Interrupt Enable Register
 	// Bit 0 : VBlank   Interrupt Enable(INT 40h)  (1 = Enable)
@@ -33,5 +47,10 @@ private:
 	// Bit 3 : Serial   Interrupt Enable(INT 58h)  (1 = Enable)
 	// Bit 4 : Joypad   Interrupt Enable(INT 60h)  (1 = Enable)
 	int IE = 0;
+	bool VBlankEnable;
+	bool LCDStatEnable;
+	bool TimerEnable;
+	bool SerialEnable;
+	bool JoypadEnable;
 };
 

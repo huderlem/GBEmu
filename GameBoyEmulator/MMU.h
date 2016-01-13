@@ -38,6 +38,8 @@ private:
 	long HRAMSize;
 	void InitializeHRAM();
 
+	void DMATransfer(int value);
+
 	// Memory Bank Controller
 	BaseMBC *mbc;
 
