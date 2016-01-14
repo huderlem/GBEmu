@@ -74,18 +74,13 @@ void GameBoy::PowerUpSequence()
 void GameBoy::Run()
 {
 	running = true;
-	SDL_Event event;
 
 	// Entry point for game
 	PowerUpSequence();
 
 	while (running)
 	{
-		while (SDL_PollEvent(&event))
-		{
-			// Later, you'll be adding your code that handles keyboard / mouse input here
-		}
-
+		joypad->ProcessJoypadInput(interrupts);
 		int cpuCycles = cpu->ExecuteNextInstruction();
 		display->Tick(cpuCycles, interrupts);
 		interrupts->ExecutePendingInterrupt(registers, mmu);
