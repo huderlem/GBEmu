@@ -1,4 +1,6 @@
 #pragma once
+#include "Interrupts.h"
+
 class Timer
 {
 public:
@@ -6,11 +8,16 @@ public:
 	~Timer();
 	int ReadByte(long address);
 	void WriteByte(int value, long address);
+	void Tick(int cpuCycles, Interrupts *interrupts);
 private:
 	// I/O Register FF04 - Divider Register
-	int DIV = 0;
+	int DIV;
+	int TicksDIV;
+
 	// I/O Register FF05 - Timer Counter
-	int TIMA = 0;
+	int TIMA;
+	int TicksTIMA;
+
 	// I/O Register FF06 - Timer Modulo
 	int TMA = 0;
 
@@ -18,6 +25,6 @@ private:
 	int TAC = 0;
 	int enabled = false;
 	int speed = 1;
-	int tickSpeeds [4] = { 64, 1, 4, 16 };
+	static int TickSpeeds[4];
 };
 

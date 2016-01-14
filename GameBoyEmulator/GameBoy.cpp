@@ -83,6 +83,7 @@ void GameBoy::Run()
 		joypad->ProcessJoypadInput(interrupts);
 		int cpuCycles = cpu->ExecuteNextInstruction();
 		display->Tick(cpuCycles, interrupts);
+		timer->Tick(cpuCycles, interrupts);
 		interrupts->ExecutePendingInterrupt(registers, mmu);
 	}
 }
