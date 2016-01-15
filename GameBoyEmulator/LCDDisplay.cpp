@@ -302,6 +302,12 @@ void LCDDisplay::Render()
 
 void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 {
+	// LCD is turned off during STOP mode.
+	if (cpu->InStopMode())
+	{
+		return;
+	}
+
 	ticks += cpuCycles;
 	if (mode == 0) // H-Blank
 	{

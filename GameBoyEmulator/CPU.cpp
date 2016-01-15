@@ -7,6 +7,7 @@ CPU::CPU(IMMU *mmu, CPURegisters *registers, CPUOpcodes *opcodes)
 	CPU::mmu = mmu;
 	CPU::opcodes = opcodes;
 	haltState = false;
+	stopState = false;
 }
 
 CPU::~CPU()
@@ -19,7 +20,7 @@ CPU::~CPU()
 int CPU::ExecuteNextInstruction(Interrupts *interrupts)
 {
 	// In HALT state, just return some fake cycles to keep the rest of the system ticking.
-	if (haltState)
+	if (haltState || stopState)
 	{
 		return 4;
 	}
@@ -33,6 +34,7 @@ int CPU::ExecuteNextInstruction(Interrupts *interrupts)
 	// TODO: This is too hacky. And magic numbers are bad.
 	if (cycles == -1)
 	{
+		// HALT instruction occurred.
 		haltState = true;
 		// If interrupts are disabled, then the next instruction is skipped.
 		if (!interrupts->InterruptsEnabled())
@@ -43,6 +45,12 @@ int CPU::ExecuteNextInstruction(Interrupts *interrupts)
 
 		return 4;
 	}
+	else if (cycles == -2)
+	{
+		// STOP instruction occurred.
+		stopState = true;
+		return 4;
+	}
 
 	return cycles;
 }
@@ -50,4 +58,10 @@ int CPU::ExecuteNextInstruction(Interrupts *interrupts)
 void CPU::NotifyInterruptOccurred()
 {
 	haltState = false;
+	stopState = false;
+}
+
+bool CPU::InStopMode()
+{
+	return stopState;
 }

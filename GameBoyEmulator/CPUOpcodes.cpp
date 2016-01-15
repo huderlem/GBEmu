@@ -284,8 +284,8 @@ int CPUOpcodes::op_0F(CPURegisters * registers)
 // stop
 int CPUOpcodes::op_10(CPURegisters * registers)
 {
-	// TODO: implement halt cpu
-	return 0;
+	// TODO: figure how this actually works...
+	return 4;
 }
 
 // ld de, d16
@@ -5133,7 +5133,7 @@ int CPUOpcodes::op_CB2E(CPURegisters * registers)
 // sra a
 int CPUOpcodes::op_CB2F(CPURegisters * registers)
 {
-	op_CB_SLA(registers, &registers->a);
+	op_CB_SRA(registers, &registers->a);
 	return 8;
 }
 

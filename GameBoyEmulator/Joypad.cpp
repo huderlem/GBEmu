@@ -45,17 +45,17 @@ void Joypad::ProcessJoypadInput(Interrupts *interrupts, CPU *cpu)
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	SDL_PumpEvents();
 
-	bool shouldRequestInterrupt = false;
-	shouldRequestInterrupt |= ProcessKeyInput(&A, keys[SDL_SCANCODE_A]);
-	shouldRequestInterrupt |= ProcessKeyInput(&B, keys[SDL_SCANCODE_S]);
-	shouldRequestInterrupt |= ProcessKeyInput(&Start, keys[SDL_SCANCODE_RETURN]);
-	shouldRequestInterrupt |= ProcessKeyInput(&Select, keys[SDL_SCANCODE_BACKSPACE]);
-	shouldRequestInterrupt |= ProcessKeyInput(&Right, keys[SDL_SCANCODE_RIGHT]);
-	shouldRequestInterrupt |= ProcessKeyInput(&Left, keys[SDL_SCANCODE_LEFT]);
-	shouldRequestInterrupt |= ProcessKeyInput(&Up, keys[SDL_SCANCODE_UP]);
-	shouldRequestInterrupt |= ProcessKeyInput(&Down, keys[SDL_SCANCODE_DOWN]);
+	bool newButtonPressed = false;
+	newButtonPressed |= ProcessKeyInput(&A, keys[SDL_SCANCODE_A]);
+	newButtonPressed |= ProcessKeyInput(&B, keys[SDL_SCANCODE_S]);
+	newButtonPressed |= ProcessKeyInput(&Start, keys[SDL_SCANCODE_RETURN]);
+	newButtonPressed |= ProcessKeyInput(&Select, keys[SDL_SCANCODE_BACKSPACE]);
+	newButtonPressed |= ProcessKeyInput(&Right, keys[SDL_SCANCODE_RIGHT]);
+	newButtonPressed |= ProcessKeyInput(&Left, keys[SDL_SCANCODE_LEFT]);
+	newButtonPressed |= ProcessKeyInput(&Up, keys[SDL_SCANCODE_UP]);
+	newButtonPressed |= ProcessKeyInput(&Down, keys[SDL_SCANCODE_DOWN]);
 
-	if (shouldRequestInterrupt)
+	if (newButtonPressed)
 	{
 		interrupts->RequestJoypadInterrupt();
 		cpu->NotifyInterruptOccurred();
@@ -66,7 +66,7 @@ bool Joypad::ProcessKeyInput(char *key, Uint8 keyState)
 {
 	int previousKeyState = *key;
 	*key = 1 - keyState;
-	if (previousKeyState == 1 && A == 0)
+	if (previousKeyState == 1 && *key == 0)
 	{
 		return true;
 	}

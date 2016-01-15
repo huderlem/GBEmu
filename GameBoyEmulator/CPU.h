@@ -14,11 +14,13 @@ public:
 	~CPU();
 	int ExecuteNextInstruction(Interrupts *interrupts);
 	void NotifyInterruptOccurred();
+	bool InStopMode();
 private:
 	CPURegisters *registers;
 	IMMU *mmu;
 	CPUOpcodes *opcodes;
 
 	bool haltState;
+	bool stopState;
 };
 
