@@ -80,10 +80,17 @@ void GameBoy::Run()
 
 	while (running)
 	{
-		joypad->ProcessJoypadInput(interrupts);
-		int cpuCycles = cpu->ExecuteNextInstruction();
-		display->Tick(cpuCycles, interrupts);
-		timer->Tick(cpuCycles, interrupts);
+		joypad->ProcessJoypadInput(interrupts, cpu);
+
+		if (registers->pc == 0xc668)
+		{
+			running = true;
+		}
+
+		int cpuCycles = cpu->ExecuteNextInstruction(interrupts);
+		display->Tick(cpuCycles, interrupts, cpu);
+		timer->Tick(cpuCycles, interrupts, cpu);
+		
 		interrupts->ExecutePendingInterrupt(registers, mmu);
 	}
 }

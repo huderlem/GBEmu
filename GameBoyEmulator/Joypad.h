@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 
+#include "CPU.h"
 #include "Interrupts.h"
 
 class Joypad
@@ -10,7 +11,7 @@ public:
 	~Joypad();
 	char ReadJoypad();
 	void WriteJoyPad(int value);
-	void ProcessJoypadInput(Interrupts *interrupts);
+	void ProcessJoypadInput(Interrupts *interrupts, CPU *cpu);
 private:
 	// I/O port 0xFF00
 	char JOYP;

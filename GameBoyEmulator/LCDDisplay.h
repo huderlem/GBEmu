@@ -3,6 +3,7 @@
 #include "SDL.h"
 #undef main
 
+#include "CPU.h"
 #include "Interrupts.h"
 #include "VRAM.h"
 
@@ -17,7 +18,7 @@ public:
 	void SetAllPixels();
 	void SetDisplayPixels(int *newPixels, int numPixels, int offset);
 	void Render();
-	void Tick(int cpuCycles, Interrupts *interrupts);
+	void Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu);
 
 	int LCDC = 0;
 

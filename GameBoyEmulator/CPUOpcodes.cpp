@@ -17,6 +17,10 @@ int CPUOpcodes::ExecuteInstruction(int opcode, CPURegisters *registers)
 {
 	Instruction_Func func = Instructions[opcode];
 	int cycles = (this->*func)(registers);
+
+	// Ensure lower-4 bits of register f are reset
+	registers->f &= 0b11110000;
+
 	return cycles;
 }
 
@@ -1191,7 +1195,7 @@ int CPUOpcodes::op_3E(CPURegisters * registers)
 int CPUOpcodes::op_3F(CPURegisters * registers)
 {
 	registers->f ^= 0b00010000;
-	registers->f = (registers->f & 0b10011111) & 0xff;
+	registers->f = (registers->f & 0b10010000) & 0xff;
 	return 4;
 }
 
@@ -1581,9 +1585,8 @@ int CPUOpcodes::op_75(CPURegisters * registers)
 
 // halt
 int CPUOpcodes::op_76(CPURegisters * registers)
-{
-	// TODO: implement halt
-	return 4;
+{ // TODO: get rid of this magic number
+	return -1;
 }
 
 // ld (hl), a
@@ -4403,50 +4406,30 @@ int CPUOpcodes::op_E8(CPURegisters * registers)
 	{
 		// immediate value is treated as negative integer
 		result = registers->sp - (0x100 - value);
-
-		// carry flag
-		if (((registers->sp & 0xff) - (0x100 - value)) < 0)
-		{
-			registers->f |= 0b00010000;
-		}
-		else
-		{
-			registers->f &= 0b11101111;
-		}
-
-		// half carry flag
-		if ((registers->sp & 0xf) - ((0x100 - value) & 0xf) < 0)
-		{
-			registers->f |= 0b00100000;
-		}
-		else
-		{
-			registers->f &= 0b11011111;
-		}
 	}
 	else
 	{
 		result = registers->sp + value;
+	}
 
-		// carry flag
-		if (((registers->sp & 0xff) + value) > 0xff)
-		{
-			registers->f |= 0b00010000;
-		}
-		else
-		{
-			registers->f &= 0b11101111;
-		}
+	// carry flag
+	if (((registers->sp & 0xff) + value) > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
 
-		// half carry flag
-		if ((registers->sp & 0xf) + (value & 0xf) > 0xf)
-		{
-			registers->f |= 0b00100000;
-		}
-		else
-		{
-			registers->f &= 0b11011111;
-		}
+	// half carry flag
+	if ((registers->sp & 0xf) + (value & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
 	}
 
 	result = result & 0xffff;
@@ -4587,50 +4570,30 @@ int CPUOpcodes::op_F8(CPURegisters * registers)
 	{
 		// immediate value is treated as negative integer
 		result = registers->sp - (0x100 - value);
-
-		// carry flag
-		if (((registers->sp & 0xff) - (0x100 - value)) < 0)
-		{
-			registers->f |= 0b00010000;
-		}
-		else
-		{
-			registers->f &= 0b11101111;
-		}
-
-		// half carry flag
-		if ((registers->sp & 0xf) - ((0x100 - value) & 0xf) < 0)
-		{
-			registers->f |= 0b00100000;
-		}
-		else
-		{
-			registers->f &= 0b11011111;
-		}
 	}
 	else
 	{
 		result = registers->sp + value;
+	}
 
-		// carry flag
-		if (((registers->sp & 0xff) + value) > 0xff)
-		{
-			registers->f |= 0b00010000;
-		}
-		else
-		{
-			registers->f &= 0b11101111;
-		}
+	// carry flag
+	if (((registers->sp & 0xff) + value) > 0xff)
+	{
+		registers->f |= 0b00010000;
+	}
+	else
+	{
+		registers->f &= 0b11101111;
+	}
 
-		// half carry flag
-		if ((registers->sp & 0xf) + (value & 0xf) > 0xf)
-		{
-			registers->f |= 0b00100000;
-		}
-		else
-		{
-			registers->f &= 0b11011111;
-		}
+	// half carry flag
+	if ((registers->sp & 0xf) + (value & 0xf) > 0xf)
+	{
+		registers->f |= 0b00100000;
+	}
+	else
+	{
+		registers->f &= 0b11011111;
 	}
 
 	result = result & 0xffff;

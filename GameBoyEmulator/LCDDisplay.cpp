@@ -300,7 +300,7 @@ void LCDDisplay::Render()
 	SDL_RenderPresent(renderer);
 }
 
-void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts)
+void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 {
 	ticks += cpuCycles;
 	if (mode == 0) // H-Blank
@@ -317,6 +317,7 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts)
 				if (OAMInterrupt > 0)
 				{
 					interrupts->RequestLCDStatInterrupt();
+					cpu->NotifyInterruptOccurred();
 				}
 			}
 			else
@@ -328,9 +329,11 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts)
 				Render();
 				
 				interrupts->RequestVBlankInterrupt();
+				cpu->NotifyInterruptOccurred();
 				if (VBlankInterrupt > 0)
 				{
 					interrupts->RequestLCDStatInterrupt();
+					cpu->NotifyInterruptOccurred();
 				}
 
 				time = SDL_GetTicks();
@@ -341,6 +344,7 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts)
 			if (CoincidenceInterrupt > 0 && LY == LYC)
 			{
 				interrupts->RequestLCDStatInterrupt();
+				cpu->NotifyInterruptOccurred();
 			}
 		}
 	}
@@ -358,10 +362,12 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts)
 			if (OAMInterrupt > 0)
 			{
 				interrupts->RequestLCDStatInterrupt();
+				cpu->NotifyInterruptOccurred();
 			}
 			if (CoincidenceInterrupt > 0 && LY == LYC)
 			{
 				interrupts->RequestLCDStatInterrupt();
+				cpu->NotifyInterruptOccurred();
 			}
 		}
 		else if (LY != prevLY)
@@ -369,6 +375,7 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts)
 			if (CoincidenceInterrupt > 0 && LY == LYC)
 			{
 				interrupts->RequestLCDStatInterrupt();
+				cpu->NotifyInterruptOccurred();
 			}
 		}
 	}
@@ -392,6 +399,7 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts)
 			if (HBlankInterrupt > 0)
 			{
 				interrupts->RequestLCDStatInterrupt();
+				cpu->NotifyInterruptOccurred();
 			}
 		}
 	}

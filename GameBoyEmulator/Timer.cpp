@@ -55,7 +55,7 @@ void Timer::WriteByte(int value, long address)
 	}
 }
 
-void Timer::Tick(int cpuCycles, Interrupts *interrupts)
+void Timer::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 {
 	// DIV register increments every 256 cpu cycles (16384 Hz).
 	TicksDIV += cpuCycles;
@@ -66,16 +66,19 @@ void Timer::Tick(int cpuCycles, Interrupts *interrupts)
 	}
 
 	// TIMA register increments at an interval determined by the TAC register.
-	TicksTIMA += cpuCycles;
-	if (TicksTIMA >= speed)
+	if (enabled)
 	{
-		TicksTIMA %= speed;
-		TIMA++;
-		if (TIMA > 0xFF)
+		TicksTIMA += cpuCycles;
+		if (TicksTIMA >= speed)
 		{
-			TIMA = TMA;
-			interrupts->RequestTimerInterrupt();
+			TicksTIMA %= speed;
+			TIMA++;
+			if (TIMA > 0xFF)
+			{
+				TIMA = TMA;
+				interrupts->RequestTimerInterrupt();
+				cpu->NotifyInterruptOccurred();
+			}
 		}
 	}
-
 }

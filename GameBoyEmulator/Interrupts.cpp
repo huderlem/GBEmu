@@ -90,12 +90,12 @@ void Interrupts::RequestJoypadInterrupt()
 	JoypadRequest = true;
 }
 
-void Interrupts::ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu)
+bool Interrupts::ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu)
 {
 	if (!IME)
 	{
 		// All interrupts are disabled.
-		return;
+		return false;
 	}
 
 	// Check for a requested interrupt in decreasing priority.
@@ -107,6 +107,7 @@ void Interrupts::ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu)
 		registers->sp -= 2;
 		mmu->WriteWord(registers->pc, registers->sp);
 		registers->pc = 0x0040;
+		return true;
 	}
 	else if (LCDStatRequest && LCDStatEnable)
 	{
@@ -116,6 +117,7 @@ void Interrupts::ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu)
 		registers->sp -= 2;
 		mmu->WriteWord(registers->pc, registers->sp);
 		registers->pc = 0x0048;
+		return true;
 	}
 	else if (TimerRequest && TimerEnable)
 	{
@@ -125,6 +127,7 @@ void Interrupts::ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu)
 		registers->sp -= 2;
 		mmu->WriteWord(registers->pc, registers->sp);
 		registers->pc = 0x0050;
+		return true;
 	}
 	else if (SerialRequest && SerialEnable)
 	{
@@ -134,6 +137,7 @@ void Interrupts::ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu)
 		registers->sp -= 2;
 		mmu->WriteWord(registers->pc, registers->sp);
 		registers->pc = 0x0058;
+		return true;
 	}
 	else if (JoypadRequest && JoypadEnable)
 	{
@@ -143,5 +147,8 @@ void Interrupts::ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu)
 		registers->sp -= 2;
 		mmu->WriteWord(registers->pc, registers->sp);
 		registers->pc = 0x0060;
+		return true;
 	}
+
+	return false;
 }

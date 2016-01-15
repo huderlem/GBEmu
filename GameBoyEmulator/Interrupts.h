@@ -22,7 +22,7 @@ public:
 	void RequestTimerInterrupt();
 	void RequestSerialInterrupt();
 	void RequestJoypadInterrupt();
-	void ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu);
+	bool ExecutePendingInterrupt(CPURegisters *registers, IMMU *mmu);
 private:
 	// Interrupt Master Enable flag
 	bool IME;
