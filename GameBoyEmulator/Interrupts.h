@@ -34,11 +34,11 @@ private:
 	// Bit 3 : Serial   Interrupt Request(INT 58h)    (1 = Request)
 	// Bit 4 : Joypad   Interrupt Request(INT 60h)    (1 = Request)
 	int IF = 0;
-	bool VBlankRequest;
-	bool LCDStatRequest;
-	bool TimerRequest;
-	bool SerialRequest;
-	bool JoypadRequest;
+	int VBlankRequest;
+	int LCDStatRequest;
+	int TimerRequest;
+	int SerialRequest;
+	int JoypadRequest;
 
 	// FFFF: IE - Interrupt Enable Register
 	// Bit 0 : VBlank   Interrupt Enable(INT 40h)  (1 = Enable)
@@ -47,10 +47,10 @@ private:
 	// Bit 3 : Serial   Interrupt Enable(INT 58h)  (1 = Enable)
 	// Bit 4 : Joypad   Interrupt Enable(INT 60h)  (1 = Enable)
 	int IE = 0;
-	bool VBlankEnable;
-	bool LCDStatEnable;
-	bool TimerEnable;
-	bool SerialEnable;
-	bool JoypadEnable;
+	int VBlankEnable;
+	int LCDStatEnable;
+	int TimerEnable;
+	int SerialEnable;
+	int JoypadEnable;
 };
 
