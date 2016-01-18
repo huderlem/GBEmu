@@ -337,8 +337,6 @@ bool MMU::LoadROM(std::string filepath)
 			romFile.seekg(0, std::ios::beg);
 			romFile.read((char *)ROM, ROMSize);
 			romFile.close();
-
-			mbc = new BaseMBC(ROM, ROMSize);
 		}
 		else
 		{
@@ -351,7 +349,34 @@ bool MMU::LoadROM(std::string filepath)
 		success = false;
 	}
 
+	if (success)
+	{
+		cartType = ROM[0x147];
+		ROMSizeType = ROM[0x148];
+		RAMSizeType = ROM[0x149];
+		destinationCode = ROM[0x14A];
+	}
+
 	return success;
+}
+
+void MMU::InitializeMBC()
+{
+	switch (cartType)
+	{
+	case 0x00:
+		mbc = new BaseMBC(ROM, ROMSize, false);
+		break;
+	case 0x01:
+		mbc = new MBC1(ROM, ROMSize, 0, false);
+		break;
+	case 0x02:
+		mbc = new MBC1(ROM, ROMSize, RAMSizeType, false);
+		break;
+	case 0x03:
+		mbc = new MBC1(ROM, ROMSize, RAMSizeType, true);
+		break;
+	}
 }
 
 void MMU::InitializeHRAM()

@@ -5,6 +5,7 @@
 #include "Interrupts.h"
 #include "Joypad.h"
 #include "LCDDisplay.h"
+#include "MBC1.h"
 #include "Timer.h"
 #include "VRAM.h"
 #include "WRAM.h"
@@ -19,6 +20,7 @@ public:
 	virtual void WriteByte(int value, long address);
 	virtual void WriteWord(int value, long address);
 	virtual bool LoadROM(std::string filepath);
+	virtual void InitializeMBC();
 private:
 	// Byte array of entire ROM.
 	unsigned char *ROM;
@@ -48,4 +50,10 @@ private:
 	Interrupts *interrupts;
 
 	Timer *timer;
+
+	// ROM headers
+	int cartType;
+	int ROMSizeType;
+	int RAMSizeType;
+	int destinationCode;
 };

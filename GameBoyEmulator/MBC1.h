@@ -1,10 +1,12 @@
 #pragma once
-class BaseMBC
+
+#include "BaseMBC.h"
+
+class MBC1: public BaseMBC
 {
 public:
-	BaseMBC(unsigned char *ROM, long ROMSize, bool battery);
-	~BaseMBC();
-	int ReadByteROM0(long address);
+	MBC1(unsigned char *ROM, long ROMSize, int RAMSizeType, bool battery);
+	~MBC1();
 	virtual int ReadByteROMSwitchableBank(long address);
 	virtual int ReadByteRAMSwitchableBank(long address);
 	virtual void WriteByteSection0(int value, long address);
@@ -12,13 +14,19 @@ public:
 	virtual void WriteByteSection2(int value, long address);
 	virtual void WriteByteSection3(int value, long address);
 	virtual void WriteByteRAMSwitchableBank(int value, long address);
-	virtual void InitializeSRAM();
-	static long GetRAMSize(int RAMSizeType);
-protected:
-	unsigned char *ROM;
-	long ROMSize;
-	unsigned char *SRAM;
-	long SRAMSize;
+	virtual void InitializeSRAM(int RAMSizeType);
+private:
+	int ROMBankLo;
+	int ROMBankHi;
+	int RAMBank;
 
-	bool battery;
+	// 0 = ROM Banking Mode
+	// 1 = RAM Banking Mode
+	int ModeSelect;
+
+	bool ExternalRAMEnable;
+
+	int GetROMBank();
+	long GetRAMSwitchableBankAddress(long address);
 };
+

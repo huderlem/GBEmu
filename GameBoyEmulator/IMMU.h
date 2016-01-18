@@ -12,5 +12,6 @@ public:
 	virtual void WriteByte(int value, long address) =0;
 	virtual void WriteWord(int value, long address) =0;
 	virtual bool LoadROM(std::string filepath) =0;
+	virtual void InitializeMBC() =0;
 };
 

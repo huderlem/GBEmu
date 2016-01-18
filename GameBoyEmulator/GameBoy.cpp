@@ -24,6 +24,7 @@ GameBoy::~GameBoy()
 void GameBoy::LoadGame(std::string filepath)
 {
 	mmu->LoadROM(filepath);
+	mmu->InitializeMBC();
 	ReadCartHeader();
 }
 
@@ -33,11 +34,6 @@ void GameBoy::ReadCartHeader()
 	{
 		title.append(1, mmu->ReadByte(i));
 	}
-
-	cartType = mmu->ReadByte(0x147);
-	ROMSize = mmu->ReadByte(0x148);
-	RAMSize = mmu->ReadByte(0x149);
-	destinationCode = mmu->ReadByte(0x14A);
 }
 
 void GameBoy::PowerUpSequence()
