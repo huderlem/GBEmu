@@ -59,9 +59,9 @@ void Timer::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 {
 	// DIV register increments every 256 cpu cycles (16384 Hz).
 	TicksDIV += cpuCycles;
-	if (TicksDIV >= 256)
+	while (TicksDIV >= 256)
 	{
-		TicksDIV %= 256;
+		TicksDIV -= 256;
 		DIV = ((DIV + 1) & 0xFF);
 	}
 
@@ -69,9 +69,9 @@ void Timer::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 	if (enabled)
 	{
 		TicksTIMA += cpuCycles;
-		if (TicksTIMA >= speed)
+		while (TicksTIMA >= speed)
 		{
-			TicksTIMA %= speed;
+			TicksTIMA -= speed;
 			TIMA++;
 			if (TIMA > 0xFF)
 			{
