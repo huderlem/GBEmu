@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CPU.h"
 #include "Interrupts.h"
 
 class Timer
@@ -10,7 +9,7 @@ public:
 	~Timer();
 	int ReadByte(long address);
 	void WriteByte(int value, long address);
-	void Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu);
+	bool Tick(int cpuCycles, Interrupts *interrupts);
 private:
 	// I/O Register FF04 - Divider Register
 	int DIV;

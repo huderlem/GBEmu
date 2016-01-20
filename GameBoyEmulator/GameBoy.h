@@ -36,7 +36,6 @@ private:
 	Timer *timer;
 	IMMU *mmu;
 	CPURegisters *registers;
-	CPUOpcodes *opcodes;
 	CPU *cpu;
 	LCDDisplay *display;
 

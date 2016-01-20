@@ -55,8 +55,10 @@ void Timer::WriteByte(int value, long address)
 	}
 }
 
-void Timer::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
+bool Timer::Tick(int cpuCycles, Interrupts *interrupts)
 {
+	bool interruptRequested = false;
+
 	// DIV register increments every 256 cpu cycles (16384 Hz).
 	TicksDIV += cpuCycles;
 	while (TicksDIV >= 256)
@@ -77,8 +79,10 @@ void Timer::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 			{
 				TIMA = TMA;
 				interrupts->RequestTimerInterrupt();
-				cpu->NotifyInterruptOccurred();
+				interruptRequested = true;
 			}
 		}
 	}
+
+	return interruptRequested;
 }

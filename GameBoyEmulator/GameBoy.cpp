@@ -12,8 +12,7 @@ GameBoy::GameBoy()
 	timer = new Timer();
 	mmu = new MMU(interrupts, wram, vram, joypad, timer, display);
 	registers = new CPURegisters();
-	opcodes = new CPUOpcodes(mmu, interrupts);
-	cpu = new CPU(mmu, registers, opcodes);
+	cpu = new CPU(mmu, registers, timer, interrupts);
 }
 
 GameBoy::~GameBoy()
@@ -80,7 +79,11 @@ void GameBoy::Run()
 
 		int cpuCycles = cpu->ExecuteNextInstruction(interrupts);
 		display->Tick(cpuCycles, interrupts, cpu);
-		timer->Tick(cpuCycles, interrupts, cpu);
+		bool timerInterruptRequested = timer->Tick(cpuCycles, interrupts);
+		if (timerInterruptRequested)
+		{
+			cpu->NotifyInterruptOccurred();
+		}
 		
 		interrupts->ExecutePendingInterrupt(registers, mmu);
 	}
