@@ -2,7 +2,7 @@
 #include "MBC1.h"
 
 
-MBC1::MBC1(unsigned char *ROM, long ROMSize, int RAMSizeType, bool battery) : BaseMBC(ROM, ROMSize, battery)
+MBC1::MBC1(unsigned char *ROM, long ROMSizeType, int RAMSizeType, bool battery) : BaseMBC(ROM, ROMSizeType, battery)
 {
 	ModeSelect = 0;
 	ExternalRAMEnable = false;
@@ -94,7 +94,14 @@ int MBC1::GetROMBank()
 {
 	if (ModeSelect == 0)
 	{
-		return (ROMBankHi << 5) | ROMBankLo;
+		if (ROMSizeType > 4)
+		{
+			return (ROMBankHi << 5) | ROMBankLo;
+		}
+		else
+		{
+			return ROMBankLo;
+		}
 	}
 	else
 	{

@@ -365,16 +365,16 @@ void MMU::InitializeMBC()
 	switch (cartType)
 	{
 	case 0x00:
-		mbc = new BaseMBC(ROM, ROMSize, false);
+		mbc = new BaseMBC(ROM, ROMSizeType, false);
 		break;
 	case 0x01:
-		mbc = new MBC1(ROM, ROMSize, 0, false);
+		mbc = new MBC1(ROM, ROMSizeType, 0, false);
 		break;
 	case 0x02:
-		mbc = new MBC1(ROM, ROMSize, RAMSizeType, false);
+		mbc = new MBC1(ROM, ROMSizeType, RAMSizeType, false);
 		break;
 	case 0x03:
-		mbc = new MBC1(ROM, ROMSize, RAMSizeType, true);
+		mbc = new MBC1(ROM, ROMSizeType, RAMSizeType, true);
 		break;
 	}
 }

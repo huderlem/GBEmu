@@ -26,10 +26,21 @@ char Joypad::ReadJoypad()
 	{
 		state = ((Start << 3) | (Select << 2) | (B << 1) | A);
 	}
-	else if (DirectionsSelected)
+	else
+	{
+		state |= 0b00100000;
+	}
+
+	if (DirectionsSelected)
 	{
 		state = ((Down << 3) | (Up << 2) | (Left << 1) | Right);
 	}
+	else
+	{
+		state |= 0b00010000;
+	}
+
+	state |= 0b11000000;
 
 	return state;
 }

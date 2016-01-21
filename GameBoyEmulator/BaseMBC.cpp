@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "BaseMBC.h"
 
-BaseMBC::BaseMBC(unsigned char *ROM, long ROMSize, bool battery)
+BaseMBC::BaseMBC(unsigned char *ROM, long ROMSizeType, bool battery)
 {
 	BaseMBC::ROM = ROM;
-	BaseMBC::ROMSize = ROMSize;
+	BaseMBC::ROMSizeType = ROMSizeType;
 	InitializeSRAM();
 	BaseMBC::battery = battery;
 }

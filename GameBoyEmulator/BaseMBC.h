@@ -16,7 +16,7 @@ public:
 	static long GetRAMSize(int RAMSizeType);
 protected:
 	unsigned char *ROM;
-	long ROMSize;
+	long ROMSizeType;
 	unsigned char *SRAM;
 	long SRAMSize;
 
