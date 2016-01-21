@@ -157,7 +157,6 @@ void LCDDisplay::SetWindowPixels()
 
 void LCDDisplay::SetOAMPixels(void *pixels)
 {
-	// TODO: support 8x16 mode
 	// TODO: correct overlapping sprite priorities and conflicts
 
 	for (int oamId = 0; oamId < 40; oamId++)
@@ -172,15 +171,27 @@ void LCDDisplay::SetOAMPixels(void *pixels)
 		bool xFlip = (attributes & 0b00100000) > 0;
 		unsigned char *nonGBCPaletteMap = (attributes & 0b00010000) > 0 ? vram->OBP1Map : vram->OBP0Map;
 
+		// Respect 8x16 mode.
+		int spriteHeight;
+		if ((LCDC & 0b00000100) > 0)
+		{
+			spriteHeight = 16;
+			tileId &= 0b11111110;
+		}
+		else
+		{
+			spriteHeight = 8;
+		}
+
 		// Set the sprite's pixels.
 		int correctedX;
 		int correctedY;
-		for (int y = 0; y < 8; y++)
+		for (int y = 0; y < spriteHeight; y++)
 		{
 			for (int x = 0; x < 8; x++)
 			{
 				// Skip if pixel would be off-screen.
-				if (yPos + y < 0 || xPos + x < 0 || yPos + y > DISPLAY_PIXELS_HEIGHT || xPos + x > DISPLAY_PIXELS_WIDTH)
+				if (yPos + y < 0 || xPos + x < 0 || yPos + y >= DISPLAY_PIXELS_HEIGHT || xPos + x >= DISPLAY_PIXELS_WIDTH)
 				{
 					continue;
 				}
@@ -194,7 +205,7 @@ void LCDDisplay::SetOAMPixels(void *pixels)
 				}
 				if (yFlip)
 				{
-					correctedY = 7 - y;
+					correctedY = spriteHeight - 1 - y;
 				}
 
 				int tilePixelOffset = (tileId * 64) + (correctedY * 8) + correctedX;
@@ -330,9 +341,6 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 			{
 				// Enter V-Blank period
 				mode = 1;
-
-				// Render the current line
-				Render();
 				
 				interrupts->RequestVBlankInterrupt();
 				cpu->NotifyInterruptOccurred();
@@ -360,6 +368,9 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 		LY = 144 + (ticks / 456);
 		if (ticks >= 4560)
 		{
+			// Render the current line
+			Render();
+
 			// End V-Blank period
 			ticks = ticks % 4560;
 			LY = 0;

@@ -88,13 +88,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\huder\Downloads\SDL2-devel-2.0.4-VC\SDL2-2.0.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Libs\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <CLRUnmanagedCodeCheck>true</CLRUnmanagedCodeCheck>
-      <AdditionalLibraryDirectories>C:\Users\huder\Downloads\SDL2-devel-2.0.4-VC\SDL2-2.0.4\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Libs\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2main.lib;SDL2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -150,7 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU.h" />
-    <ClInclude Include="CPUOpcodes.h" />
     <ClInclude Include="CPURegisters.h" />
     <ClInclude Include="BaseMBC.h" />
     <ClInclude Include="GameBoy.h" />
@@ -169,7 +168,6 @@
   <ItemGroup>
     <ClCompile Include="BaseMBC.cpp" />
     <ClCompile Include="CPU.cpp" />
-    <ClCompile Include="CPUOpcodes.cpp" />
     <ClCompile Include="CPURegisters.cpp" />
     <ClCompile Include="GameBoy.cpp" />
     <ClCompile Include="GameBoyEmulator.cpp" />
