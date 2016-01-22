@@ -15,8 +15,7 @@ public:
 	~LCDDisplay();
 	int ReadSTAT();
 	void WriteSTAT(int value);
-	void SetAllPixels();
-	void SetDisplayPixels(int *newPixels, int numPixels, int offset);
+	void SetScanlinePixels(int scanline);
 	void Render();
 	void Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu);
 
@@ -54,14 +53,17 @@ private:
 
 	VRAM *vram;
 
-	void SetDisplayPixels();
-	void SetWindowPixels();
-	void SetBackgroundPixels();
-	void SetOAMPixels(void *pixels);
+	void SetDisplayPixels(int scanline, void *pixels, int pitch);
+	void SetWindowPixels(int scanline);
+	void SetBackgroundPixels(int scanline);
+	void SetOAMPixels(void *pixels, int scanline);
 
 	int ticks = 0;
 	int mode = 0;  // See STAT register
 
 	int time = 0;
 	int last = 0;
+
+	void *pixels;
+	int pitch;
 };
