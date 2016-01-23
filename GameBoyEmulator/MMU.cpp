@@ -360,7 +360,7 @@ bool MMU::LoadROM(std::string filepath)
 	return success;
 }
 
-void MMU::InitializeMBC()
+void MMU::InitializeMBC(std::string romDirectory, std::string romName)
 {
 	switch (cartType)
 	{
@@ -368,15 +368,20 @@ void MMU::InitializeMBC()
 		mbc = new BaseMBC(ROM, ROMSizeType, false);
 		break;
 	case 0x01:
-		mbc = new MBC1(ROM, ROMSizeType, 0, false);
+		mbc = new MBC1(ROM, ROMSizeType, 0, false, romDirectory, romName);
 		break;
 	case 0x02:
-		mbc = new MBC1(ROM, ROMSizeType, RAMSizeType, false);
+		mbc = new MBC1(ROM, ROMSizeType, RAMSizeType, false, romDirectory, romName);
 		break;
 	case 0x03:
-		mbc = new MBC1(ROM, ROMSizeType, RAMSizeType, true);
+		mbc = new MBC1(ROM, ROMSizeType, RAMSizeType, true, romDirectory, romName);
 		break;
 	}
+}
+
+void MMU::ExitGame()
+{
+	mbc->ExitGame();
 }
 
 void MMU::InitializeHRAM()

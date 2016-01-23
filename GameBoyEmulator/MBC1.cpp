@@ -2,15 +2,17 @@
 #include "MBC1.h"
 
 
-MBC1::MBC1(unsigned char *ROM, long ROMSizeType, int RAMSizeType, bool battery) : BaseMBC(ROM, ROMSizeType, battery)
+MBC1::MBC1(unsigned char *ROM, long ROMSizeType, int RAMSizeType, bool batteryEnabled, std::string saveDirectory, std::string romName) : BaseMBC(ROM, ROMSizeType, batteryEnabled)
 {
 	ModeSelect = 0;
 	ExternalRAMEnable = false;
+	battery = new Battery(saveDirectory, romName);
 	InitializeSRAM(RAMSizeType);
 }
 
 MBC1::~MBC1()
 {
+	battery->SaveRAM(SRAM, SRAMSize);
 }
 
 int MBC1::ReadByteROMSwitchableBank(long address)
@@ -86,8 +88,25 @@ void MBC1::WriteByteRAMSwitchableBank(int value, long address)
 
 void MBC1::InitializeSRAM(int RAMSizeType)
 {
-	long RAMSize = BaseMBC::GetRAMSize(RAMSizeType);
-	SRAM = new unsigned char[RAMSize]();
+	SRAMSize = GetRAMSize(RAMSizeType);
+	if (batteryEnabled)
+	{
+		SRAM = battery->LoadRAM(SRAMSize);
+	}
+	
+	if (SRAM == nullptr)
+	{
+		// TODO: fill with random values, instead of 0.
+		SRAM = new unsigned char[SRAMSize]();
+	}
+}
+
+void MBC1::ExitGame()
+{
+	if (batteryEnabled)
+	{
+		battery->SaveRAM(SRAM, SRAMSize);
+	}
 }
 
 int MBC1::GetROMBank()

@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "BaseMBC.h"
 
-BaseMBC::BaseMBC(unsigned char *ROM, long ROMSizeType, bool battery)
+BaseMBC::BaseMBC(unsigned char *ROM, long ROMSizeType, bool batteryEnabled)
 {
 	BaseMBC::ROM = ROM;
 	BaseMBC::ROMSizeType = ROMSizeType;
 	InitializeSRAM();
-	BaseMBC::battery = battery;
+	BaseMBC::batteryEnabled = batteryEnabled;
 }
 
 BaseMBC::~BaseMBC()
@@ -64,6 +64,10 @@ void BaseMBC::InitializeSRAM()
 {
 	SRAMSize = 0x2000;
 	SRAM = new unsigned char[SRAMSize]();
+}
+
+void BaseMBC::ExitGame()
+{
 }
 
 long BaseMBC::GetRAMSize(int RAMSizeType)

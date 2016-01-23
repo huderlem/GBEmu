@@ -2,14 +2,17 @@
 //
 #include "stdafx.h"
 
-#define EXPORT_TEST_APIS 1
+#include <string>
 
 #include "GameBoy.h"
 
 int main()
 {
+	std::string directory = "D:\\Games\\Emulation\\Nintendo Gameboy\\Pokemon Green\\";
+	std::string romFilename = "Pocket Monsters Midori (Japan).gb";
+
 	GameBoy *gameboy = new GameBoy();
-	gameboy->LoadGame("D:\\Downloads\\cpu_instrs\\cpu_instrs\\cpu_instrs.gb");
+	gameboy->LoadGame(directory, romFilename);
 	gameboy->Run();
     return 0;
 }

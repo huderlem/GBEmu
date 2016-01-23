@@ -11,7 +11,7 @@ public:
 	~Joypad();
 	char ReadJoypad();
 	void WriteJoyPad(int value);
-	void ProcessJoypadInput(Interrupts *interrupts, CPU *cpu);
+	bool ProcessJoypadInput(Interrupts *interrupts, CPU *cpu);
 private:
 	// I/O port 0xFF00
 	char JOYP;

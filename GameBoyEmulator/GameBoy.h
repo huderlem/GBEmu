@@ -16,11 +16,15 @@ class GameBoy
 public:
 	GameBoy();
 	~GameBoy();
-	void LoadGame(std::string filepath);
+	void LoadGame(std::string romDirectory, std::string romFilepath);
 	void Run();
+	void ExitGame();
 private:
 	void ReadCartHeader();
 	void PowerUpSequence();
+
+	std::string romDirectory;
+	std::string romFilename;
 
 	// Cartridge Header Values
 	std::string title = "";

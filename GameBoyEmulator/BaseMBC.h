@@ -2,7 +2,7 @@
 class BaseMBC
 {
 public:
-	BaseMBC(unsigned char *ROM, long ROMSize, bool battery);
+	BaseMBC(unsigned char *ROM, long ROMSize, bool batteryEnabled);
 	~BaseMBC();
 	int ReadByteROM0(long address);
 	virtual int ReadByteROMSwitchableBank(long address);
@@ -13,6 +13,7 @@ public:
 	virtual void WriteByteSection3(int value, long address);
 	virtual void WriteByteRAMSwitchableBank(int value, long address);
 	virtual void InitializeSRAM();
+	virtual void ExitGame();
 	static long GetRAMSize(int RAMSizeType);
 protected:
 	unsigned char *ROM;
@@ -20,5 +21,5 @@ protected:
 	unsigned char *SRAM;
 	long SRAMSize;
 
-	bool battery;
+	bool batteryEnabled;
 };

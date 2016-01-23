@@ -13,7 +13,7 @@ CPU::CPU(IMMU *mmu, CPURegisters *registers, Timer *timer, Interrupts *interrupt
 
 CPU::~CPU()
 {
-	//TODO: delete members ??
+	delete registers;
 }
 
 // Executes the next CPU instruction.

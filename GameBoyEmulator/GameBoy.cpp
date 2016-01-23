@@ -20,10 +20,14 @@ GameBoy::~GameBoy()
 	// TODO: delete members?
 }
 
-void GameBoy::LoadGame(std::string filepath)
+void GameBoy::LoadGame(std::string romDirectory, std::string romName)
 {
-	mmu->LoadROM(filepath);
-	mmu->InitializeMBC();
+	this->romDirectory = romDirectory;
+	this->romFilename = romName;
+
+	std::string romFilepath = romDirectory + romName;
+	mmu->LoadROM(romFilepath);
+	mmu->InitializeMBC(romDirectory, romName);
 	ReadCartHeader();
 }
 
@@ -75,7 +79,7 @@ void GameBoy::Run()
 
 	while (running)
 	{
-		joypad->ProcessJoypadInput(interrupts, cpu);
+		bool exit = joypad->ProcessJoypadInput(interrupts, cpu);
 
 		int cpuCycles = cpu->ExecuteNextInstruction(interrupts);
 		display->Tick(cpuCycles, interrupts, cpu);
@@ -86,6 +90,18 @@ void GameBoy::Run()
 		}
 		
 		interrupts->ExecutePendingInterrupt(registers, mmu);
+
+		if (exit)
+		{
+			running = false;
+		}
 	}
+
+	ExitGame();
+}
+
+void GameBoy::ExitGame()
+{
+	mmu->ExitGame();
 }
 

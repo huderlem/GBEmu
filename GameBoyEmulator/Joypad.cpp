@@ -51,7 +51,7 @@ void Joypad::WriteJoyPad(int value)
 	DirectionsSelected = ((value & 0b00010000) == 0);
 }
 
-void Joypad::ProcessJoypadInput(Interrupts *interrupts, CPU *cpu)
+bool Joypad::ProcessJoypadInput(Interrupts *interrupts, CPU *cpu)
 {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	SDL_PumpEvents();
@@ -70,6 +70,15 @@ void Joypad::ProcessJoypadInput(Interrupts *interrupts, CPU *cpu)
 	{
 		interrupts->RequestJoypadInterrupt();
 		cpu->NotifyInterruptOccurred();
+	}
+
+	if (keys[SDL_SCANCODE_ESCAPE])
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

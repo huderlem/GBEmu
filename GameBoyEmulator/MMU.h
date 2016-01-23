@@ -20,7 +20,8 @@ public:
 	virtual void WriteByte(int value, long address);
 	virtual void WriteWord(int value, long address);
 	virtual bool LoadROM(std::string filepath);
-	virtual void InitializeMBC();
+	virtual void InitializeMBC(std::string romDirectory, std::string romName);
+	virtual void ExitGame();
 private:
 	// Byte array of entire ROM.
 	unsigned char *ROM;
