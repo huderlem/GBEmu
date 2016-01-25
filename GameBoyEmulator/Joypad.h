@@ -9,12 +9,12 @@ class Joypad
 public:
 	Joypad();
 	~Joypad();
-	char ReadJoypad();
+	int ReadJoypad();
 	void WriteJoyPad(int value);
 	bool ProcessJoypadInput(Interrupts *interrupts, CPU *cpu);
 private:
 	// I/O port 0xFF00
-	char JOYP;
+	int JOYP;
 	bool ButtonsSelected = false;
 	bool DirectionsSelected = false;
 

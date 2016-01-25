@@ -287,7 +287,7 @@ void LCDDisplay::Render()
 void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 {
 	// LCD is turned off during STOP mode.
-	if (cpu->InStopMode())
+	if (cpu->InStopMode() || (LCDC & 0x80) == 0)
 	{
 		return;
 	}

@@ -6,6 +6,7 @@
 #include "Joypad.h"
 #include "LCDDisplay.h"
 #include "MBC1.h"
+#include "MBC2.h"
 #include "Timer.h"
 #include "VRAM.h"
 #include "WRAM.h"
