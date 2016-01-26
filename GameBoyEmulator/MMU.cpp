@@ -378,8 +378,16 @@ void MMU::InitializeMBC(std::string romDirectory, std::string romName)
 		break;
 	case 0x05:
 		mbc = new MBC2(ROM, ROMSizeType, RAMSizeType, false, romDirectory, romName);
+		break;
 	case 0x06:
 		mbc = new MBC2(ROM, ROMSizeType, RAMSizeType, true, romDirectory, romName);
+		break;
+	case 0x12:
+		mbc = new MBC3(ROM, ROMSizeType, RAMSizeType, false, romDirectory, romName);
+		break;
+	case 0x13:
+		mbc = new MBC3(ROM, ROMSizeType, RAMSizeType, true, romDirectory, romName);
+		break;
 	}
 }
 
