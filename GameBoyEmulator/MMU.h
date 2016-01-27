@@ -8,6 +8,7 @@
 #include "MBC1.h"
 #include "MBC2.h"
 #include "MBC3.h"
+#include "MBC5.h"
 #include "Timer.h"
 #include "VRAM.h"
 #include "WRAM.h"
