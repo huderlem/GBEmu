@@ -76,12 +76,14 @@ void GameBoy::Run()
 
 	// Entry point for game
 	PowerUpSequence();
+	int cpuCyclesPerSecond = 4194304;  // this is just for original gameboy
 
 	while (running)
 	{
 		bool exit = joypad->ProcessJoypadInput(interrupts, cpu);
 
 		int cpuCycles = cpu->ExecuteNextInstruction(interrupts);
+		mmu->TickMBC(cpuCycles, cpuCyclesPerSecond);
 		display->Tick(cpuCycles, interrupts, cpu);
 		bool timerInterruptRequested = timer->Tick(cpuCycles, interrupts);
 		if (timerInterruptRequested)

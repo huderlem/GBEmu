@@ -14,6 +14,7 @@ public:
 	virtual void WriteByteRAMSwitchableBank(int value, long address);
 	virtual void InitializeSRAM();
 	virtual void ExitGame();
+	virtual void Tick(int cpucycles, int cpuCycles);
 	static long GetRAMSize(int RAMSizeType);
 protected:
 	unsigned char *ROM;

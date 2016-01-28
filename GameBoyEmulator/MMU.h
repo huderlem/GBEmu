@@ -25,6 +25,7 @@ public:
 	virtual bool LoadROM(std::string filepath);
 	virtual void InitializeMBC(std::string romDirectory, std::string romName);
 	virtual void ExitGame();
+	virtual void TickMBC(int cpuCycles, int cyclesPerSecond);
 private:
 	// Byte array of entire ROM.
 	unsigned char *ROM;

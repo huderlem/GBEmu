@@ -70,6 +70,10 @@ void BaseMBC::ExitGame()
 {
 }
 
+void BaseMBC::Tick(int cpucycles, int cpuCycles)
+{
+}
+
 long BaseMBC::GetRAMSize(int RAMSizeType)
 {
 	switch (RAMSizeType)

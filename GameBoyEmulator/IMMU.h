@@ -14,5 +14,6 @@ public:
 	virtual bool LoadROM(std::string filepath) =0;
 	virtual void InitializeMBC(std::string romDirectory, std::string romName) =0;
 	virtual void ExitGame() =0;
+	virtual void TickMBC(int cpuCycles, int cyclesPerSecond) =0;
 };
 

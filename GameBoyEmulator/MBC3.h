@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <ctime>
 
 #include "BaseMBC.h"
 #include "Battery.h"
@@ -19,11 +18,31 @@ public:
 	virtual void WriteByteRAMSwitchableBank(int value, long address);
 	virtual void InitializeSRAM(int RAMSizeType);
 	virtual void ExitGame();
+	virtual void Tick(int cpuCycles, int cyclesPerSecond);
 private:
+	void InitializeRTC();
+
 	int ROMBank;
 	int RAM_RTC_Register;
+	int RTC_TickCounter;
 
 	bool RAM_RTC_Enable;
+
+	int RTC_TimerEnable;
+	int RTC_Seconds;
+	int RTC_Minutes;
+	int RTC_Hours;
+	int RTC_DaysLo;
+	int RTC_DaysHi;
+	int RTC_DayCarry;
+
+	int RTC_Latched_Seconds;
+	int RTC_Latched_Minutes;
+	int RTC_Latched_Hours;
+	int RTC_Latched_DaysLo;
+	int RTC_Latched_DaysHi;
+
+	bool latchStarted;
 
 	Battery *battery;
 };

@@ -382,6 +382,15 @@ void MMU::InitializeMBC(std::string romDirectory, std::string romName)
 	case 0x06:
 		mbc = new MBC2(ROM, ROMSizeType, RAMSizeType, true, romDirectory, romName);
 		break;
+	case 0x09:
+		mbc = new MBC3(ROM, ROMSizeType, 0, true, romDirectory, romName);
+		break;
+	case 0x10:
+		mbc = new MBC3(ROM, ROMSizeType, RAMSizeType, true, romDirectory, romName);
+		break;
+	case 0x11:
+		mbc = new MBC3(ROM, ROMSizeType, 0, false, romDirectory, romName);
+		break;
 	case 0x12:
 		mbc = new MBC3(ROM, ROMSizeType, RAMSizeType, false, romDirectory, romName);
 		break;
@@ -403,6 +412,11 @@ void MMU::InitializeMBC(std::string romDirectory, std::string romName)
 void MMU::ExitGame()
 {
 	mbc->ExitGame();
+}
+
+void MMU::TickMBC(int cpuCycles, int cyclesPerSecond)
+{
+	mbc->Tick(cpuCycles, cyclesPerSecond);
 }
 
 void MMU::InitializeHRAM()
