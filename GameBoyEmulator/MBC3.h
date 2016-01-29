@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
+#include <time.h>
 
 #include "BaseMBC.h"
-#include "Battery.h"
 
 class MBC3 : public BaseMBC
 {
@@ -19,8 +19,11 @@ public:
 	virtual void InitializeSRAM(int RAMSizeType);
 	virtual void ExitGame();
 	virtual void Tick(int cpuCycles, int cyclesPerSecond);
+	virtual void BatterySave(const unsigned char *SRAM, long SRAMSize);
+	virtual unsigned char * BatteryLoad(long SRAMSize);
 private:
 	void InitializeRTC();
+	void AdvanceRTCSeconds(int seconds);
 
 	int ROMBank;
 	int RAM_RTC_Register;
@@ -43,7 +46,5 @@ private:
 	int RTC_Latched_DaysHi;
 
 	bool latchStarted;
-
-	Battery *battery;
 };
 

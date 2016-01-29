@@ -149,7 +149,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Battery.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="CPURegisters.h" />
     <ClInclude Include="BaseMBC.h" />
@@ -171,7 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseMBC.cpp" />
-    <ClCompile Include="Battery.cpp" />
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="CPURegisters.cpp" />
     <ClCompile Include="GameBoy.cpp" />

@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseMBC.h"
-#include "Battery.h"
 
 class MBC5 : public BaseMBC
 {
@@ -23,6 +22,4 @@ private:
 	int RAMBank;
 
 	bool RAMEnable;
-
-	Battery *battery;
 };

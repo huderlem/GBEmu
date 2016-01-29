@@ -365,7 +365,7 @@ void MMU::InitializeMBC(std::string romDirectory, std::string romName)
 	switch (cartType)
 	{
 	case 0x00:
-		mbc = new BaseMBC(ROM, ROMSizeType, false);
+		mbc = new BaseMBC(ROM, ROMSizeType, false, romDirectory, romName);
 		break;
 	case 0x01:
 		mbc = new MBC1(ROM, ROMSizeType, 0, false, romDirectory, romName);

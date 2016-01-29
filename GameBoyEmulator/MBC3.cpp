@@ -2,14 +2,13 @@
 #include "MBC3.h"
 
 
-MBC3::MBC3(unsigned char * ROM, long ROMSizeType, int RAMSizeType, bool batteryEnabled, std::string saveDirectory, std::string romName) : BaseMBC(ROM, ROMSizeType, batteryEnabled)
+MBC3::MBC3(unsigned char * ROM, long ROMSizeType, int RAMSizeType, bool batteryEnabled, std::string saveDirectory, std::string romName) : BaseMBC(ROM, ROMSizeType, batteryEnabled, saveDirectory, romName)
 {
 	ROMBank = 1;
 	RAM_RTC_Enable = false;
 	RAM_RTC_Register = 0;
-	battery = new Battery(saveDirectory, romName);
-	InitializeSRAM(RAMSizeType);
 	InitializeRTC();
+	InitializeSRAM(RAMSizeType);
 }
 
 MBC3::~MBC3()
@@ -172,7 +171,7 @@ void MBC3::InitializeSRAM(int RAMSizeType)
 	SRAMSize = GetRAMSize(RAMSizeType);
 	if (batteryEnabled)
 	{
-		SRAM = battery->LoadRAM(SRAMSize);
+		SRAM = BatteryLoad(SRAMSize);
 	}
 
 	if (SRAM == nullptr)
@@ -186,7 +185,7 @@ void MBC3::ExitGame()
 {
 	if (batteryEnabled)
 	{
-		battery->SaveRAM(SRAM, SRAMSize);
+		BatterySave(SRAM, SRAMSize);
 	}
 }
 
@@ -201,27 +200,199 @@ void MBC3::Tick(int cpuCycles, int cyclesPerSecond)
 	while (RTC_TickCounter > cyclesPerSecond)
 	{
 		RTC_TickCounter -= cyclesPerSecond;
-		RTC_Seconds += 1;
-		if (RTC_Seconds >= 60)
+		AdvanceRTCSeconds(1);
+	}
+}
+
+void MBC3::BatterySave(const unsigned char * SRAM, long SRAMSize)
+{
+	std::string saveFilepath = saveDirectory + romName + ".sav";
+
+	std::ofstream saveFile;
+	saveFile.open(saveFilepath, std::ios::out | std::ios::binary | std::ios::trunc);
+	if (saveFile.is_open())
+	{
+		saveFile.write((char *)SRAM, SRAMSize);
+
+		// Write RTC data to end of .sav file.
+		// This is following BGB's RTC save format (http://bgb.bircd.org/rtcsave.html)
+		saveFile.put((char)RTC_Seconds);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_Minutes);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_Hours);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_DaysLo);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_DaysHi);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_Latched_Seconds);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_Latched_Minutes);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_Latched_Hours);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_Latched_DaysLo);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put((char)RTC_Latched_DaysHi);
+		saveFile.put(0);
+		saveFile.put(0);
+		saveFile.put(0);
+
+		time_t utc_seconds = time(nullptr);
+		saveFile.put(utc_seconds & 0xff);
+		saveFile.put((utc_seconds >> 8) & 0xff);
+		saveFile.put((utc_seconds >> 16) & 0xff);
+		saveFile.put((utc_seconds >> 24) & 0xff);
+		saveFile.put((utc_seconds >> 32) & 0xff);
+		saveFile.put((utc_seconds >> 40) & 0xff);
+		saveFile.put((utc_seconds >> 48) & 0xff);
+		saveFile.put((utc_seconds >> 56) & 0xff);
+
+		saveFile.close();
+	}
+	else
+	{
+		// TODO: handle save file error.
+	}
+}
+
+unsigned char * MBC3::BatteryLoad(long SRAMSize)
+{
+	std::string saveFilepath = saveDirectory + romName + ".sav";
+
+	std::fstream saveFile;
+	saveFile.open(saveFilepath, std::ios::in | std::ios::binary);
+	if (saveFile.is_open())
+	{
+		long start = (long)saveFile.tellg();
+		saveFile.seekg(0, std::ios::end);
+		long end = (long)saveFile.tellg();
+		long SRAMFileSize = end - start;
+
+		unsigned char * saveRAM = new unsigned char[SRAMSize];
+		saveFile.seekg(0, std::ios::beg);
+		saveFile.read((char *)saveRAM, SRAMSize);
+
+		// Load RTC data at the end of the .sav file.
+		long long prevUTCSeconds;
+		if (SRAMFileSize == SRAMSize + 44 || SRAMFileSize == SRAMSize + 48)
 		{
-			RTC_Seconds = 0;
-			RTC_Minutes += 1;
-			if (RTC_Minutes >= 60)
+			char val;
+			saveFile.get(val);
+			RTC_Seconds = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_Minutes = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_Hours = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_DaysLo = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_DaysHi = val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_Latched_Seconds = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_Latched_Minutes = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_Latched_Hours = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_Latched_DaysLo = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			RTC_Latched_DaysHi = (unsigned char)val;
+			saveFile.get(val);
+			saveFile.get(val);
+			saveFile.get(val);
+
+			saveFile.get(val);
+			prevUTCSeconds = (unsigned char)val;
+			saveFile.get(val);
+			prevUTCSeconds = ((unsigned char)val << 8) | prevUTCSeconds;
+			saveFile.get(val);
+			prevUTCSeconds = ((unsigned char)val << 16) | prevUTCSeconds;
+			saveFile.get(val);
+			prevUTCSeconds = ((unsigned char)val << 24) | prevUTCSeconds;
+
+			if (SRAMFileSize == SRAMSize + 48)
 			{
-				RTC_Minutes = 0;
-				RTC_Hours += 1;
-				if (RTC_Hours >= 24)
-				{
-					RTC_Hours = 0;
-					RTC_DaysLo += 1;
-					if (RTC_DaysLo >= 0x100)
-					{
-						RTC_DaysLo = 0;
-						RTC_DaysHi = 1;
-					}
-				}
+				saveFile.get(val);
+				prevUTCSeconds = ((unsigned char)val << 32) | prevUTCSeconds;
+				saveFile.get(val);
+				prevUTCSeconds = ((unsigned char)val << 40) | prevUTCSeconds;
+				saveFile.get(val);
+				prevUTCSeconds = ((unsigned char)val << 48) | prevUTCSeconds;
+				saveFile.get(val);
+				prevUTCSeconds = ((unsigned char)val << 56) | prevUTCSeconds;
 			}
 		}
+
+		saveFile.close();
+
+		// Correct RTC values using the time since the game was last exited.
+		int secondsDiff = ((long)time(nullptr)) - prevUTCSeconds;
+		if (secondsDiff > 0)
+		{
+			AdvanceRTCSeconds(secondsDiff);
+		}
+
+		return saveRAM;
+	}
+	else
+	{
+		return nullptr;
 	}
 }
 
@@ -231,9 +402,9 @@ void MBC3::InitializeRTC()
 
 	RTC_TimerEnable = 0;
 	RTC_Seconds = 0;
-	RTC_Minutes = 59;
-	RTC_Hours = 23;
-	RTC_DaysLo = 255;
+	RTC_Minutes = 0;
+	RTC_Hours = 0;
+	RTC_DaysLo = 0;
 	RTC_DaysHi = 0;
 	RTC_DayCarry = 0;
 
@@ -244,4 +415,29 @@ void MBC3::InitializeRTC()
 	RTC_Latched_DaysHi = 0;
 
 	latchStarted = false;
+}
+
+void MBC3::AdvanceRTCSeconds(int seconds)
+{
+	RTC_Seconds += seconds;
+	while (RTC_Seconds >= 60)
+	{
+		RTC_Seconds -= 60;
+		RTC_Minutes += 1;
+		if (RTC_Minutes >= 60)
+		{
+			RTC_Minutes = 0;
+			RTC_Hours += 1;
+			if (RTC_Hours >= 24)
+			{
+				RTC_Hours = 0;
+				RTC_DaysLo += 1;
+				if (RTC_DaysLo >= 0x100)
+				{
+					RTC_DaysLo = 0;
+					RTC_DaysHi = 1;
+				}
+			}
+		}
+	}
 }

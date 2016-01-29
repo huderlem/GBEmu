@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "BaseMBC.h"
 
-BaseMBC::BaseMBC(unsigned char *ROM, long ROMSizeType, bool batteryEnabled)
+BaseMBC::BaseMBC(unsigned char *ROM, long ROMSizeType, bool batteryEnabled, std::string saveDirectory, std::string romName)
 {
 	BaseMBC::ROM = ROM;
 	BaseMBC::ROMSizeType = ROMSizeType;
+	BaseMBC::saveDirectory = saveDirectory;
+	BaseMBC::romName = romName;
 	InitializeSRAM();
 	BaseMBC::batteryEnabled = batteryEnabled;
 }
@@ -88,5 +90,48 @@ long BaseMBC::GetRAMSize(int RAMSizeType)
 		return 0x8000;
 	default:
 		return 0;
+	}
+}
+
+void BaseMBC::BatterySave(const unsigned char * SRAM, long SRAMSize)
+{
+	std::string saveFilepath = saveDirectory + romName + ".sav";
+
+	std::ofstream saveFile;
+	saveFile.open(saveFilepath, std::ios::out | std::ios::binary | std::ios::trunc);
+	if (saveFile.is_open())
+	{
+		saveFile.write((char *)SRAM, SRAMSize);
+		saveFile.close();
+	}
+	else
+	{
+		// TODO: handle save file error.
+	}
+}
+
+unsigned char * BaseMBC::BatteryLoad(long SRAMSize)
+{
+	std::string saveFilepath = saveDirectory + romName + ".sav";
+
+	std::fstream saveFile;
+	saveFile.open(saveFilepath, std::ios::in | std::ios::binary);
+	if (saveFile.is_open())
+	{
+		long start = (long)saveFile.tellg();
+		saveFile.seekg(0, std::ios::end);
+		long end = (long)saveFile.tellg();
+		long SRAMFileSize = end - start;
+
+		unsigned char * saveRAM = new unsigned char[SRAMSize];
+		saveFile.seekg(0, std::ios::beg);
+		saveFile.read((char *)saveRAM, SRAMSize);
+
+		saveFile.close();
+		return saveRAM;
+	}
+	else
+	{
+		return nullptr;
 	}
 }

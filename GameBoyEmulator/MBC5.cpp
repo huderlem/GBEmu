@@ -2,14 +2,13 @@
 #include "MBC5.h"
 
 
-MBC5::MBC5(unsigned char * ROM, long ROMSizeType, int RAMSizeType, bool batteryEnabled, std::string saveDirectory, std::string romName) : BaseMBC(ROM, ROMSizeType, batteryEnabled)
+MBC5::MBC5(unsigned char * ROM, long ROMSizeType, int RAMSizeType, bool batteryEnabled, std::string saveDirectory, std::string romName) : BaseMBC(ROM, ROMSizeType, batteryEnabled, saveDirectory, romName)
 {
 	ROMBankLo = 1;
 	ROMBankHi = 0;
 	RAMBank = 0;
 	RAMEnable = false;
 
-	battery = new Battery(saveDirectory, romName);
 	InitializeSRAM(RAMSizeType);
 }
 
@@ -92,7 +91,7 @@ void MBC5::InitializeSRAM(int RAMSizeType)
 	SRAMSize = GetRAMSize(RAMSizeType);
 	if (batteryEnabled)
 	{
-		SRAM = battery->LoadRAM(SRAMSize);
+		BatteryLoad(SRAMSize);
 	}
 
 	if (SRAM == nullptr)
@@ -106,7 +105,7 @@ void MBC5::ExitGame()
 {
 	if (batteryEnabled)
 	{
-		battery->SaveRAM(SRAM, SRAMSize);
+		BatterySave(SRAM, SRAMSize);
 	}
 }
 

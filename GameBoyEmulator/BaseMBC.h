@@ -1,8 +1,12 @@
 #pragma once
+#include <string>
+#include <iostream>
+#include <fstream>
+
 class BaseMBC
 {
 public:
-	BaseMBC(unsigned char *ROM, long ROMSize, bool batteryEnabled);
+	BaseMBC(unsigned char *ROM, long ROMSize, bool batteryEnabled, std::string saveDirectory, std::string romName);
 	~BaseMBC();
 	int ReadByteROM0(long address);
 	virtual int ReadByteROMSwitchableBank(long address);
@@ -16,6 +20,8 @@ public:
 	virtual void ExitGame();
 	virtual void Tick(int cpucycles, int cpuCycles);
 	static long GetRAMSize(int RAMSizeType);
+	virtual void BatterySave(const unsigned char *SRAM, long SRAMSize);
+	virtual unsigned char * BatteryLoad(long SRAMSize);
 protected:
 	unsigned char *ROM;
 	long ROMSizeType;
@@ -23,4 +29,6 @@ protected:
 	long SRAMSize;
 
 	bool batteryEnabled;
+	std::string saveDirectory;
+	std::string romName;
 };

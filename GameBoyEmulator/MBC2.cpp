@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "MBC2.h"
 
-MBC2::MBC2(unsigned char * ROM, long ROMSizeType, int RAMSizeType, bool batteryEnabled, std::string saveDirectory, std::string romName) : BaseMBC(ROM, ROMSizeType, batteryEnabled)
+MBC2::MBC2(unsigned char * ROM, long ROMSizeType, int RAMSizeType, bool batteryEnabled, std::string saveDirectory, std::string romName) : BaseMBC(ROM, ROMSizeType, batteryEnabled, saveDirectory, romName)
 {
 	ROMBank = 1;
 	RAMEnable = false;
-	battery = new Battery(saveDirectory, romName);
 	InitializeSRAM(RAMSizeType);
 }
 
@@ -90,7 +89,7 @@ void MBC2::InitializeSRAM(int RAMSizeType)
 	SRAMSize = 0x200;
 	if (batteryEnabled)
 	{
-		SRAM = battery->LoadRAM(SRAMSize);
+		SRAM = BatteryLoad(SRAMSize);
 	}
 
 	if (SRAM == nullptr)
@@ -104,6 +103,6 @@ void MBC2::ExitGame()
 {
 	if (batteryEnabled)
 	{
-		battery->SaveRAM(SRAM, SRAMSize);
+		BatterySave(SRAM, SRAMSize);
 	}
 }

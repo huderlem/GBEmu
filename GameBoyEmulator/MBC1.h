@@ -2,7 +2,6 @@
 #include <string>
 
 #include "BaseMBC.h"
-#include "Battery.h"
 
 class MBC1: public BaseMBC
 {
@@ -31,7 +30,5 @@ private:
 
 	int GetROMBank();
 	long GetRAMSwitchableBankAddress(long address);
-
-	Battery *battery;
 };
 

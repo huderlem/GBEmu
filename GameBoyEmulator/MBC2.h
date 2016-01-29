@@ -2,7 +2,6 @@
 #include <string>
 
 #include "BaseMBC.h"
-#include "Battery.h"
 
 class MBC2 : public BaseMBC
 {
@@ -21,7 +20,5 @@ public:
 private:
 	int ROMBank;
 	bool RAMEnable;
-
-	Battery *battery;
 };
 
