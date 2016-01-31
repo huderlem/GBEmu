@@ -20,10 +20,18 @@ LCDDisplay::LCDDisplay(VRAM *vram)
 	// Lock texture for pixel manipulation.
 	SDL_LockTexture(texture, NULL, &pixels, &pitch);
 
+	LCDC = 0;
+
 	InitPalette();
 
 	time = SDL_GetTicks();
 	last = time;
+
+	oamIds = new int[40]();
+	for (int i = 0; i < 40; i++)
+	{
+		oamIds[i] = i;
+	}
 }
 
 LCDDisplay::~LCDDisplay()
@@ -148,10 +156,20 @@ void LCDDisplay::SetWindowPixels(int scanline)
 
 void LCDDisplay::SetOAMPixels(void *pixels, int scanline)
 {
-	// TODO: correct overlapping sprite priorities and conflicts
-
-	for (int oamId = 0; oamId < 40; oamId++)
+	int usedSpriteIds = 0;
+	SortOAMIds(oamIds, 0, 39);
+	int pixelsTaken[160] = {};
+	for (int i = 0; i < 40; i++)
 	{
+		// Max of 10 sprites per scanline.
+		if (usedSpriteIds >= 10)
+		{
+			break;
+		}
+
+		int oamId = oamIds[i];
+
+		bool spriteInScanline = false;
 		int oamOffset = oamId * 4;
 		int yPos = vram->oamData[oamOffset] - 16;
 		int xPos = vram->oamData[oamOffset + 1] - 8;
@@ -187,11 +205,15 @@ void LCDDisplay::SetOAMPixels(void *pixels, int scanline)
 		int correctedY;
 		for (int x = 0; x < 8; x++)
 		{
+			int pixelColumn = xPos + x;
+
 			// Skip if pixel would be off-screen.
-			if (xPos + x < 0 || xPos + x >= DISPLAY_PIXELS_WIDTH)
+			if (pixelColumn < 0 || pixelColumn >= DISPLAY_PIXELS_WIDTH || pixelsTaken[pixelColumn] > 0)
 			{
 				continue;
 			}
+
+			spriteInScanline = true;
 
 			// Respect axis mirroring attributes.
 			correctedX = x;
@@ -211,10 +233,10 @@ void LCDDisplay::SetOAMPixels(void *pixels, int scanline)
 			// Color 0 is transparent for OAM sprites.
 			if (newPixel > 0)
 			{
-				int pixelIndex = (yPos * DISPLAY_PIXELS_WIDTH) + xPos + (y * DISPLAY_PIXELS_WIDTH) + x;
+				int pixelIndex = (scanline * DISPLAY_PIXELS_WIDTH) + pixelColumn;
 
 				// Don't draw sprite pixel if it's behind the Background or Window colors 1-3.
-				if (behindBG && 
+				if (behindBG &&
 					(((LCDC & 0b00000001) > 0 && backgroundPixels[pixelIndex] > 0)
 						|| ((LCDC & 0b00100000) > 0 && windowPixels[pixelIndex] > 0)))
 				{
@@ -222,9 +244,98 @@ void LCDDisplay::SetOAMPixels(void *pixels, int scanline)
 				}
 
 				((Uint32 *)(pixels))[pixelIndex] = palette[nonGBCPaletteMap[newPixel]];
+				pixelsTaken[pixelColumn] = 1;
 			}
 		}
+
+		if (spriteInScanline)
+		{
+			usedSpriteIds++;
+		}
 	}
+}
+
+// Perorm a merge sort to arrange the sprite data in correct priority order.
+void LCDDisplay::SortOAMIds(int * oamIds, int lower, int upper)
+{
+	if (upper <= lower)
+	{
+		return;
+	}
+
+	int middle = (lower + upper) / 2;
+	SortOAMIds(oamIds, lower, middle);
+	SortOAMIds(oamIds, middle + 1, upper);
+
+	SortOAMIds_Merge(oamIds, lower, upper, middle);
+}
+
+void LCDDisplay::SortOAMIds_Merge(int * oamIds, int lower, int upper, int middle)
+{
+	int leftSize = middle - lower + 1;
+	int rightSize = upper - middle;
+	int * left = new int[leftSize];
+	int * right = new int[rightSize];
+
+	for (int i = 0; i < leftSize; i++)
+	{
+		left[i] = oamIds[lower + i];
+	}
+
+	for (int i = 0; i < rightSize; i++)
+	{
+		right[i] = oamIds[middle + 1 + i];
+	}
+
+	int leftIndex = 0;
+	int rightIndex = 0;
+	int resultIndex = lower;
+	while (leftIndex < leftSize && rightIndex < rightSize)
+	{
+		int leftOAMId = left[leftIndex];
+		int rightOAMId = right[rightIndex];
+		int leftXPos = vram->oamData[(leftOAMId * 4) + 1] - 8;
+		int rightXPos = vram->oamData[(rightOAMId * 4) + 1] - 8;
+		bool pushLeft = true;
+		if (leftXPos == rightXPos)
+		{
+			pushLeft = leftOAMId < rightOAMId;
+		}
+		else
+		{
+			pushLeft = leftXPos < rightXPos;
+		}
+
+		if (pushLeft)
+		{
+			oamIds[resultIndex] = left[leftIndex];
+			leftIndex++;
+		}
+		else
+		{
+			oamIds[resultIndex] = right[rightIndex];
+			rightIndex++;
+		}
+
+		resultIndex++;
+	}
+
+	while (leftIndex < leftSize)
+	{
+		oamIds[resultIndex] = left[leftIndex];
+		leftIndex++;
+		resultIndex++;
+	}
+
+	while (rightIndex < rightSize)
+	{
+		oamIds[resultIndex] = right[rightIndex];
+		rightIndex++;
+		resultIndex++;
+	}
+
+	delete [] left;
+	delete [] right;
 }
 
 void LCDDisplay::InitPalette()
@@ -282,6 +393,8 @@ void LCDDisplay::Render()
 	SDL_RenderPresent(renderer);
 
 	SDL_LockTexture(texture, NULL, &pixels, &pitch);
+
+	SDL_Delay(10);
 }
 
 void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)

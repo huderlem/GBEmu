@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 #include "SDL.h"
 #undef main
@@ -19,7 +20,7 @@ public:
 	void Render();
 	void Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu);
 
-	int LCDC = 0;
+	int LCDC;
 
 	// STAT register
 	int CoincidenceInterrupt;
@@ -57,6 +58,10 @@ private:
 	void SetWindowPixels(int scanline);
 	void SetBackgroundPixels(int scanline);
 	void SetOAMPixels(void *pixels, int scanline);
+
+	void LCDDisplay::SortOAMIds(int * oamIds, int lower, int upper);
+	void LCDDisplay::SortOAMIds_Merge(int * oamIds, int lower, int upper, int middle);
+	int * oamIds;
 
 	int ticks = 0;
 	int mode = 0;  // See STAT register
