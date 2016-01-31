@@ -293,7 +293,6 @@ unsigned char * MBC3::BatteryLoad(long SRAMSize)
 		saveFile.read((char *)saveRAM, SRAMSize);
 
 		// Load RTC data at the end of the .sav file.
-		long long prevUTCSeconds;
 		if (SRAMFileSize == SRAMSize + 44 || SRAMFileSize == SRAMSize + 48)
 		{
 			char val;
@@ -358,7 +357,7 @@ unsigned char * MBC3::BatteryLoad(long SRAMSize)
 			saveFile.get(val);
 
 			saveFile.get(val);
-			prevUTCSeconds = (unsigned char)val;
+			long long prevUTCSeconds = (unsigned char)val;
 			saveFile.get(val);
 			prevUTCSeconds = ((unsigned char)val << 8) | prevUTCSeconds;
 			saveFile.get(val);
@@ -377,17 +376,16 @@ unsigned char * MBC3::BatteryLoad(long SRAMSize)
 				saveFile.get(val);
 				prevUTCSeconds = ((unsigned char)val << 56) | prevUTCSeconds;
 			}
+
+			// Correct RTC values using the time since the game was last exited.
+			int secondsDiff = ((long)time(nullptr)) - prevUTCSeconds;
+			if (secondsDiff > 0)
+			{
+				AdvanceRTCSeconds(secondsDiff);
+			}
 		}
 
 		saveFile.close();
-
-		// Correct RTC values using the time since the game was last exited.
-		int secondsDiff = ((long)time(nullptr)) - prevUTCSeconds;
-		if (secondsDiff > 0)
-		{
-			AdvanceRTCSeconds(secondsDiff);
-		}
-
 		return saveRAM;
 	}
 	else
