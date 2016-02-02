@@ -4,7 +4,7 @@
 #include "MMU.h"
 
 
-MMU::MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer, LCDDisplay *display)
+MMU::MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer, LCDDisplay *display, SoundController *soundController)
 {
 	MMU::interrupts = interrupts;
 	MMU::wram = wram;
@@ -12,6 +12,7 @@ MMU::MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *
 	MMU::joypad = joypad;
 	MMU::timer = timer;
 	MMU::display = display;
+	MMU::soundController = soundController;
 	InitializeHRAM();
 }
 
@@ -99,9 +100,7 @@ int MMU::ReadByte(long address)
 	}
 	else if (address < 0xFF40)
 	{
-		// Sound registers
-		// TODO:
-		return 0;
+		return soundController->ReadByte(address);
 	}
 	else if (address < 0xff80)
 	{
@@ -244,8 +243,7 @@ void MMU::WriteByte(int value, long address)
 	}
 	else if (address < 0xFF40)
 	{
-		// Sound registers
-		// TODO:
+		soundController->WriteByte(value, address);
 	}
 	else if (address < 0xff80)
 	{

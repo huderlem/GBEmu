@@ -162,6 +162,7 @@
     <ClInclude Include="MBC3.h" />
     <ClInclude Include="MBC5.h" />
     <ClInclude Include="MMU.h" />
+    <ClInclude Include="SoundController.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Timer.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="MBC3.cpp" />
     <ClCompile Include="MBC5.cpp" />
     <ClCompile Include="MMU.cpp" />
+    <ClCompile Include="SoundController.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

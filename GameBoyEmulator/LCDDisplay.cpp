@@ -25,7 +25,8 @@ LCDDisplay::LCDDisplay(VRAM *vram)
 	InitPalette();
 
 	time = SDL_GetTicks();
-	last = time;
+	lastRenderTime = time;
+	ticksPerFrame = 1000.0 / 60.0;
 
 	oamIds = new int[40]();
 	for (int i = 0; i < 40; i++)
@@ -392,9 +393,16 @@ void LCDDisplay::Render()
 
 	SDL_RenderPresent(renderer);
 
-	SDL_LockTexture(texture, NULL, &pixels, &pitch);
+	Uint32 timePassed = SDL_GetTicks() - lastRenderTime;
+	long long timeToDelay = ticksPerFrame - timePassed;
+	if (timeToDelay > 0)
+	{
+		SDL_Delay(timeToDelay);
+	}
 
-	SDL_Delay(10);
+	lastRenderTime = SDL_GetTicks();
+
+	SDL_LockTexture(texture, NULL, &pixels, &pitch);
 }
 
 void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
@@ -439,10 +447,6 @@ void LCDDisplay::Tick(int cpuCycles, Interrupts *interrupts, CPU *cpu)
 					interrupts->RequestLCDStatInterrupt();
 					cpu->NotifyInterruptOccurred();
 				}
-
-				time = SDL_GetTicks();
-				printf("Time: %f\n", 1000.0 / (time - last));
-				last = time;
 			}
 
 			if (CoincidenceInterrupt > 0 && LY == LYC)

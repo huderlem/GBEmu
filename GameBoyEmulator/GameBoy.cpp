@@ -10,7 +10,8 @@ GameBoy::GameBoy()
 	display = new LCDDisplay(vram);
 	joypad = new Joypad();
 	timer = new Timer();
-	mmu = new MMU(interrupts, wram, vram, joypad, timer, display);
+	soundController = new SoundController();
+	mmu = new MMU(interrupts, wram, vram, joypad, timer, display, soundController);
 	registers = new CPURegisters();
 	cpu = new CPU(mmu, registers, timer, interrupts);
 }
@@ -83,6 +84,7 @@ void GameBoy::Run()
 		bool exit = joypad->ProcessJoypadInput(interrupts, cpu);
 
 		int cpuCycles = cpu->ExecuteNextInstruction(interrupts);
+		soundController->Tick(cpuCycles, cpuCyclesPerSecond);
 		mmu->TickMBC(cpuCycles, cpuCyclesPerSecond);
 		display->Tick(cpuCycles, interrupts, cpu);
 		bool timerInterruptRequested = timer->Tick(cpuCycles, interrupts);

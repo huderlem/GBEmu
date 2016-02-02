@@ -38,6 +38,7 @@ private:
 	VRAM *vram;
 	Joypad *joypad;
 	Timer *timer;
+	SoundController *soundController;
 	IMMU *mmu;
 	CPURegisters *registers;
 	CPU *cpu;

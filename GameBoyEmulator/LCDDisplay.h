@@ -66,8 +66,9 @@ private:
 	int ticks = 0;
 	int mode = 0;  // See STAT register
 
-	int time = 0;
-	int last = 0;
+	Uint32 time = 0;
+	Uint32 lastRenderTime = 0;
+	float ticksPerFrame;
 
 	void *pixels;
 	int pitch;

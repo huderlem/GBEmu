@@ -9,6 +9,7 @@
 #include "MBC2.h"
 #include "MBC3.h"
 #include "MBC5.h"
+#include "SoundController.h"
 #include "Timer.h"
 #include "VRAM.h"
 #include "WRAM.h"
@@ -16,7 +17,7 @@
 class MMU: public IMMU
 {
 public:
-	MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer, LCDDisplay *display);
+	MMU(Interrupts *interrupts, WRAM *wram, VRAM *vram, Joypad *joypad, Timer *timer, LCDDisplay *display, SoundController *soundController);
 	~MMU();
 	virtual int ReadByte(long address);
 	virtual int ReadWord(long address);
@@ -55,6 +56,8 @@ private:
 	Interrupts *interrupts;
 
 	Timer *timer;
+
+	SoundController *soundController;
 
 	// ROM headers
 	int cartType;
