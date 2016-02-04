@@ -1,5 +1,6 @@
 #pragma once
 #include <mutex>
+#include <thread>
 
 #include "SDL.h"
 
@@ -15,7 +16,17 @@ public:
 	void TickChannel2(int cpuCycles, int cpuCyclesPerSecond);
 	void TickChannel3(int cpuCycles, int cpuCyclesPerSecond);
 	void TickChannel4(int cpuCycles, int cpuCyclesPerSecond);
-	void FillSamples(Sint16 *stream, int numSamples);
+	void FillSamples();
+
+	int sampleBufferSize;
+	const int numSampleBuffers = 2;
+	Sint16 *sampleBuffer0;
+	Sint16 *sampleBuffer1;
+	int curSampleBuffer;
+	int emptyBuffers[2];
+
+	std::mutex buf1Lock;
+	std::mutex buf2Lock;
 private:
 	// Channel 1 (Tone & Sweep)
 	int NR10; // 0xFF10

@@ -6,11 +6,16 @@ SoundController::SoundController()
 {
 	SDL_Init(SDL_INIT_AUDIO);
 
+	sampleBufferSize = 1024;
+	sampleBuffer0 = new Sint16[sampleBufferSize]();
+	sampleBuffer1 = new Sint16[sampleBufferSize]();
+	curSampleBuffer = 0;
+
 	SDL_AudioSpec desiredSpec;
 	desiredSpec.freq = 44100;
 	desiredSpec.format = AUDIO_S16SYS;
 	desiredSpec.channels = 1;
-	desiredSpec.samples = 512;
+	desiredSpec.samples = sampleBufferSize;
 	desiredSpec.callback = AudioCallback;
 	desiredSpec.userdata = this;
 
@@ -61,6 +66,9 @@ SoundController::SoundController()
 	ch3_FrequencyLo = 0;
 	ch3_FrequencyHi = 0;
 	ch3_CounterOrConsecutiveSelection = 0;
+
+	std::thread fillSamplesThread(&SoundController::FillSamples, this);
+	fillSamplesThread.detach();
 }
 
 SoundController::~SoundController()
@@ -420,33 +428,68 @@ void SoundController::TickChannel4(int cpuCycles, int cpuCyclesPerSecond)
 {
 }
 
-void SoundController::FillSamples(Sint16 * stream, int numSamples)
+void SoundController::FillSamples()
 {
 	int sampleRate = obtainedSpec.freq;
 	float secondsPerSample = 1.0 / sampleRate;
 
-	float ch1SquareFrequency = 131072.0 / (2048.0 - (((ch1_FrequencyHi & 0x7) << 8) | ch1_FrequencyLo));
-	float ch1CycleSamples = sampleRate / ch1SquareFrequency;
-	float ch1CycleSamplesLow = ch1CycleSamples * ch1_Duty;
-	float ch1CyclesSamplesHigh = ch1CycleSamples - ch1CycleSamplesLow;
-
-	float ch2SquareFrequency = 131072.0 / (2048.0 - (((ch2_FrequencyHi & 0x7) << 8) | ch2_FrequencyLo));
-	float ch2CycleSamples = sampleRate / ch2SquareFrequency;
-	float ch2CycleSamplesLow = ch2CycleSamples * ch2_Duty;
-	float ch2CyclesSamplesHigh = ch2CycleSamples - ch2CycleSamplesLow;
-
-	float ch3Frequency = 65536.0 / (2048.0 - (((ch3_FrequencyHi & 0x7) << 8) | ch3_FrequencyLo));
-	float ch3SamplesPerWaveDataSample = sampleRate / ch3Frequency / 32.0;
-
-	for (int i = 0; i < numSamples; i++)
+	while (true)
 	{
-		Sint16 sample = 0;
+		for (int bufferIndex = 0; bufferIndex < numSampleBuffers; bufferIndex++)
+		{
+			if (emptyBuffers[bufferIndex] > 0)
+			{
+				Sint16 *buffer = sampleBuffer0;
+				switch (bufferIndex)
+				{
+				case 0:
+					buf1Lock.lock();
+					buffer = sampleBuffer0;
+					break;
+				case 1:
+					buf2Lock.lock();
+					buffer = sampleBuffer1;
+					break;
+				}
 
-		sample += ProduceChannel1Sample(ch1CycleSamples, ch1CycleSamplesLow, ch1CyclesSamplesHigh);
-		sample += ProduceChannel2Sample(ch2CycleSamples, ch2CycleSamplesLow, ch2CyclesSamplesHigh);
-		sample += ProduceChannel3Sample(ch3SamplesPerWaveDataSample);
+				float ch1SquareFrequency = 131072.0 / (2048.0 - (((ch1_FrequencyHi & 0x7) << 8) | ch1_FrequencyLo));
+				float ch1CycleSamples = sampleRate / ch1SquareFrequency;
+				float ch1CycleSamplesLow = ch1CycleSamples * ch1_Duty;
+				float ch1CyclesSamplesHigh = ch1CycleSamples - ch1CycleSamplesLow;
 
-		stream[i] = sample;
+				float ch2SquareFrequency = 131072.0 / (2048.0 - (((ch2_FrequencyHi & 0x7) << 8) | ch2_FrequencyLo));
+				float ch2CycleSamples = sampleRate / ch2SquareFrequency;
+				float ch2CycleSamplesLow = ch2CycleSamples * ch2_Duty;
+				float ch2CyclesSamplesHigh = ch2CycleSamples - ch2CycleSamplesLow;
+
+				float ch3Frequency = 65536.0 / (2048.0 - (((ch3_FrequencyHi & 0x7) << 8) | ch3_FrequencyLo));
+				float ch3SamplesPerWaveDataSample = sampleRate / ch3Frequency / 32.0;
+
+				for (int i = 0; i < sampleBufferSize; i++)
+				{
+					Sint16 sample = 0;
+
+					sample += ProduceChannel1Sample(ch1CycleSamples, ch1CycleSamplesLow, ch1CyclesSamplesHigh);
+					sample += ProduceChannel2Sample(ch2CycleSamples, ch2CycleSamplesLow, ch2CyclesSamplesHigh);
+					sample += ProduceChannel3Sample(ch3SamplesPerWaveDataSample);
+
+					buffer[i] = sample;
+				}
+
+				// Mark sample buffer as no longer empty.
+				emptyBuffers[bufferIndex] = 0;
+
+				switch (bufferIndex)
+				{
+				case 0:
+					buf1Lock.unlock();
+					break;
+				case 1:
+					buf2Lock.unlock();
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -546,5 +589,20 @@ void AudioCallback(void * _soundController, Uint8 * _stream, int _numSamples)
 	int numSamples = _numSamples / 2;
 	SoundController *soundController = (SoundController *)_soundController;
 
-	soundController->FillSamples(stream, numSamples);
+	if (soundController->curSampleBuffer == 0)
+	{
+		soundController->buf1Lock.lock();
+		memcpy(stream, soundController->sampleBuffer0, sizeof(Sint16) * soundController->sampleBufferSize);
+		soundController->emptyBuffers[0] = 1;
+		soundController->buf1Lock.unlock();
+	}
+	else if (soundController->curSampleBuffer == 1)
+	{
+		soundController->buf2Lock.lock();
+		memcpy(stream, soundController->sampleBuffer1, sizeof(Sint16) * soundController->sampleBufferSize);
+		soundController->emptyBuffers[1] = 1;
+		soundController->buf2Lock.unlock();
+	}
+
+	soundController->curSampleBuffer = (soundController->curSampleBuffer + 1) % soundController->numSampleBuffers;
 }
