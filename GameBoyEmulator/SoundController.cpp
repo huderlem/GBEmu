@@ -67,6 +67,23 @@ SoundController::SoundController()
 	ch3_FrequencyHi = 0;
 	ch3_CounterOrConsecutiveSelection = 0;
 
+	ch4_FrameSequencerTicks = 0;
+	ch4_FrameSequencerStep = 0;
+	ch4_FrequencyCounter = 0;
+	ch4_Enabled = 0;
+	ch4_LengthCounter = 0;
+	ch4_CounterOrConsecutiveSelection = 0;
+	ch4_InitialVolume = 0;
+	ch4_EnvelopeVolume = 0;
+	ch4_EnvelopeDirection = 0;
+	ch4_EnvelopePeriod = 0;
+	ch4_EnvelopeCounter = 0;
+	ch4_ClockShift = 0;
+	ch4_WidthMode = 0;
+	ch4_DivisorCode = 0;
+	ch4_LengthEnable = 0;
+	ch4_LFSR = 0b011010100101011;
+
 	std::thread fillSamplesThread(&SoundController::FillSamples, this);
 	fillSamplesThread.detach();
 }
@@ -170,6 +187,30 @@ void SoundController::WriteByte(int value, long address)
 		ch3_CounterOrConsecutiveSelection = ((value >> 6) & 1);
 		ch3_FrequencyHi = (value & 7);
 		break;
+	case 0xFF20:
+		ch4_LengthCounter = value;
+		break;
+	case 0xFF21:
+		ch4_EnvelopeCounter = (value & 0x7);
+		ch4_EnvelopePeriod = ch4_EnvelopeCounter;
+		ch4_EnvelopeDirection = ((value >> 3) & 1);
+		ch4_InitialVolume = ((value >> 4) & 0xF);
+		ch4_EnvelopeVolume = ch4_InitialVolume;
+		break;
+	case 0xFF22:
+		ch4_ClockShift = ((value >> 4) & 0xF);
+		ch4_WidthMode = ((value >> 3) & 1);
+		ch4_DivisorCode = (value & 0x7);
+		break;
+	case 0xFF23:
+		if ((value & 0b10000000) > 0)
+		{
+			// Restart sound.
+			ch4_Enabled = true;
+			ch4_LengthCounter = 0xFF;
+		}
+		ch4_CounterOrConsecutiveSelection = ((value >> 6) & 1);
+		break;
 	}
 
 	if (address >= 0xFF30 && address < 0xFF40)
@@ -212,6 +253,14 @@ int SoundController::ReadByte(long address)
 		return 0xFF;
 	case 0xFF1E:
 		return (ch3_CounterOrConsecutiveSelection << 6) | 0b10111111;
+	case 0xFF20:
+		return ch4_LengthCounter;
+	case 0xFF21:
+		return (ch4_InitialVolume << 4) | (ch4_EnvelopeDirection << 3) | ch4_EnvelopePeriod;
+	case 0xFF22:
+		return (ch4_ClockShift << 4) | (ch4_WidthMode << 3) | ch4_DivisorCode;
+	case 0xFF23:
+		return (ch4_CounterOrConsecutiveSelection << 6) | 0b10111111;
 	}
 
 	if (address >= 0xFF30 && address < 0xFF40)
@@ -228,6 +277,7 @@ void SoundController::Tick(int cpuCycles, int cpuCyclesPerSecond)
 	TickChannel1(cpuCycles, cpuCyclesPerSecond);
 	TickChannel2(cpuCycles, cpuCyclesPerSecond);
 	TickChannel3(cpuCycles, cpuCyclesPerSecond);
+	TickChannel4(cpuCycles, cpuCyclesPerSecond);
 }
 
 void SoundController::TickChannel1(int cpuCycles, int cpuCyclesPerSecond)
@@ -426,6 +476,60 @@ void SoundController::Ch3_ClockLengthCounter()
 
 void SoundController::TickChannel4(int cpuCycles, int cpuCyclesPerSecond)
 {
+	int cyclesPerStep = cpuCyclesPerSecond / 512;  // Frame Sequencer is clocked at 512 Hz
+	ch4_FrameSequencerTicks += cpuCycles;
+	if (ch4_FrameSequencerTicks > cyclesPerStep)
+	{
+		ch4_FrameSequencerTicks -= cyclesPerStep;
+		ch4_FrameSequencerStep = (ch4_FrameSequencerStep + 1) % 8;
+		switch (ch4_FrameSequencerStep)
+		{
+		case 0:
+			Ch4_ClockLengthCounter();
+			break;
+		case 2:
+			Ch4_ClockLengthCounter();
+			break;
+		case 4:
+			Ch4_ClockLengthCounter();
+			break;
+		case 6:
+			Ch4_ClockLengthCounter();
+			break;
+		case 7:
+			Ch4_ClockEnvelope();
+			break;
+		}
+	}
+}
+
+void SoundController::Ch4_ClockLengthCounter()
+{
+	if (ch4_CounterOrConsecutiveSelection == 1 && ch4_LengthCounter > 0)
+	{
+		ch4_LengthCounter -= 1;
+		if (ch4_LengthCounter == 0)
+		{
+			ch4_Enabled = false;
+		}
+	}
+}
+
+void SoundController::Ch4_ClockEnvelope()
+{
+	ch4_EnvelopeCounter -= 1;
+	if (ch4_EnvelopeCounter == 0)
+	{
+		ch4_EnvelopeCounter = ch4_EnvelopePeriod;
+		if (ch4_EnvelopeDirection > 0 && ch4_EnvelopeVolume < 0xF)
+		{
+			ch4_EnvelopeVolume += 1;
+		}
+		else if (ch4_EnvelopeDirection == 0 && ch4_EnvelopeVolume > 0)
+		{
+			ch4_EnvelopeVolume -= 1;
+		}
+	}
 }
 
 void SoundController::FillSamples()
@@ -452,18 +556,20 @@ void SoundController::FillSamples()
 					break;
 				}
 
-				float ch1SquareFrequency = 131072.0 / (2048.0 - (((ch1_FrequencyHi & 0x7) << 8) | ch1_FrequencyLo));
-				float ch1CycleSamples = sampleRate / ch1SquareFrequency;
-				float ch1CycleSamplesLow = ch1CycleSamples * ch1_Duty;
-				float ch1CyclesSamplesHigh = ch1CycleSamples - ch1CycleSamplesLow;
+				double ch1SquareFrequency = 131072.0 / (2048.0 - (((ch1_FrequencyHi & 0x7) << 8) | ch1_FrequencyLo));
+				double ch1CycleSamples = sampleRate / ch1SquareFrequency;
+				double ch1CycleSamplesLow = ch1CycleSamples * ch1_Duty;
+				double ch1CyclesSamplesHigh = ch1CycleSamples - ch1CycleSamplesLow;
 
-				float ch2SquareFrequency = 131072.0 / (2048.0 - (((ch2_FrequencyHi & 0x7) << 8) | ch2_FrequencyLo));
-				float ch2CycleSamples = sampleRate / ch2SquareFrequency;
-				float ch2CycleSamplesLow = ch2CycleSamples * ch2_Duty;
-				float ch2CyclesSamplesHigh = ch2CycleSamples - ch2CycleSamplesLow;
+				double ch2SquareFrequency = 131072.0 / (2048.0 - (((ch2_FrequencyHi & 0x7) << 8) | ch2_FrequencyLo));
+				double ch2CycleSamples = sampleRate / ch2SquareFrequency;
+				double ch2CycleSamplesLow = ch2CycleSamples * ch2_Duty;
+				double ch2CyclesSamplesHigh = ch2CycleSamples - ch2CycleSamplesLow;
 
-				float ch3Frequency = 65536.0 / (2048.0 - (((ch3_FrequencyHi & 0x7) << 8) | ch3_FrequencyLo));
-				float ch3SamplesPerWaveDataSample = sampleRate / ch3Frequency / 32.0;
+				double ch3Frequency = 65536.0 / (2048.0 - (((ch3_FrequencyHi & 0x7) << 8) | ch3_FrequencyLo));
+				double ch3SamplesPerWaveDataSample = sampleRate / ch3Frequency / 32.0;
+
+				double ch4SamplesPerFrequencyClock = 512.0 / ((8 * (ch4_DivisorCode + 1)) << ch4_ClockShift);
 
 				for (int i = 0; i < sampleBufferSize; i++)
 				{
@@ -472,6 +578,7 @@ void SoundController::FillSamples()
 					sample += ProduceChannel1Sample(ch1CycleSamples, ch1CycleSamplesLow, ch1CyclesSamplesHigh);
 					sample += ProduceChannel2Sample(ch2CycleSamples, ch2CycleSamplesLow, ch2CyclesSamplesHigh);
 					sample += ProduceChannel3Sample(ch3SamplesPerWaveDataSample);
+					sample += ProduceChannel4Sample(ch4SamplesPerFrequencyClock);
 
 					buffer[i] = sample;
 				}
@@ -580,6 +687,34 @@ Sint16 SoundController::ProduceChannel3Sample(float samplesPerWaveDataSample)
 		}
 	}
 
+	return sample;
+}
+
+Sint16 SoundController::ProduceChannel4Sample(float samplesPerFrequencyClock)
+{
+	Sint16 sample;
+	if (ch4_Enabled && ch4_EnvelopeVolume > 0)
+	{
+		sample = squareAmplitudes[ch4_EnvelopeVolume] * (1 - (ch4_LFSR & 1));
+	}
+	else
+	{
+		sample = 0;
+	}
+
+	ch4_FrequencyCounter += 1.0;
+	if (ch4_FrequencyCounter > samplesPerFrequencyClock)
+	{
+		ch4_FrequencyCounter -= samplesPerFrequencyClock;
+
+		int xorBit = ((ch4_LFSR >> 1) & 1) ^ (ch4_LFSR & 1);
+		ch4_LFSR = (xorBit << 14) | (ch4_LFSR >> 1);
+		if (ch4_WidthMode > 0)
+		{
+			ch4_LFSR = (ch4_LFSR & 0x7FFF) | (xorBit << 6);
+		}
+	}
+	
 	return sample;
 }
 

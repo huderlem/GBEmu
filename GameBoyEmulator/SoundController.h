@@ -38,10 +38,14 @@ private:
 	void Ch2_ClockLengthCounter();
 	void Ch2_ClockEnvelope();
 	void Ch3_ClockLengthCounter();
+	void Ch4_ClockLengthCounter();
+	void Ch4_ClockEnvelope();
+
 
 	Sint16 SoundController::ProduceChannel1Sample(float cycleSamples, float cycleSamplesLow, float cyclesSamplesHigh);
 	Sint16 SoundController::ProduceChannel2Sample(float cycleSamples, float cycleSamplesLow, float cyclesSamplesHigh);
 	Sint16 SoundController::ProduceChannel3Sample(float samplesPerWaveDataSample);
+	Sint16 SoundController::ProduceChannel4Sample(float samplesPerFrequencyClock);
 
 	// Wave synthesis helpers.
 	const int SQUARE_AMPLITUDE = 4000;
@@ -106,6 +110,24 @@ private:
 	int ch3_Volume;
 	int ch3_FrequencyLo;
 	int ch3_FrequencyHi;
+
+	// Channel 4 (Noise)
+	int ch4_FrameSequencerTicks;
+	int ch4_FrameSequencerStep;
+	float ch4_FrequencyCounter;
+	int ch4_Enabled;
+	int ch4_LengthCounter;
+	int ch4_CounterOrConsecutiveSelection;
+	int ch4_InitialVolume;
+	int ch4_EnvelopeVolume;
+	int ch4_EnvelopeDirection;
+	int ch4_EnvelopePeriod;
+	int ch4_EnvelopeCounter;
+	int ch4_ClockShift;
+	int ch4_WidthMode;
+	int ch4_DivisorCode;
+	int ch4_LengthEnable;
+	int ch4_LFSR;
 
 	SDL_AudioSpec obtainedSpec;
 
