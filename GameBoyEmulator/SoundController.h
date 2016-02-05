@@ -27,9 +27,15 @@ public:
 
 	std::mutex buf1Lock;
 	std::mutex buf2Lock;
+
+	int AudioEnabled;
 private:
-	// Channel 1 (Tone & Sweep)
-	int NR10; // 0xFF10
+
+	int LeftSpeakerEnabled;
+	int LeftSpeakerVolume;
+	int RightSpeakerEnabled;
+	int RightSpeakerVolume;
+	int SoundOutput;
 
 	void Ch1_ClockLengthCounter();
 	void Ch1_ClockEnvelope();

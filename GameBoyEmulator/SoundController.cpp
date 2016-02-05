@@ -24,6 +24,14 @@ SoundController::SoundController()
 	// Unpause
 	SDL_PauseAudio(0);
 
+	AudioEnabled = 1;
+
+	LeftSpeakerEnabled = 0;
+	LeftSpeakerVolume = 0;
+	RightSpeakerEnabled = 0;
+	RightSpeakerVolume = 0;
+	SoundOutput = 0;
+
 	ch1_FrameSequencerTicks = 0;
 	ch1_FrameSequencerStep = 0;
 	ch1_Enabled = 0;
@@ -94,6 +102,16 @@ SoundController::~SoundController()
 
 void SoundController::WriteByte(int value, long address)
 {
+	if (address == 0xFF26)
+	{
+		AudioEnabled = ((value >> 7) & 1);
+		return;
+	}
+	else if (AudioEnabled == 0)
+	{
+		return;
+	}
+
 	switch (address)
 	{
 	case 0xff10:
@@ -211,6 +229,15 @@ void SoundController::WriteByte(int value, long address)
 		}
 		ch4_CounterOrConsecutiveSelection = ((value >> 6) & 1);
 		break;
+	case 0xFF24:
+		LeftSpeakerEnabled = ((value >> 7) & 1);
+		LeftSpeakerVolume = ((value >> 4) & 0x7);
+		RightSpeakerEnabled = ((value >> 3) & 1);
+		RightSpeakerVolume = (value & 0x7);
+		break;
+	case 0xFF25:
+		SoundOutput = value;
+		break;
 	}
 
 	if (address >= 0xFF30 && address < 0xFF40)
@@ -223,6 +250,19 @@ void SoundController::WriteByte(int value, long address)
 
 int SoundController::ReadByte(long address)
 {
+	if (address == 0xFF26)
+	{
+		int ch1On = ch1_LengthCounter > 0 ? 1 : 0;
+		int ch2On = ch2_LengthCounter > 0 ? 1 : 0;
+		int ch3On = ch3_LengthCounter > 0 ? 1 : 0;
+		int ch4On = ch4_LengthCounter > 0 ? 1 : 0;
+		return (AudioEnabled << 7) | (ch4On << 3) | (ch3On << 2) | (ch2On << 1) | ch1On;
+	}
+	else if (AudioEnabled == 0)
+	{
+		return 0;
+	}
+
 	switch (address)
 	{
 	case 0xff10:
@@ -261,6 +301,10 @@ int SoundController::ReadByte(long address)
 		return (ch4_ClockShift << 4) | (ch4_WidthMode << 3) | ch4_DivisorCode;
 	case 0xFF23:
 		return (ch4_CounterOrConsecutiveSelection << 6) | 0b10111111;
+	case 0xFF24:
+		return (LeftSpeakerEnabled << 7) | (LeftSpeakerVolume < 4) | (RightSpeakerEnabled << 3) | RightSpeakerVolume;
+	case 0xFF25:
+		return SoundOutput;
 	}
 
 	if (address >= 0xFF30 && address < 0xFF40)
@@ -274,10 +318,13 @@ int SoundController::ReadByte(long address)
 
 void SoundController::Tick(int cpuCycles, int cpuCyclesPerSecond)
 {
-	TickChannel1(cpuCycles, cpuCyclesPerSecond);
-	TickChannel2(cpuCycles, cpuCyclesPerSecond);
-	TickChannel3(cpuCycles, cpuCyclesPerSecond);
-	TickChannel4(cpuCycles, cpuCyclesPerSecond);
+	if (AudioEnabled > 0)
+	{
+		TickChannel1(cpuCycles, cpuCyclesPerSecond);
+		TickChannel2(cpuCycles, cpuCyclesPerSecond);
+		TickChannel3(cpuCycles, cpuCyclesPerSecond);
+		TickChannel4(cpuCycles, cpuCyclesPerSecond);
+	}
 }
 
 void SoundController::TickChannel1(int cpuCycles, int cpuCyclesPerSecond)
@@ -539,6 +586,12 @@ void SoundController::FillSamples()
 
 	while (true)
 	{
+		// TODO: This loop is just spinning if audio is disabled. Might want a more elegant solution to this.
+		if (AudioEnabled == 0)
+		{
+			continue;
+		}
+
 		for (int bufferIndex = 0; bufferIndex < numSampleBuffers; bufferIndex++)
 		{
 			if (emptyBuffers[bufferIndex] > 0)
@@ -575,12 +628,24 @@ void SoundController::FillSamples()
 				{
 					Sint16 sample = 0;
 
-					sample += ProduceChannel1Sample(ch1CycleSamples, ch1CycleSamplesLow, ch1CyclesSamplesHigh);
-					sample += ProduceChannel2Sample(ch2CycleSamples, ch2CycleSamplesLow, ch2CyclesSamplesHigh);
-					sample += ProduceChannel3Sample(ch3SamplesPerWaveDataSample);
-					sample += ProduceChannel4Sample(ch4SamplesPerFrequencyClock);
+					if ((SoundOutput & 0x10) > 0)
+					{
+						sample += ProduceChannel1Sample(ch1CycleSamples, ch1CycleSamplesLow, ch1CyclesSamplesHigh);
+					}
+					if ((SoundOutput & 0x20) > 0)
+					{
+						sample += ProduceChannel2Sample(ch2CycleSamples, ch2CycleSamplesLow, ch2CyclesSamplesHigh);
+					}
+					if ((SoundOutput & 0x40) > 0)
+					{
+						sample += ProduceChannel3Sample(ch3SamplesPerWaveDataSample);
+					}
+					if ((SoundOutput & 0x80) > 0)
+					{
+						sample += ProduceChannel4Sample(ch4SamplesPerFrequencyClock);
+					}
 
-					buffer[i] = sample;
+					buffer[i] = sample * (LeftSpeakerVolume / 7.0);
 				}
 
 				// Mark sample buffer as no longer empty.
@@ -723,6 +788,11 @@ void AudioCallback(void * _soundController, Uint8 * _stream, int _numSamples)
 	Sint16 *stream = (Sint16*)_stream;
 	int numSamples = _numSamples / 2;
 	SoundController *soundController = (SoundController *)_soundController;
+
+	if (soundController->AudioEnabled == 0)
+	{
+		return;
+	}
 
 	if (soundController->curSampleBuffer == 0)
 	{
