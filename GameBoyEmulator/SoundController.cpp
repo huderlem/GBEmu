@@ -30,7 +30,7 @@ SoundController::SoundController()
 	LeftSpeakerVolume = 0;
 	RightSpeakerEnabled = 0;
 	RightSpeakerVolume = 0;
-	SoundOutput = 0;
+	SoundOutput = 0xFF;
 
 	ch1_FrameSequencerTicks = 0;
 	ch1_FrameSequencerStep = 0;
@@ -147,11 +147,6 @@ void SoundController::WriteByte(int value, long address)
 			if (ch1_SweepPeriod > 0 || ch1_SweepShift > 0)
 			{
 				ch1_SweepEnabled = 1;
-			}
-			int newFrequency = Ch1_RecalculateSweep();
-			if (newFrequency > 2047)
-			{
-				ch1_Enabled = 0;
 			}
 		}
 		ch1_CounterOrConsecutiveSelection = ((value >> 6) & 1);
