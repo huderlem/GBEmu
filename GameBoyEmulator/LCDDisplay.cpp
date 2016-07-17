@@ -158,7 +158,7 @@ void LCDDisplay::SetWindowPixels(int scanline)
 void LCDDisplay::SetOAMPixels(void *pixels, int scanline)
 {
 	int usedSpriteIds = 0;
-	SortOAMIds(oamIds, 0, 39);
+	//SortOAMIds(oamIds, 0, 39);
 	int pixelsTaken[160] = {};
 	for (int i = 0; i < 40; i++)
 	{
@@ -397,7 +397,7 @@ void LCDDisplay::Render()
 	long long timeToDelay = ticksPerFrame - timePassed;
 	if (timeToDelay > 0)
 	{
-		SDL_Delay(timeToDelay);
+		//SDL_Delay(timeToDelay);
 	}
 
 	lastRenderTime = SDL_GetTicks();

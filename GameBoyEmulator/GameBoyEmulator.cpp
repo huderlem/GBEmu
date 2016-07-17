@@ -8,8 +8,8 @@
 
 int main()
 {
-	std::string directory = "D:\\Games\\Emulation\\Nintendo Gameboy\\Pokemon Green\\";
-	std::string romFilename = "Pocket Monsters Midori (Japan).gb";
+	std::string directory = "D:\\Games\\Emulation\\Nintendo Gameboy\\Pokemon Gold\\";
+	std::string romFilename = "Pokemon Gold.gbc";
 
 	GameBoy *gameboy = new GameBoy();
 	gameboy->LoadGame(directory, romFilename);

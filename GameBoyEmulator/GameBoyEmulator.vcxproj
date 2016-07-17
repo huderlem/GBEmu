@@ -83,7 +83,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -114,18 +114,21 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\Libs\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Libs\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,6 +152,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\blargg_common.h" />
+    <ClInclude Include="Blargg_Gb_Snd_Emu\blargg_source.h" />
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Blip_Buffer.h" />
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Blip_Synth.h" />
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Gb_Apu.h" />
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Gb_Oscs.h" />
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Multi_Buffer.h" />
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Sound_Queue.h" />
+    <ClInclude Include="boost\config.hpp" />
+    <ClInclude Include="boost\cstdint.hpp" />
+    <ClInclude Include="boost\static_assert.hpp" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="CPURegisters.h" />
     <ClInclude Include="BaseMBC.h" />
@@ -171,6 +185,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseMBC.cpp" />
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Blip_Buffer.cpp" />
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Gb_Apu.cpp" />
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Gb_Oscs.cpp" />
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Multi_Buffer.cpp" />
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Sound_Queue.cpp" />
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="CPURegisters.cpp" />
     <ClCompile Include="GameBoy.cpp" />

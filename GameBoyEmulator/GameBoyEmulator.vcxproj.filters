@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Blarrg_Gb_Snd_Emu">
+      <UniqueIdentifier>{d56fa2cc-3355-4295-b75c-aeb642ba821a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Blarrg_Gb_Snd_Emu">
+      <UniqueIdentifier>{8dd74f69-2332-4173-b2a8-21494acf155c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\boost">
+      <UniqueIdentifier>{e174303b-91e7-4b3d-9329-b19d52caa7f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -75,6 +84,39 @@
     <ClInclude Include="SoundController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\blargg_common.h">
+      <Filter>Header Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\blargg_source.h">
+      <Filter>Header Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Blip_Buffer.h">
+      <Filter>Header Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Blip_Synth.h">
+      <Filter>Header Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Gb_Apu.h">
+      <Filter>Header Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Gb_Oscs.h">
+      <Filter>Header Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Multi_Buffer.h">
+      <Filter>Header Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClInclude>
+    <ClInclude Include="boost\config.hpp">
+      <Filter>Header Files\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="boost\cstdint.hpp">
+      <Filter>Header Files\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="boost\static_assert.hpp">
+      <Filter>Header Files\boost</Filter>
+    </ClInclude>
+    <ClInclude Include="Blargg_Gb_Snd_Emu\Sound_Queue.h">
+      <Filter>Header Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -130,6 +172,21 @@
     </ClCompile>
     <ClCompile Include="SoundController.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Blip_Buffer.cpp">
+      <Filter>Source Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Gb_Apu.cpp">
+      <Filter>Source Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Gb_Oscs.cpp">
+      <Filter>Source Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Multi_Buffer.cpp">
+      <Filter>Source Files\Blarrg_Gb_Snd_Emu</Filter>
+    </ClCompile>
+    <ClCompile Include="Blargg_Gb_Snd_Emu\Sound_Queue.cpp">
+      <Filter>Source Files\Blarrg_Gb_Snd_Emu</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
