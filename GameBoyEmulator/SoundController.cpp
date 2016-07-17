@@ -17,7 +17,7 @@ SoundController::SoundController()
 	gbBuffer->clock_rate(4194304);
 	gbBuffer->set_sample_rate(44100);
 
-	gbSoundQueue->start(44100, 1);
+	gbSoundQueue->start(44100, 2);
 
 	audioTime = 0;
 	absoluteAudioTime = 0;
